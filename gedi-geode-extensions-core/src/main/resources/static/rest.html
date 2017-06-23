@@ -1,0 +1,88 @@
+<html>
+	<body>
+		<h1>Example GemFire REST Web based API</h1>
+		<p>
+			This is an example Spring Boot based app that provides the following GemFire features.
+		</p> 
+		<ul>
+			<li>POST region with region key and value to put data into a region</li>
+			<li>GET region name and key to read</li>
+		</ul>
+		
+		<p>
+		When starting the application you must provide the ENVironment	
+		</p>
+		
+		<ul>
+			<li><strong>LOCATOR_HOST=</strong>public IP address or Public Host Name**
+			</li>
+			<li><strong>LOCATOR_PORT=</strong> =**Locator Port**</li>
+		</ul>
+		
+
+		
+<h2>Example REST Region Service</h2>
+<p>
+The URL http://**root**/region prefix exposes a REST interface to preform READ/WRITE 
+operations on a GemFire region.
+</p>
+
+<h3>POST region</h3>
+<br/>
+Put a  key/value entry into a given region.
+<br/>
+**NOTE** The value is expected to be a JSON string
+<br/>
+<br/>
+**Format** 
+<br/>
+	http://<strong>root</strong>/region/<strong>regionName></strong>/<strong>key</strong>
+	<br/>
+	POST BODY
+<br/>	
+		<strong>value</strong>
+<br/>
+<p>
+<strong>Example</strong>
+</p>
+<p>
+HTTP POST<br/>
+<br/>
+<p>
+	<a href="http://gedi-geode-extensions-rest.cfapps.pez.pivotal.io/region/tweets/hello">http://idp-data-services.cfapps.io/region/Test/hello</a>
+</p>
+<br/>
+RESPONSE
+<br/>
+{ "name" : "world"}
+<br/>
+<br/>
+<br/>
+<h3>GET region</h3>
+<br/>
+Get a region value based on a given key
+<br/>
+<strong>Format</strong> 
+<br/>
+	http://<strong>root</strong>/region/<strong>regionName</strong>/<strong>key</strong>
+	<br/>
+<br/>
+<strong>Example</strong>
+<br/>
+HTTP GET
+<br/>
+http://idp-data-services.cfapps.io/region/Test/hello
+<br/>
+RESPONSE
+<br/>
+{ "name" : "world"}
+<br/>
+
+<h2>NOTES - TODO</h2>
+<br/>
+The core GemFire API can get region values in under 5 milliseconds, but it looks like  the 
+wrapper REST service taking more than 100 milliseconds. It may be the Spring reflection and injection that is adding the additional time. Need to explorer non-Spring Boot based wrappers.
+<br/>
+		
+	</body>
+</html>

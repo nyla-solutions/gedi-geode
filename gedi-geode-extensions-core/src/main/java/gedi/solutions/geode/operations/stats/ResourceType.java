@@ -19,7 +19,7 @@ public class ResourceType implements StatsInfo
 	    private final String name;
 	    private String desc;
 	    private final StatDescriptor[] stats;
-	    private Map descriptorMap;
+	    private Map<String,StatDescriptor> descriptorMap;
 
 	    public void dump(PrintWriter stream) {
 	      if (loaded) {
@@ -43,7 +43,7 @@ public class ResourceType implements StatsInfo
 	      this.name = name;
 	      this.desc = desc;
 	      this.stats = new StatDescriptor[statCount];
-	      this.descriptorMap = new HashMap();
+	      this.descriptorMap = new HashMap<String,StatDescriptor>();
 	    }
 	    
 	    public boolean isRegion()

@@ -5,7 +5,7 @@
 	<artifactId>gedi-geode-extensions-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gedi-geode-extensions-core</name>
-	<description>Web based solutions</description>
+	<description>GemFire Enterprise Data Integration - Power by Apache Geode</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -21,7 +21,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://github.com/ggreen/gedi-geode.git</url>
+		<url>https://github.com/nyla-solutions/gedi-geode.git</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -88,34 +88,15 @@
 			<version>${gemfire.version}</version>
 		</dependency>		
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.6.2</version>
-</dependency>
-		
-<!-- 		<dependency> -->
-<!-- 			<version>1.1.0</version> -->
-<!-- 			<groupId>org.apache.geode</groupId> -->
-<!-- 			<artifactId>geode-core</artifactId> -->
-<!-- 		</dependency> -->
-<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-<!-- <dependency> -->
-<!--     <groupId>org.slf4j</groupId> -->
-<!--     <artifactId>slf4j-api</artifactId> -->
-<!--     <version>1.6.4</version> -->
-<!-- </dependency> -->
-
-	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-	
-
-
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-api</artifactId>
+		    <version>2.6.2</version>
+		</dependency>
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>nyla.solutions.core</artifactId>
-			<version>0.3</version>
+			<version>0.4-SNAPSHOT</version>
 		</dependency>	
 
 	</dependencies>

@@ -7,7 +7,8 @@ import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.security.AuthInitialize;
 import org.apache.geode.security.AuthenticationFailedException;
 
-import gedi.solutions.geode.client.ClientSetting;
+import nyla.solutions.core.util.Config;
+import nyla.solutions.core.util.settings.Settings;
 
 /**
  * This object will main user/password based on a property file of encrypted password
@@ -94,6 +95,6 @@ public class CryptionPropertyAuthInitialize implements AuthInitialize
 			throws AuthenticationFailedException
 	{
 	}// ------------------------------------------------
-	private static ClientSetting settings = ClientSetting.getInstance();
+	private static Settings settings = Config.getSettings();
 	//private ResourceBundle config = ResourceBundle.getBundle("config");
 }
