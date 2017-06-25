@@ -1,4 +1,4 @@
-package gedi.solutions.geode.pcc.security;
+package gedi.solutions.geode.client;
 
 import java.util.Properties;
 import org.apache.geode.LogWriter;
@@ -6,7 +6,6 @@ import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.security.AuthInitialize;
 import org.apache.geode.security.AuthenticationFailedException;
 
-import gedi.solutions.geode.pcc.config.VCAPConfig;
 import nyla.solutions.core.security.SecuredToken;
 import nyla.solutions.core.util.Config;
 
@@ -23,27 +22,27 @@ import nyla.solutions.core.util.Config;
  * @author Gregory Green
  *
  */
-public class VCAPConfigAuthInitialize
+public class GeodeConfigAuthInitialize
 implements AuthInitialize 
 {
-	private final VCAPConfig vcapConfig;
+	private final GeodeSettings vcapConfig;
 
 	  public static final String USER_NAME = "security-username";
 	  public static final String PASSWORD = "security-password";
 	  public static final String TOKEN = "security-token";
 	  
-	  private LogWriter logWriter, securityLogWriter;
+	  //private LogWriter logWriter, securityLogWriter;
 
 	  /**
 	   * Constructor
 	   * @param vcapConfig the VCAP configuration
 	   */
-	  protected VCAPConfigAuthInitialize(VCAPConfig vcapConfig)
+	  protected GeodeConfigAuthInitialize(GeodeSettings vcapConfig)
 	  {
 		  this.vcapConfig = vcapConfig;
 	  }//------------------------------------------------
 	  public static AuthInitialize create() {
-	    return new VCAPConfigAuthInitialize(VCAPConfig.getInstance());
+	    return new GeodeConfigAuthInitialize(GeodeSettings.getInstance());
 	  }
 
 	  @Override
@@ -54,8 +53,7 @@ implements AuthInitialize
 	  public Properties getCredentials(Properties inputProperties, DistributedMember distributedMember,
 	                                   boolean arg2) throws AuthenticationFailedException 
 	  {
-		  System.out.println("GEDI getting getCredentials");
-		  
+
 	    Properties props = new Properties();
 	    String username = Config.getProperty(USER_NAME,"");
 	    String password = Config.getProperty(PASSWORD,"");
@@ -85,7 +83,7 @@ implements AuthInitialize
 	  public void init(LogWriter logWriter, LogWriter securityLogWriter)
 	      throws AuthenticationFailedException 
 	  {
-		  this.logWriter = logWriter;
-		  this.securityLogWriter = securityLogWriter;
+		  //this.logWriter = logWriter;
+		  //this.securityLogWriter = securityLogWriter;
 	  }
 }

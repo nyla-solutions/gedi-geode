@@ -1,7 +1,7 @@
 package gedi.geode.extensions.rest
 
 import gedi.solutions.geode.client.GeodeClient
-import gedi.solutions.geode.pcc.config.VCAPConfig
+import gedi.solutions.geode.client.GeodeSettings
 import org.apache.geode.cache.EvictionAttributes
 import org.apache.geode.cache.client.ClientCache
 import org.apache.geode.cache.client.ClientCacheFactory
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 import java.net.URI
 import java.util.Properties
-import gedi.solutions.geode.pcc.security.VCAPConfigAuthInitialize
+import gedi.solutions.geode.client.GeodeConfigAuthInitialize
 
 /**
  * Configuration settings for the application
@@ -35,7 +35,7 @@ class AppConfig
 	@Bean(name = arrayOf("client-cache"))
 	fun getCache(@Autowired  environment : Environment) : ClientCache
 	{
-		var vcap : VCAPConfig = VCAPConfig.getInstance();
+		var vcap : GeodeSettings = GeodeSettings.getInstance();
 		
 		var locatorList = vcap.getLocatorUrlList();
 		var locatorURI : URI? = null;
@@ -72,7 +72,7 @@ class AppConfig
  		try
 		{
 			 var props : Properties = Properties();
- 			 props.setProperty("security-client-auth-init", VCAPConfigAuthInitialize::class.java.name+".create");
+ 			 props.setProperty("security-client-auth-init", GeodeConfigAuthInitialize::class.java.name+".create");
 			
 			var factory : ClientCacheFactory = ClientCacheFactory(props)
 			.addPoolLocator(host, port)

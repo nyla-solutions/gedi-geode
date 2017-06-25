@@ -1,4 +1,4 @@
-package gedi.solutions.geode.pcc.config;
+package gedi.solutions.geode.client;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gedi.solutions.geode.security.UserSecuredCredentials;
+import nyla.solutions.core.exception.ConfigException;
 import nyla.solutions.core.security.SecuredToken;
+import nyla.solutions.core.util.Config;
 
 /**
  * <pre>
@@ -55,51 +57,100 @@ import nyla.solutions.core.security.SecuredToken;
  * 
  * }
  */
-public class VCAPConfig
+public class GeodeSettings
 {
 	/**
 	 * VCAP_SERVICES = "VCAP_SERVICES"
 	 */
 	public static final String VCAP_SERVICES = "VCAP_SERVICES";
 
-	private static VCAPConfig instance = null;
+	private static GeodeSettings instance = null;
 	private final String envContent;
 	private final Pattern p = Pattern.compile("(.*)\\[(\\d*)\\]");
+	private final String locatorHost;
+	private final int locatorPort;
 
 	/**
 	 * Get from VCAP_SERVICES system environment variable or JVM system property
 	 */
-	public VCAPConfig()
+	private GeodeSettings()
 	{
 
-		String tmpVcap = System.getenv().get(VCAP_SERVICES);
-
-		if (tmpVcap == null || tmpVcap.trim() == null)
-			tmpVcap = System.getProperty(VCAP_SERVICES);
-
-		this.envContent = tmpVcap;
+	this(System.getenv().get(VCAP_SERVICES) !=null 
+		? System.getenv().get(VCAP_SERVICES) 
+		: System.getProperty(VCAP_SERVICES));
+		
 	}// ------------------------------------------------
 
-	protected VCAPConfig(String envContent)
+	GeodeSettings(String envContent)
 	{
 		this.envContent = envContent;
+		
+		List<URI> locatorList = getLocatorUrlList();
+		URI locatorURI = null;
+		
+		if(locatorList != null && !locatorList.isEmpty())
+				locatorURI = locatorList.get(0);
+		
+		int port = 10334;
+		
+		String host = Config.getProperty("LOCATOR_HOST","");
+		
+		if (host.trim().length() == 0)
+		{
+			//check env
+			if(locatorURI != null)
+			{
+				host = locatorURI.getHost();
+				port = locatorURI.getPort();
+			}
+		}
+		else
+		{
+			port = Config.getPropertyInteger("LOCATOR_PORT",10334).intValue();
+			
+			if(host.trim().length() == 0)
+				throw new ConfigException("LOCATOR_HOST configuration property required");
+		}
+		
+		this.locatorHost = host;
+		this.locatorPort = port;
 	}// ------------------------------------------------
+
+	/**
+	 * @return the locatorHost
+	 */
+	public String getLocatorHost()
+	{
+		return locatorHost;
+	}
+
+	/**
+	 * 
+	 * @return the locator port
+	 */
+	public int getLocatorPort()
+	{
+		return locatorPort;
+	}//------------------------------------------------
 
 	/**
 	 * 
 	 * @return the VCAPConfig
 	 */
-	public static VCAPConfig getInstance()
+	public static GeodeSettings getInstance()
 	{
-		synchronized (VCAPConfig.class)
+		synchronized (GeodeSettings.class)
 		{
 			if (instance == null)
 			{
-				instance = new VCAPConfig();
+				instance = new GeodeSettings();
 			}
 		}
 		return instance;
 	}// ------------------------------------------------
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public String getLocators()
@@ -123,7 +174,8 @@ public class VCAPConfig
 	}// ------------------------------------------------
 
 	@SuppressWarnings("unchecked")
-	public List<URI> getLocatorUrlList() throws IOException, URISyntaxException
+	public List<URI> getLocatorUrlList() 
+
 	{
 		List<URI> locatorList = new ArrayList<URI>();
 		Map<String, ?> credentials = getCredentials();
@@ -132,18 +184,26 @@ public class VCAPConfig
 			return null;
 
 		List<String> locators = (List<String>) credentials.get("locators");
-		for (String locator : locators)
+		try
 		{
-			Matcher m = p.matcher(locator);
-			if (!m.matches())
+			for (String locator : locators)
 			{
-				throw new IllegalStateException("Unexpected locator format. expected host[port], got" + locator);
+				Matcher m = p.matcher(locator);
+				if (!m.matches())
+				{
+					throw new IllegalStateException("Unexpected locator format. expected host[port], got" + locator);
+				}
+				locatorList.add(new URI("locator://" + m.group(1) + ":" + m.group(2)));
 			}
-			locatorList.add(new URI("locator://" + m.group(1) + ":" + m.group(2)));
+			return locatorList;
 		}
-		return locatorList;
+		catch (URISyntaxException e)
+		{
+			throw new ConfigException("One of the provided locators has an incorrect syntax:"+locatorList);
+		}
 	}// ------------------------------------------------
 
+	
 	/**
 	 * 
 	 * @param token

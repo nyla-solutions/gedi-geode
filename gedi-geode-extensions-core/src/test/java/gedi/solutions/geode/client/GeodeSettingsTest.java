@@ -1,11 +1,12 @@
-package gedi.solutions.geode.pcc.config;
+package gedi.solutions.geode.client;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import gedi.solutions.geode.client.GeodeSettings;
 import nyla.solutions.core.io.IO;
 
-public class VCAPConfigTest
+public class GeodeSettingsTest
 {
 
 	@Test
@@ -15,13 +16,10 @@ public class VCAPConfigTest
 		
 		
 		
-		VCAPConfig config = VCAPConfig.getInstance();
+		GeodeSettings config = GeodeSettings.getInstance();
 		
 		Assert.assertNotNull(config);
 		
-		Assert.assertNull(config.getLocators());
-		Assert.assertNull(config.getLocatorUrlList());
-		Assert.assertNull(config.getSecuredToken());
 	}//------------------------------------------------
 
 	@Test
@@ -29,7 +27,7 @@ public class VCAPConfigTest
 	throws Exception
 	{
 		String envContent = IO.readClassPath("json/vcap.json");
-		VCAPConfig config = new VCAPConfig(envContent);
+		GeodeSettings config = new GeodeSettings(envContent);
 		
 		String locators = config.getLocators();
 		System.out.println("locators:"+locators);
@@ -42,7 +40,7 @@ public class VCAPConfigTest
 	throws Exception
 	{
 		String envContent = IO.readClassPath("json/vcap.json");
-		VCAPConfig config = new VCAPConfig(envContent);
+		GeodeSettings config = new GeodeSettings(envContent);
 		
 		String token = null;
 		Assert.assertNull(config.getSecuredToken("invalid", token));
@@ -60,7 +58,7 @@ public class VCAPConfigTest
 	throws Exception
 	{
 		String envContent = IO.readClassPath("json/vcap.json");
-		VCAPConfig config = new VCAPConfig(envContent);
+		GeodeSettings config = new GeodeSettings(envContent);
 		
 		String token = null;
 		Assert.assertArrayEquals("some_developer_password".toCharArray(), config.getSecuredToken("developer", token).getCredentials());
