@@ -1,10 +1,9 @@
 package gedi.solutions.geode.client;
 
-import java.net.URI;
-import java.util.List;
 import java.util.Properties;
 import java.util.Queue;
 
+import org.apache.geode.cache.CacheClosedException;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
@@ -39,15 +38,16 @@ public class GeodeClient
 	private final ClientCache clientCache;
 	private final boolean cachingProxy;
 	private final ClientRegionFactory<?, ?> factory;
+	private static GeodeClient geodeClient = null;
 	
-	public GeodeClient(boolean cachingProxy, String... classPatterns)
+	protected GeodeClient(boolean cachingProxy, String... classPatterns)
 	{
 		 this(GeodeSettings.getInstance().getLocatorHost(),
 		 	GeodeSettings.getInstance().getLocatorPort(),
 		 	cachingProxy, 
 		 	classPatterns);
 	}//------------------------------------------------
-	public GeodeClient(String host, int port, boolean cachingProxy, String... classPatterns)
+	protected GeodeClient(String host, int port, boolean cachingProxy, String... classPatterns)
 	{
 		this.cachingProxy = cachingProxy;
 		
@@ -56,13 +56,32 @@ public class GeodeClient
 		
 		String name = Config.getProperty("name",GeodeClient.class.getSimpleName());
 		
-		this.clientCache = new ClientCacheFactory(props).addPoolLocator(host, port)
-		.setPoolSubscriptionEnabled(true)
-		.setPdxSerializer(new ReflectionBasedAutoSerializer(classPatterns))
-		.set("log-level", Config.getProperty("log-level","config"))
-		.set("log-file", Config.getProperty("log-file","client.log"))
-		.set("name", name)
-		.create();
+		//check for exists client cache
+		ClientCache cache = null;
+		
+		try
+		{
+			cache = ClientCacheFactory.getAnyInstance();	
+		}
+		catch(CacheClosedException e)
+		{
+		}
+		
+		try{
+			if(cache != null)
+				cache.close(); //close old connection
+		}catch(Exception e)
+		{}
+		
+		
+			this.clientCache = new ClientCacheFactory(props).addPoolLocator(host, port)
+			.setPoolSubscriptionEnabled(true)
+			.setPdxSerializer(new ReflectionBasedAutoSerializer(classPatterns))
+			.set("log-level", Config.getProperty("log-level","config"))
+			.set("log-file", Config.getProperty("log-file","client.log"))
+			.set("name", name)
+			.create();
+
 		
 		if(cachingProxy)
 		{
@@ -78,13 +97,13 @@ public class GeodeClient
 	 * 
 	 * @param clientCache the connection
 	 */
-	public GeodeClient(ClientCache clientCache)
+	protected GeodeClient(ClientCache clientCache)
 	{
 		this(clientCache,
 		clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY));
 	}//------------------------------------------------
 
-	public GeodeClient(ClientCache clientCache,  ClientRegionFactory<?, ?> factory)
+	protected GeodeClient(ClientCache clientCache,  ClientRegionFactory<?, ?> factory)
 	{
 		cachingProxy = false;
 		this.clientCache = clientCache;
@@ -150,48 +169,18 @@ public class GeodeClient
 		}
 	}
 	//------------------------------------------------
-	public static GeodeClient connect()
+	/**
+	 * 
+	 * @return the GEODE client
+	 */
+	public synchronized static GeodeClient connect()
 	{
-	 GeodeSettings vcap = GeodeSettings.getInstance();
-	
-	 List<URI> locatorList = vcap.getLocatorUrlList();
-	
-	 URI locatorURI = null;
-	
-	if(locatorList != null && !locatorList.isEmpty())
-			locatorURI = locatorList.get(0);
-	
-	int port = 0;
-	
-	String host = Config.getProperty("LOCATOR_HOST");
-	
-	if (host.trim().length() == 0)
-	{
-		//check env
-		if(locatorURI != null)
-		{
-			host = locatorURI.getHost();
-			port = locatorURI.getPort();
-		}
-	}
-	else
-	{
-		port = Config.getPropertyInteger("LOCATOR_PORT",10334);
-	}
-	
-	 String name = Config.getProperty("name",GeodeClient.class.getSimpleName());
-	
-
-		 Properties props = new Properties();
-		props.setProperty("security-client-auth-init", GeodeConfigAuthInitialize.class.getName()+".create");
+		if(geodeClient != null)
+			return geodeClient;
 		
-		ClientCacheFactory factory = new ClientCacheFactory(props)
-		.addPoolLocator(host, port)
-		.setPoolSubscriptionEnabled(true)
-		.setPdxReadSerialized(true)
-		.set("name", name);
+		geodeClient = new GeodeClient(true,".*");
 		
-		return new GeodeClient(factory.create());
+		return geodeClient;
 	}//------------------------------------------------
 	/**
 	 * @return the clientCache

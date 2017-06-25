@@ -94,9 +94,9 @@ class AppConfig
 	 * @return 
 	 */
 	@Bean
-	fun getGeode( clientCache : ClientCache,  factory : ClientRegionFactory<Any, Any>) : GeodeClient
+	fun getGeode() : GeodeClient
 	{
-		return GeodeClient(clientCache, factory);
+		return GeodeClient.connect();
 	}//------------------------------------------------
 	
 	/**
