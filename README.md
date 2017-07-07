@@ -15,3 +15,25 @@ deploy --jar=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/
 - [gedi-geode-extensions-core](https://github.com/nyla-solutions/gedi-geode) contains extension API(s) for common geode addon needs
 
 
+
+# GeodeClient API
+
+
+**Setup Environment**
+
+    export LOCATOR_HOST=localhost
+
+    export LOCATOR_PORT=10334
+    
+**Get a Apache Geode Connection**
+
+	GeodeClient geodeClient = GeodeClient.connect()
+		
+	//Get a the Apache Geode client cache	
+	ClientCache cache = geodeClient.getClientCache();
+		
+
+**Get a Region**
+		
+	Region<String,PdxInstance> region = geodeClient.getRegion("Test"))
+		

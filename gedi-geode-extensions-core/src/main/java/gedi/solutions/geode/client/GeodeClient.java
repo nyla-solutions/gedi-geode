@@ -1,5 +1,6 @@
 package gedi.solutions.geode.client;
 
+import java.util.Collection;
 import java.util.Properties;
 import java.util.Queue;
 
@@ -9,6 +10,7 @@ import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqAttributesFactory;
 import org.apache.geode.cache.query.CqClosedException;
@@ -21,6 +23,7 @@ import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
 import gedi.solutions.geode.client.cq.CqQueueListener;
+import gedi.solutions.geode.io.Querier;
 import nyla.solutions.core.util.Config;
 
 
@@ -92,6 +95,16 @@ public class GeodeClient
 		{
 			factory = clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY);
 		}
+	}//------------------------------------------------
+	
+	public <ReturnType> Collection<ReturnType>  select(String oql)
+	{
+		return select(sql,null);
+	}//------------------------------------------------
+	
+	public <ReturnType> Collection<ReturnType> select(String oql, RegionFunctionContext rfc)
+	{
+		return  Querier.query(oql, rfc);
 	}//------------------------------------------------
 	/**
 	 * 
@@ -189,5 +202,4 @@ public class GeodeClient
 	{
 		return clientCache;
 	}
-	
 }
