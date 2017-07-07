@@ -99,7 +99,7 @@ public class GeodeClient
 	
 	public <ReturnType> Collection<ReturnType>  select(String oql)
 	{
-		return select(sql,null);
+		return select(oql,null);
 	}//------------------------------------------------
 	
 	public <ReturnType> Collection<ReturnType> select(String oql, RegionFunctionContext rfc)

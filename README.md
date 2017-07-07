@@ -36,4 +36,18 @@ deploy --jar=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/
 **Get a Region**
 		
 	Region<String,PdxInstance> region = geodeClient.getRegion("Test"))
-		
+
+
+
+**Execute a Query**
+
+    Collection<PdxInstance> collection = geodeClient.select("select * from /myregion");
+ 
+**Get a queue continous query matches**
+
+    Queue<PdxInstance> queue = registerCq("myQueryName","select * from /myregion")
+    
+    //get first recod
+    PdxInstance pdxRow = queue.poll();
+    
+ 

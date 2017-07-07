@@ -48,7 +48,7 @@ implements CqListener, Queue<E>, Disposable
 	public void setCqQuery(CqQuery cqQuery)
 	{
 		this.cqQuery = cqQuery;
-	}//------------------------------------------------
+	}
 
 	@Override
 	public void dispose()
