@@ -1,4 +1,6 @@
-# Geode Extension GeodeClient API
+# Geode Extension 
+
+## GeodeClient API
 
 **Setup Environment**
 
