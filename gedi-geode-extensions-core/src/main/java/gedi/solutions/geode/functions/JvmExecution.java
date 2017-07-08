@@ -31,7 +31,11 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 		return this;
 	}//-------------------------------------------------------------------
 
-	@SuppressWarnings("rawtypes")
+	/**
+	 *
+	 * @param resultCollector the result collector
+	 * @return the execution with the set result collector
+	 */
 	public Execution withCollector(ResultCollector resultCollector)
 	{
 		throw new RuntimeException("Not implemented");
@@ -45,14 +49,6 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ResultCollector<?, ?> execute(Function function) throws FunctionException
 	{
-//		if(LeapFrogReadOnlyFunction.class.isAssignableFrom(function.getClass()))
-//		{
-//			LeapFrogReadOnlyFunction<?> leapFrogReadOnlyFunction =  (LeapFrogReadOnlyFunction)function;
-//			leapFrogReadOnlyFunction.setRegionDictionary(new ClientRegionDictionary());
-//			
-//			leapFrogReadOnlyFunction.setExecutionFactory(new JvmExecutionFactory());
-//		}
-		
 		JvmResultsSender resultSender = new JvmResultsSender();
 		JvmResultCollector jmvResultCollector = new JvmResultCollector(resultSender);
 		
