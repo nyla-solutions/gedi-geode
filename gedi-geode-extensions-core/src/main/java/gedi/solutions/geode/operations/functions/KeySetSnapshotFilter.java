@@ -23,10 +23,6 @@ public class KeySetSnapshotFilter implements SnapshotFilter<Object, Object>
 		
 		this.keys = keys;
 	}// --------------------------------------------------------
-	/**
-	 * 
-	 * @see com.gemstone.gemfire.cache.snapshot.SnapshotFilter#accept(java.util.Map.Entry)
-	 */
 	@Override
 	public boolean accept(Entry<Object, Object> entry)
 	{

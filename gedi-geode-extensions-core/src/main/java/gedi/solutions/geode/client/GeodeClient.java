@@ -126,6 +126,8 @@ public class GeodeClient
 	/**
 	 * This is an example to get or create a region
 	 * @param regionName the  name
+	 * @param <K> the key type
+	 * @param <V> the value type
 	 * @return the existing or created region (using the ClientbRegionFactory)
 	 */
 	@SuppressWarnings("unchecked")

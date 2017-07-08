@@ -9,31 +9,13 @@ import java.io.File;
    * selected for loading.
    */
   public interface ValueFilter {
-    /**
-     * Returns true if the specified archive file matches this spec. Any
-     * archives whose name does not match this spec will not be selected for
-     * loading by this spec.
-     */
-    public boolean archiveMatches(File archive);
 
-    /**
-     * Returns true if the specified type name matches this spec. Any types
-     * whose name does not match this spec will not be selected for loading by
-     * this spec.
-     */
+	public boolean archiveMatches(File archive);
+
     public boolean typeMatches(String typeName);
 
-    /**
-     * Returns true if the specified statistic name matches this spec. Any stats
-     * whose name does not match this spec will not be selected for loading by
-     * this spec.
-     */
     public boolean statMatches(String statName);
 
-    /**
-     * Returns true if the specified instance matches this spec. Any instance
-     * whose text id and numeric id do not match this spec will not be selected
-     * for loading by this spec.
-     */
+
     public boolean instanceMatches(String textId, long numericId);
   }

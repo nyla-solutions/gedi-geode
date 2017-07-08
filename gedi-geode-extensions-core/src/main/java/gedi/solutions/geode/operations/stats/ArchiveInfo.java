@@ -43,16 +43,13 @@ public class ArchiveInfo implements StatsInfo
 	      archive.setTimeZone(getTimeZone());
 	    }
 
-	    /**
-	     * Returns the difference, measured in milliseconds, between the time the
-	     * archive file was create and midnight, January 1, 1970 UTC.
-	     */
+
 	    public long getStartTimeMillis() {
 	      return this.startTimeStamp;
 	    }
 
 	    /**
-	     * Returns the difference, measured in milliseconds, between the time the
+	     * @return the difference, measured in milliseconds, between the time the
 	     * archived system was started and midnight, January 1, 1970 UTC.
 	     */
 	    public long getSystemStartTimeMillis() {
@@ -60,7 +57,7 @@ public class ArchiveInfo implements StatsInfo
 	    }
 
 	    /**
-	     * Returns a numeric id of the archived system.  It can be used in
+	     * @return a numeric id of the archived system.  It can be used in
 	     * conjunction with the {@link #getSystemStartTimeMillis} to uniquely
 	     * identify an archived system.
 	     */
@@ -69,7 +66,7 @@ public class ArchiveInfo implements StatsInfo
 	    }
 
 	    /**
-	     * Returns a string describing the operating system the archive was written
+	     * @return a string describing the operating system the archive was written
 	     * on.
 	     */
 	    public String getOs() {
@@ -77,14 +74,14 @@ public class ArchiveInfo implements StatsInfo
 	    }
 
 	    /**
-	     * Returns a string describing the machine the archive was written on.
+	     * @return a string describing the machine the archive was written on.
 	     */
 	    public String getMachine() {
 	      return this.machine;
 	    }
 
 	    /**
-	     * Returns  the time zone used when the archive was created. This can be
+	     * @return  the time zone used when the archive was created. This can be
 	     * used to print timestamps in the same time zone that was in effect when
 	     * the archive was created.
 	     */
@@ -97,7 +94,7 @@ public class ArchiveInfo implements StatsInfo
 	    }
 
 	    /**
-	     * Returns a string containing the version of the product that wrote this
+	     * @return a string containing the version of the product that wrote this
 	     * archive.
 	     */
 	    public String getProductVersion() {
@@ -105,7 +102,7 @@ public class ArchiveInfo implements StatsInfo
 	    }
 
 	    /**
-	     * Returns a numeric code that represents the format version used to encode
+	     * @return a numeric code that represents the format version used to encode
 	     * the archive as a stream of bytes.
 	     */
 	    public int getArchiveFormatVersion() {
@@ -113,14 +110,14 @@ public class ArchiveInfo implements StatsInfo
 	    }
 
 	    /**
-	     * Returns a string describing the system that this archive recorded.
+	     * @return a string describing the system that this archive recorded.
 	     */
 	    public String getSystem() {
 	      return this.systemDirectory;
 	    }
 
 	    /**
-	     * Returns a string representation of this object.
+	     * @return a string representation of this object.
 	     */
 	    @Override
 	    public String toString() {

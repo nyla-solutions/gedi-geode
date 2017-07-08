@@ -7,7 +7,7 @@ import java.util.Map;
 
 import gedi.solutions.geode.operations.stats.visitors.StatsVisitor;
 
-/**
+/*
  * Defines a statistic resource type. Each resource instance must be of a
  * single type. The type defines what statistics each instance of it will
  * support. The type also has a description of itself.
@@ -55,7 +55,7 @@ public class ResourceType implements StatsInfo
 	      return this.loaded;
 	    }
 
-	    /**
+	    /*
 	     * Frees up any resources no longer needed after the archive file is closed.
 	     * Returns true if this guy is no longer needed.
 	     */
@@ -100,14 +100,14 @@ public class ResourceType implements StatsInfo
 //	      return this.id;
 //	    }
 
-	    /**
+	    /*
 	     * Returns the name of this resource type.
 	     */
 	    public String getName() {
 	      return this.name;
 	    }
 
-	    /**
+	    /*
 	     * Returns an array of descriptors for each statistic this resource type
 	     * supports.
 	     */
@@ -115,7 +115,7 @@ public class ResourceType implements StatsInfo
 	      return this.stats;
 	    }
 
-	    /**
+	    /*
 	     * Gets a stat descriptor contained in this type given the stats name.
 	     *
 	     * @param name the name of the stat to find in the current type
@@ -126,7 +126,7 @@ public class ResourceType implements StatsInfo
 	      return (StatDescriptor) descriptorMap.get(name);
 	    }
 
-	    /**
+	    /*
 	     * Returns a description of this resource type.
 	     */
 	    public String getDescription() {

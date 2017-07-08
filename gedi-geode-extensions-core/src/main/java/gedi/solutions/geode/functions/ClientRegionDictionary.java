@@ -12,10 +12,6 @@ import org.apache.geode.cache.client.ClientCacheFactory;
 public class ClientRegionDictionary implements RegionDictionary
 {
 
-
-	/* (non-Javadoc)
-	 * @see com.jnj.lpfg.lpfg_functions.io.RegionDictionary#getRegion(java.lang.String)
-	 */
 	public <K, V> Region<K, V> getRegion(String name)
 	{
 		ClientCache cache = ClientCacheFactory.getAnyInstance();

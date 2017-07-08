@@ -11,9 +11,6 @@ import org.apache.geode.cache.execute.Execution;
 public class JvmExecutionFactory implements ExecutionFactory
 {
 
-	/* (non-Javadoc)
-	 * @see com.jnj.lpfg.lpfg_functions.io.ExecutionFactory#onRegion(com.gemstone.gemfire.cache.Region)
-	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Execution onRegion(Region<?, ?> region)

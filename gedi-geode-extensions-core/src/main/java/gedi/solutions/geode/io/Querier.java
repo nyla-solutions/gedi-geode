@@ -20,6 +20,7 @@ public class Querier
 	/**
 	 * 
 	 * @param query the OQL query
+	 * @param <ReturnType> the return type
 	 * @return the collection of the return types
 	 */
 	public static <ReturnType> Collection<ReturnType> query(String query)

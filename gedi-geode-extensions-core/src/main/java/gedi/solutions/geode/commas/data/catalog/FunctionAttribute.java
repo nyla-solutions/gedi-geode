@@ -50,14 +50,6 @@ implements Serializable
 		this.setValue(aValue);
 
 	}// --------------------------------------------
-
-	/**
-	 * @param aOther
-	 *            the other property to compare
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 * @throws ClassCastException
-	 *             if the other is not a property
-	 */
 	public int compareTo(Object aOther)
 	{
 		FunctionAttribute other = (FunctionAttribute) aOther;
@@ -97,7 +89,6 @@ implements Serializable
 	/**
 	 * 
 	 * @return the value of the property
-	 * @see solutions.global.data.Mappable#getValue()
 	 */
 	public Object getValue()
 	{
@@ -117,8 +108,6 @@ implements Serializable
 	/**
 	 * 
 	 * @return name of the property
-	 * 
-	 * @see solutions.global.data.Mappable#getKey()
 	 * 
 	 */
 	public Object getKey()
@@ -204,7 +193,6 @@ implements Serializable
 	/**
 	 * Set name to key
 	 * 
-	 * @see solutions.global.data.Key#setKey(java.lang.Object)
 	 */
 	public void setKey(Object key)
 	{

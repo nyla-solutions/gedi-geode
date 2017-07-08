@@ -7,9 +7,6 @@ import gedi.solutions.geode.operations.stats.visitors.StatsVisitor;
 
 public abstract class BitInterval implements StatsInfo
 {
-    /**
-     * Returns number of items added to values
-     */
     abstract int fill(double[] values, int valueOffset, int typeCode,
         int skipCount);
 

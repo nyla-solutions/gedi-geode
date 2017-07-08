@@ -1,21 +1,3 @@
-/*
- ****************************************************************************
- *
- * Copyright (c)2014 The Vanguard Group of Investment Companies (VGI)
- * All rights reserved.
- *
- * This source code is CONFIDENTIAL and PROPRIETARY to VGI. Unauthorized
- * distribution, adaptation, or use may be subject to civil and criminal
- * penalties.
- *
- ****************************************************************************
- Module Description:
-
- $HeadURL: http://prdsvnrepo:8080/svn/tip/tip/projects/globalbasketconstruction/gbc-cacheserver/trunk/src/main/java/com/vanguard/tip/gbc/cacheserver/function/SystemShutDownFunction.java $
- $LastChangedRevision: 343018 $
- $Author: UHOH $
- $LastChangedDate: 2014-10-30 11:57:20 -0400 (Thu, 30 Oct 2014) $
-*/
 package gedi.solutions.geode.operations.functions;
 
 import java.lang.management.ManagementFactory;
@@ -41,7 +23,7 @@ import org.apache.geode.distributed.DistributedSystem;
  * </p>
  * 
  * <p>
- * 			gfsh>execute function --group="gbc-data-node" --id="SystemShutdown"
+ * 			gfsh&gt;execute function --group="gbc-data-node" --id="SystemShutdown"
  * </p>
  * 
  * <p>

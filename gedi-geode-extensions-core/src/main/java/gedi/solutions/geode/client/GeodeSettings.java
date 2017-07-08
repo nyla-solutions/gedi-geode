@@ -206,8 +206,6 @@ public class GeodeSettings
 	
 	/**
 	 * 
-	 * @param token
-	 *            the token to initialize
 	 * @return the secured token information
 	 */
 	public SecuredToken getSecuredToken()

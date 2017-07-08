@@ -11,10 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PrintExampleJsonFunction implements Function
 {
-	/**
-	 * 
-	 * @see com.gemstone.gemfire.cache.execute.Function#execute(com.gemstone.gemfire.cache.execute.FunctionContext)
-	 */
 	public void execute(FunctionContext fc)
 	{
 		ResultSender<String> rs = fc.getResultSender();

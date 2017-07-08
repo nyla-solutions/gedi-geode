@@ -48,49 +48,49 @@ import java.io.PrintWriter;
     }
 
     /**
-     * Returns the type code of this statistic.
+     * @return the type code of this statistic.
      */
     public byte getTypeCode() {
       return this.typeCode;
     }
 
     /**
-     * Returns the name of this statistic.
+     * @return the name of this statistic.
      */
     public String getName() {
       return this.name;
     }
 
     /**
-     * Returns true if this statistic's value will always increase.
+     * @return true if this statistic's value will always increase.
      */
     public boolean isCounter() {
       return this.isCounter;
     }
 
     /**
-     * Returns true if larger values indicate better performance.
+     * @return true if larger values indicate better performance.
      */
     public boolean isLargerBetter() {
       return this.largerBetter;
     }
 
     /**
-     * Returns a string that describes the units this statistic measures.
+     * @return a string that describes the units this statistic measures.
      */
     public String getUnits() {
       return this.units;
     }
 
     /**
-     * Returns a textual description of this statistic.
+     * @return a textual description of this statistic.
      */
     public String getDescription() {
       return this.desc;
     }
 
     /**
-     * Returns the offset of this stat in its type.
+     * @return the offset of this stat in its type.
      */
     public int getOffset() {
       return this.offset;

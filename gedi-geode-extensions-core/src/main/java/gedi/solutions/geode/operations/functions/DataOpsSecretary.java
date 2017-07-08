@@ -23,9 +23,9 @@ public class DataOpsSecretary
 	
 	/**
 	 * 
-	 * @param exportFileType
-	 * @param regionName
-	 * @return
+	 * @param exportFileType the export file type
+	 * @param regionName the region
+	 * @return the file 
 	 */
 	public static File determineFile(ExportFileType exportFileType,String regionName)
 	{

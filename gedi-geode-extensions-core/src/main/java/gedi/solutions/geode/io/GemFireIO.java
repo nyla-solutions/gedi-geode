@@ -47,6 +47,7 @@ public class GemFireIO
 	 * Execute a function with the given execution settings
 	 * @param execution the function service execution settings
 	 * @param function the function to be execute
+	 * @param <T> the type
 	 * @return the flatten results from one or more servers
 	 * @throws Exception when remote execution errors occur
 	 */
@@ -92,6 +93,7 @@ public class GemFireIO
 	/**
 	 * 
 	 * @param region the region
+	 * @param  <T> the type
 	 * @return the set of keys
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -118,6 +120,7 @@ public class GemFireIO
 	 * Used to flatten results from multiple servers
 	 * @param input the unflatten input
 	 * @param flattenOutput the flatten results
+	 * @param <T> the return type of collection objects
 	 * @throws Exception if an any input collection items are exceptions
 	 */
 	@SuppressWarnings("unchecked")

@@ -222,6 +222,7 @@ public class GfStatsReader implements StatsInfo
 	 * @param ts
 	 *            The difference, measured in milliseconds, between the time
 	 *            marked by this time stamp and midnight, January 1, 1970 UTC.
+	 *  @return format yyyy/MM/dd HH:mm:ss.SSS z
 	 */
 	public String formatTimeMillis(long ts)
 	{
@@ -240,7 +241,7 @@ public class GfStatsReader implements StatsInfo
 	}
 
 	/**
-	 * Returns the time series for this archive.
+	 * @return the time series for this archive.
 	 */
 	TimeStampSeries getTimeStamps()
 	{
@@ -255,6 +256,7 @@ public class GfStatsReader implements StatsInfo
 	 * <p>
 	 * Once closed a reader can no longer be updated.
 	 *
+	 *@param doReset update flag
 	 * @return true if update read some new data.
 	 * @throws java.io.IOException
 	 *             if <code>archiveName</code> could not be opened read, or
@@ -311,6 +313,7 @@ public class GfStatsReader implements StatsInfo
 
 	/**
 	 * Closes the archive.
+	 * @throws IOException when an IO error occurs
 	 */
 	public void close() throws IOException
 	{
@@ -389,7 +392,7 @@ public class GfStatsReader implements StatsInfo
 	}
 
 	/**
-	 * Returns global information about the read archive. Returns null if no
+	 * @return global information about the read archive. @return null if no
 	 * information is available.
 	 */
 	public ArchiveInfo getArchiveInfo()
@@ -810,7 +813,7 @@ public class GfStatsReader implements StatsInfo
 	}
 
 	/**
-	 * Returns true if token read, false if eof.
+	 * @return true if token read, false if eof.
 	 */
 	private boolean readToken() throws IOException
 	{
@@ -854,7 +857,7 @@ public class GfStatsReader implements StatsInfo
 	}
 
 	/**
-	 * Returns the approximate amount of memory used to implement this object.
+	 * @return the approximate amount of memory used to implement this object.
 	 */
 	protected int getMemoryUsed()
 	{

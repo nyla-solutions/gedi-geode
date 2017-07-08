@@ -124,10 +124,6 @@ public class GetEntriesChecksumFunction implements Function, Declarable
 	{
 		return "GetEntriesChecksumFunction";
 	}// --------------------------------------------------------
-	/**
-	 * 
-	 * @see com.gemstone.gemfire.cache.execute.Function#hasResult()
-	 */
 	@Override
 	public boolean hasResult()
 	{

@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 
-/**
+/*
  * Defines a single instance of a resource type.
  */
 public class ResourceInst
@@ -20,7 +20,7 @@ public class ResourceInst
 	    private int firstTSidx = -1;
 	    private int lastTSidx = -1;
 
-	    /**
+	    /*
 	     * Returns the approximate amount of memory used to implement this object.
 	     */
 	    protected int getMemoryUsed() {
@@ -33,7 +33,7 @@ public class ResourceInst
 	      return result;
 	    }
 
-	    /**
+	    /*
 	     * Returns a string representation of this object.
 	     */
 	    @Override
@@ -54,7 +54,7 @@ public class ResourceInst
 	      return result.toString();
 	    }
 
-	    /**
+	    /*
 	     * Returns the number of times this resource instance has been sampled.
 	     */
 	    public int getSampleCount() {
@@ -123,7 +123,7 @@ public class ResourceInst
 	      }
 	    }
 
-	    /**
+	    /*
 	     * Returns true if sample was added.
 	     */
 	    protected boolean addValueSample(int statOffset, long statDeltaBits) {
@@ -139,7 +139,7 @@ public class ResourceInst
 	      return this.loaded;
 	    }
 
-	    /**
+	    /*
 	     * Frees up any resources no longer needed after the archive file is closed.
 	     * Returns true if this guy is no longer needed.
 	     */
@@ -168,7 +168,7 @@ public class ResourceInst
 	      return archive.getTimeStamps().getBase();
 	    }
 
-	    /**
+	    /*
 	     * Returns an array of doubles containing the timestamps at which this
 	     * instances samples where taken. Each of these timestamps is the
 	     * difference, measured in milliseconds, between the sample time and
@@ -179,7 +179,7 @@ public class ResourceInst
 	      return archive.getTimeStamps().getTimeValuesSinceIdx(firstTSidx);
 	    }
 
-	    /**
+	    /*
 	     * Returns an array of statistic value descriptors. Each element of the
 	     * array describes the corresponding statistic this instance supports. The
 	     * <code>StatValue</code> instances can be used to obtain the actual sampled
@@ -189,7 +189,7 @@ public class ResourceInst
 	      return this.values;
 	    }
 
-	    /**
+	    /*
 	     * Gets the value of the stat in the current instance given the stat name.
 	     *
 	     * @param name the name of the stat to find in the current instance
@@ -205,21 +205,21 @@ public class ResourceInst
 	      return result;
 	    }
 
-	    /**
+	    /*
 	     * Returns the name of this instance.
 	     */
 	    public String getName() {
 	      return this.name;
 	    }
 
-	    /**
+	    /*
 	     * Returns the id of this instance.
 	     */
 	    public long getId() {
 	      return this.id;
 	    }
 
-	    /**
+	    /*
 	     * Returns the difference, measured in milliseconds, between the time of the
 	     * instance's first sample and midnight, January 1, 1970 UTC.
 	     */
@@ -227,7 +227,7 @@ public class ResourceInst
 	      return archive.getTimeStamps().getMilliTimeStamp(firstTSidx);
 	    }
 
-	    /**
+	    /*
 	     * Returns resource type of this instance.
 	     */
 	    public ResourceType getType() {
@@ -240,7 +240,7 @@ public class ResourceInst
 	      close(); // this frees up unused memory now that no more samples
 	    }
 
-	    /**
+	    /*
 	     * Returns true if archive might still have future samples for this
 	     * instance.
 	     */

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
  * Import region data using exported JSON formatted data.
  * 
  * Example: 
- * gfsh>execute function --id="ImportJsonFunction" --region=/securityRegion
+ * gfsh&gt;execute function --id="ImportJsonFunction" --region=/securityRegion
  * 
  * </pre>
  * 

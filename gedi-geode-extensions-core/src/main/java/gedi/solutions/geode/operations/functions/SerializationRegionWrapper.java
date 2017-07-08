@@ -11,26 +11,11 @@ package gedi.solutions.geode.operations.functions;
  */
 public class SerializationRegionWrapper
 {
-	
-	/**
-	 * 
-	 * @param value the object
-	 * @param valueClassName
-	 * @param key
-	 * @param keyClassName
-	 */
 	public SerializationRegionWrapper(Object key, Object value)
 	{
 		this(key, key.getClass().getName(), value, value.getClass().getName());
 	}// --------------------------------------------------------
 
-	/**
-	 * 
-	 * @param value the object
-	 * @param valueClassName
-	 * @param key
-	 * @param keyClassName
-	 */
 	public SerializationRegionWrapper(
 			Object key, String keyClassName,
 			Object value, String valueClassName)

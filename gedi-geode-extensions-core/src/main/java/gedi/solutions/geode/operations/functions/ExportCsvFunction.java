@@ -29,7 +29,7 @@ import nyla.solutions.core.util.Config;
  * The output will be stored in the $gbc-cacheserver-{PERSISTENT_STORE_LOCATION} indicated directory.
  * One file will be written per region (format: ${region.name}.json)
  * 
- * Example:			gfsh>execute function --id="ExportJsonFunction" --arguments=myRegion
+ * Example:			gfsh&gt;execute function --id="ExportJsonFunction" --arguments=myRegion
  * </pre>
  * 
  * @author Gregory Green

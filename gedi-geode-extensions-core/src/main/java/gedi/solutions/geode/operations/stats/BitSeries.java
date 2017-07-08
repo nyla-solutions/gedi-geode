@@ -14,7 +14,7 @@ public class BitSeries implements StatsInfo
 	    int intervalIdx; // index of most recent BitInterval
 	    BitInterval intervals[];
 
-	    /**
+	    /*
 	     * Returns the amount of memory used to implement this series.
 	     */
 	    protected int getMemoryUsed() {
@@ -28,7 +28,7 @@ public class BitSeries implements StatsInfo
 	      return result;
 	    }
 
-	    /**
+	    /*
 	     * Gets the first "resultSize" values of this series skipping over the first
 	     * "samplesToSkip" ones. The first value in a series is at index 0. The
 	     * maximum result size can be obtained by calling "getSize()".
@@ -136,7 +136,7 @@ public class BitSeries implements StatsInfo
 	      count++;
 	    }
 
-	    /**
+	    /*
 	     * Free up any unused memory
 	     */
 	    void shrink() {

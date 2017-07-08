@@ -27,7 +27,7 @@ import gedi.solutions.geode.operations.functions.util.FunctionAssistant;
  * The output will be stored in the current working directory.
  * One file will be written per region (format: ${region.name}.json)
  * 
- * Example:			gfsh>execute function --id="ExportJsonFunction" --arguments=myRegion
+ * Example:			gfsh&gt;execute function --id="ExportJsonFunction" --arguments=myRegion
  * </pre>
  * 
  * @author Gregory Green
@@ -53,7 +53,6 @@ public class ReadExportFunction  implements Function
 	 * This function will use the JsonExportFunction function
 	 * to export json data and read the results to be returned to callers
 	 * 
-	 * @see com.gemstone.gemfire.cache.execute.Function#execute(com.gemstone.gemfire.cache.execute.FunctionContext)
 	 */
 	@Override
 	public void execute(FunctionContext functionContext)

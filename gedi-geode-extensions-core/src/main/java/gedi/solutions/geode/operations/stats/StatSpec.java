@@ -17,7 +17,7 @@ public interface StatSpec extends ValueFilter {
     public final int NONE = 0;
 
     /**
-     * Returns one of the following values: {@link #GLOBAL}, {@link #FILE},
+     * @return one of the following values: {@link #GLOBAL}, {@link #FILE},
      * {@link #NONE}.
      */
     public int getCombineType();

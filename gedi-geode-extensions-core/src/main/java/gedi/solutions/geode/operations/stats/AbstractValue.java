@@ -79,7 +79,7 @@ abstract class AbstractValue implements StatValue {
       }
     }
 
-    /**
+    /*
      * Calculates each stat given the result of calling getSnapshots
      */
     protected void calcStats(double[] values) {
@@ -120,7 +120,7 @@ abstract class AbstractValue implements StatValue {
       statsValid = true;
     }
 
-    /**
+    /*
      * Returns a string representation of this object.
      */
     @Override

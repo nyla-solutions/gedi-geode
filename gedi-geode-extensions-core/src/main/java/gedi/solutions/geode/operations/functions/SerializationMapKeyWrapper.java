@@ -15,25 +15,14 @@ public class SerializationMapKeyWrapper
 	
 	public SerializationMapKeyWrapper()
 	{}
-	/**
-	 * 
-	 * @param value the object
-	 * @param valueClassName
-	 * @param key
-	 * @param keyClassName
-	 */
+
+	
 	public SerializationMapKeyWrapper(Object key)
 	{
 		this(key, key.getClass().getName());
 	}// --------------------------------------------------------
 
-	/**
-	 * 
-	 * @param value the object
-	 * @param valueClassName
-	 * @param key
-	 * @param keyClassName
-	 */
+
 	public SerializationMapKeyWrapper(
 			Object key, String keyClassName)
 	{

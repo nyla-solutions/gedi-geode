@@ -20,19 +20,11 @@ import org.apache.geode.cache.execute.ResultSender;
 public class ClearRegionFunction implements Function, Declarable
 {
 
-
-	/**
-	 * @see com.gemstone.gemfire.cache.Declarable#init(java.util.Properties)
-	 */
 	@Override
 	public void init(Properties arg0)
 	{
 	}
 
-	/**
-	 * Return the number of records deleted
-	 * @see com.gemstone.gemfire.cache.execute.Function#execute(com.gemstone.gemfire.cache.execute.FunctionContext)
-	 */
 	@Override
 	public void execute(FunctionContext functionContext)
 	{
@@ -74,36 +66,24 @@ public class ClearRegionFunction implements Function, Declarable
 		
 	}// --------------------------------------------------------
 
-	/**
-	 * @see com.gemstone.gemfire.cache.execute.Function#getId()
-	 */
 	@Override
 	public String getId()
 	{
 		return "ClearRegionFunction";
 	}
 
-	/**
-	 * @see com.gemstone.gemfire.cache.execute.Function#hasResult()
-	 */
 	@Override
 	public boolean hasResult()
 	{
 		return true;
 	}
 
-	/**
-	 * @see com.gemstone.gemfire.cache.execute.Function#isHA()
-	 */
 	@Override
 	public boolean isHA()
 	{
 		return false;
 	}
 
-	/**
-	 * @see com.gemstone.gemfire.cache.execute.Function#optimizeForWrite()
-	 */
 	@Override
 	public boolean optimizeForWrite()
 	{

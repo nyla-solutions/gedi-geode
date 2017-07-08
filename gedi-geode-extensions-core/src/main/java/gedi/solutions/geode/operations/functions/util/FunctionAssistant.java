@@ -17,8 +17,9 @@ public class FunctionAssistant
 	/**
 	 * 
 	 * @param fileName  the full file path of which to read
+	 * @param charSet the character set
 	 * @return string data
-	 * @throws IOException
+	 * @throws IOException when IO error occurs
 	 */
 	public static String readFile(String fileName, Charset charSet) throws IOException
 	{
@@ -74,8 +75,8 @@ public class FunctionAssistant
 	 * 
 	 * @param file the file to read
 	 * @return binary file content
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @throws FileNotFoundException the fiel does not exist
+	 * @throws IOException when an IO errors occurs when reading the file
 	 */
 	public static byte[] readBinaryFile(File file)
 			throws FileNotFoundException, IOException

@@ -62,7 +62,7 @@ public class ObjectSizing
 	  /**
 	   * Calculates and logs the size of all entries in the region. 
 	   * 
-	   * @param region
+	   * @param region the region to calcuate the size
 	   */
 	  public void sizeRegion(Region<?,?> region) {
 	    sizeRegion(region, 0);

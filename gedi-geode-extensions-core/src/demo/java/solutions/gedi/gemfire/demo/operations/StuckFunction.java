@@ -18,9 +18,6 @@ public class StuckFunction implements Function
 	 */
 	private static final long serialVersionUID = -447987547385138276L;
 
-	/* (non-Javadoc)
-	 * @see com.gemstone.gemfire.cache.execute.Function#execute(com.gemstone.gemfire.cache.execute.FunctionContext)
-	 */
 	@Override
 	public void execute(FunctionContext arg0)
 	{
@@ -40,27 +37,18 @@ public class StuckFunction implements Function
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.gemstone.gemfire.cache.execute.Function#getId()
-	 */
 	@Override
 	public String getId()
 	{
 		return "StuckFunction";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.gemstone.gemfire.cache.execute.Function#hasResult()
-	 */
 	@Override
 	public boolean hasResult()
 	{
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.gemstone.gemfire.cache.execute.Function#isHA()
-	 */
 	@Override
 	public boolean isHA()
 	{
@@ -68,9 +56,6 @@ public class StuckFunction implements Function
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.gemstone.gemfire.cache.execute.Function#optimizeForWrite()
-	 */
 	@Override
 	public boolean optimizeForWrite()
 	{

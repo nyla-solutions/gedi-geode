@@ -75,6 +75,7 @@ public class GemFireJmxClient
 	/**
 	 * 
 	 * @param jmx the JMX managers
+	 * @throws Exception when an unknown error occurs
 	 */
 	public static void stopGatewaySenders(JMX jmx)
 	throws Exception
@@ -92,7 +93,7 @@ public class GemFireJmxClient
 	}// --------------------------------------------------------
 	/***
 	 * 
-	 * @param distributedRegionMXBean
+	 * @param distributedRegionMXBean the distributed region JMX bean
 	 * @return return if region.getRegionType contains the term  REPLICATE
 	 */
 	public static boolean isReplicatedRegion(DistributedRegionMXBean distributedRegionMXBean)
@@ -143,7 +144,7 @@ public class GemFireJmxClient
 	 * @param propertyName the property name
 	 * @param jmx the JMX connection
 	 * @return the GemFire property on the member
-	 * @throws MalformedObjectNameException
+	 * @throws MalformedObjectNameException when the member name is invalid
 	 */
 	public static String getMemberGemFireProperty(String memberName, String propertyName, JMX jmx)
 	throws MalformedObjectNameException
@@ -222,13 +223,10 @@ public class GemFireJmxClient
 	}// --------------------------------------------------------
 	/**
 	 * This methods create a pool for connecting to a locator
-	 * @param locatorName the locator name
 	 * @param jmx the JMX connection
 	 * @return the pool instance
-	 * @throws InstanceNotFoundException
 	 */
 	public static synchronized Pool getPoolForLocator(JMX jmx)
-	throws InstanceNotFoundException
 	{
 		String locatorsPoolName = jmx.getHost()+"["+jmx.getPort()+"]";
 		
@@ -258,6 +256,8 @@ public class GemFireJmxClient
 	 * Get region based on a given name (create the region if it exists on the server, but not on the client).
 	 * @param regionName the region name the obtains
 	 * @param jmx the GemFire JMX connection
+	 * @param <K> the key type
+	 * @param <V> the value type
 	 * @return the created region
 	 */
 	@SuppressWarnings("unchecked")
@@ -352,10 +352,8 @@ public class GemFireJmxClient
 	 * 
 	 * @param jmx the JMX connection
 	 * @return the locator port obtained from JMX
-	 * @throws MalformedObjectNameException
 	 */
 	public static int getLocatorPort(JMX jmx)
-			throws MalformedObjectNameException
 	{
 		// Get Locator port
 		// locator bean GemFire:service=Locator,type=Member,member=locator
@@ -384,7 +382,7 @@ public class GemFireJmxClient
 			// get port
 			return jmx.getAttribute(locatorServiceObjName, "Port");
 		}
-		catch (InstanceNotFoundException e)
+		catch (Exception e)
 		{
 			throw new RuntimeException(e.getMessage(),e);
 		}
@@ -521,7 +519,7 @@ public class GemFireJmxClient
 		return regionObjNameSet.iterator().next();
 	}// --------------------------------------------------------
 	/**
-	 * 
+	 * @param jmx the JMX connection 
 	 * @return the string containing the 
 	 */
 	public static String getPrimaryGatewaySenderMember(JMX jmx)
@@ -555,9 +553,8 @@ public class GemFireJmxClient
 	}// --------------------------------------------------------
 	
 	/**
-	 * 
+	 * @param jmx the JMX connection
 	 * @return list of gateway senders
-	 * @throws Exception
 	 */
 	public static Collection<GatewaySenderMXBean> listGatewaySenders(JMX jmx)
 	{
@@ -592,7 +589,7 @@ public class GemFireJmxClient
 	 * Obtain a GemFire JMX client
 	 * @param name the JMX client name
 	 * @param jmx the JMX connection
-	 * @return
+	 * @return JMX member object
 	 */
 	public static MemberMXBean getMember(String name,JMX jmx)
 	{
@@ -653,7 +650,7 @@ public class GemFireJmxClient
 				return list;
 			}// --------------------------------------------------------
 	/**
-	 * 
+	 * @param  jmx the JMX connection object
 	 * @return member names
 	 */
 	public static Collection<String> listMembers(JMX jmx)
@@ -687,7 +684,7 @@ public class GemFireJmxClient
 	/**
 	 * 
 	 * @param jmx the JMX connection
-	 * @return
+	 * @return the locator host[port]
 	 */
 	public static Collection<String> listLocators(JMX jmx)
 	{
@@ -819,7 +816,7 @@ public class GemFireJmxClient
 		}
 	}// --------------------------------------------------------
 	/**
-	 * 
+	 * @param jmx the JMX object
 	 * @return ObjectName(GemFire:service=System,type=Distributed) TotalRegionEntryCount attribute
 	 */
 	public static long getTotalRegionEntryCount(JMX jmx)
@@ -837,9 +834,9 @@ public class GemFireJmxClient
 		}
 	}// --------------------------------------------------------
 	/**
-	 * 
+	 * @param jmx the JMX connection
 	 * @return the region name that do not have redundancy
-	 * @throws Exception
+	 * @throws Exception the collection of the region names
 	 */
 	public static Collection<String> listRegionsWithNumBucketsWithoutRedundancy(JMX jmx)
 	throws Exception

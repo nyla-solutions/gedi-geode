@@ -161,7 +161,7 @@ public class GemFireMgmt
 	 * Reconnect to a given locator
 	 * @param locatorHost the locator host
 	 * @param locatorPort the locator port
-	 * @return
+	 * @return the new JMX connect
 	 */
    public static JMX reconnectJMX(String locatorHost, int locatorPort)
    {

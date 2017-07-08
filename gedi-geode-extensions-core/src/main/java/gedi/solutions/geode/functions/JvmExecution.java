@@ -8,6 +8,15 @@ import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.ResultCollector;
 
+/**
+ * Supports executing functions locally within the JVM
+ * 
+ * @author Gregory Green
+ *
+ * @param <K> the key type
+ * @param <V> the value value
+ * @param <T> the generic type
+ */
 public class JvmExecution<K,V,T> extends ExecutionAdapter
 {
 	
@@ -44,7 +53,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 	 * 
 	 * @param function the function to exe
 	 * @return the result collector
-	 * @throws FunctionException
+	 * @throws FunctionException when the server side exception occurs
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ResultCollector<?, ?> execute(Function function) throws FunctionException

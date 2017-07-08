@@ -29,7 +29,7 @@ import gedi.solutions.geode.operations.functions.util.FunctionAssistant;
  * The output will be stored in the current working directory.
  * One file will be written per region (format: ${region.name}.gfd)
  * 
- * Example:			gfsh>execute function --id="GfdExportFunction" --region-myRegion
+ * Example:			gfsh&gt;gexecute function --id="GfdExportFunction" --region-myRegion
  * </pre>
  * 
  * @author Gregory Green

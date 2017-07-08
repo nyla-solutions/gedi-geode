@@ -1,5 +1,7 @@
 package gedi.solutions.geode.functions;
 
+import java.util.Set;
+
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.Execution;
 import org.apache.geode.cache.execute.ResultCollector;
@@ -18,7 +20,8 @@ public class JvmExecutionTest {
         Region<?,?> region = Mockito.mock(Region.class);
         JvmExecution jvm = new JvmExecution(region);
 
-        Execution exe = jvm.withFilter(Mockito.anySet());
+        Set<?> set = Mockito.mock(Set.class);
+        Execution exe = jvm.withFilter(set);
 
         Assert.assertEquals(jvm,exe);
 
@@ -35,17 +38,4 @@ public class JvmExecutionTest {
         Assert.assertEquals(jvm,exe);
 
     }
-
-    @Test
-    public void test_withCollector(){
-
-        Region<?,?> region = Mockito.mock(Region.class);
-        JvmExecution jvm = new JvmExecution(region);
-
-        Execution exe = jvm.withCollector(Mockito.mock(ResultCollector.class));
-
-        Assert.assertEquals(jvm,exe);
-
-    }
-
 }
