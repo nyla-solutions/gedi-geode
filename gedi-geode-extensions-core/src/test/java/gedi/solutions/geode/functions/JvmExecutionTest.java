@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.Execution;
-import org.apache.geode.cache.execute.ResultCollector;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

@@ -7,20 +7,25 @@
     export LOCATOR_HOST=localhost
 
     export LOCATOR_PORT=10334
+
+If authentication is enabled
+	
+	export SECURITY_USERNAME=user
+	export SECURITY_PASSWORD=password
+    
     
 **Get a Apache Geode Connection**
 
 	GeodeClient geodeClient = GeodeClient.connect()
-		
-	//Get a the Apache Geode client cache	
+
+Get the Apache Geode client cache
+	
 	ClientCache cache = geodeClient.getClientCache();
 		
 
 **Get a Region**
 		
 	Region<String,PdxInstance> region = geodeClient.getRegion("Test"))
-
-
 
 **Execute a Query**
 

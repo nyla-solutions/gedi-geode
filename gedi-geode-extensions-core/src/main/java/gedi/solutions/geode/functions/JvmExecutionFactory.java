@@ -11,12 +11,11 @@ import org.apache.geode.cache.execute.Execution;
 public class JvmExecutionFactory implements ExecutionFactory
 {
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Execution onRegion(Region<?, ?> region)
 	{
 		
-		JvmExecution exe = new JvmExecution<>(region);
+		JvmExecution exe = new JvmExecution(region);
 		
 		return exe;
 	}

@@ -90,7 +90,7 @@ open class GeodeRegionService
 			if(region == null || region.length == 0 || key == null)
 				return null;
 			
-			var gemRegion : Region<String, Object> = geode.getRegion(region);
+			var gemRegion : Region<String, Any> = geode.getRegion(region);
 			
 			var value = gemRegion.get(key);
 			

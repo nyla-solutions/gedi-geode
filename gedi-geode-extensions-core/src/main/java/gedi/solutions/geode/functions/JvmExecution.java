@@ -17,10 +17,10 @@ import org.apache.geode.cache.execute.ResultCollector;
  * @param <V> the value value
  * @param <T> the generic type
  */
-public class JvmExecution<K,V,T> extends ExecutionAdapter
+public class JvmExecution extends ExecutionAdapter
 {
 	
-	public JvmExecution(Region<K,V> region)
+	public JvmExecution(Region<?,?> region)
 	{
 		if (region == null)
 			throw new IllegalArgumentException("region: required");
@@ -45,7 +45,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 	 * @param resultCollector the result collector
 	 * @return the execution with the set result collector
 	 */
-	public Execution withCollector(ResultCollector resultCollector)
+	public Execution withCollector(ResultCollector<?,?> resultCollector)
 	{
 		throw new RuntimeException("Not implemented");
 	}//-------------------------------------------------------------------
@@ -61,7 +61,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 		JvmResultsSender resultSender = new JvmResultsSender();
 		JvmResultCollector jmvResultCollector = new JvmResultCollector(resultSender);
 		
-		JvmRegionFunctionContext<K, V, T> rfc = new JvmRegionFunctionContext
+		JvmRegionFunctionContext<?,?, ?> rfc = new JvmRegionFunctionContext
 				(dataSet, resultSender, arguments, filter);
 		
 		function.execute(rfc);
@@ -70,7 +70,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 		return jmvResultCollector;
 	}//-------------------------------------------------------------------
 
-	private final Region<K,V> dataSet;
+	private final Region<?,?> dataSet;
 	private Set<?> filter = null;
 	
 	private Object arguments = null;

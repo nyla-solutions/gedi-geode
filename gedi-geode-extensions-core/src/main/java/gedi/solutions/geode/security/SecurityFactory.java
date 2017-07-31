@@ -1,7 +1,7 @@
 package gedi.solutions.geode.security;
 
 import org.apache.geode.security.AuthInitialize;
-import org.apache.geode.security.Authenticator;
+import org.apache.geode.security.SecurityManager;
 
 /**
  * SecurityFactory is representable for the create authorization/authentication objects
@@ -27,7 +27,7 @@ public class SecurityFactory
 	 * 
 	 * @return new LDAPAuthenticator()
 	 */
-	public static Authenticator createAuthenticator()
+	public static SecurityManager createAuthenticator()
 	{
 		return new LDAPAuthenticator();
 	}// ------------------------------------------------

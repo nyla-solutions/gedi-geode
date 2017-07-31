@@ -1,0 +1,10 @@
+configure pdx --read-serialized=true
+
+create lucene index --name=USER_INDEX --region=USER_TEST --field=id,firstName,lastName
+
+create region --name=USER_TEST --type=PARTITION
+
+
+create region --name=Test --type=PARTITION
+
+create region --name=PAGING  --type=PARTITION

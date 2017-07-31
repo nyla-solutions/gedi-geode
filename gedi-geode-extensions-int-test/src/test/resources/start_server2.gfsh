@@ -1,0 +1,1 @@
+start server --name=server2 --server-port=10102 --use-cluster-configuration --locators=localhost[10334]

@@ -24,7 +24,10 @@ import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
 import gedi.solutions.geode.client.cq.CqQueueListener;
 import gedi.solutions.geode.io.Querier;
+import gedi.solutions.geode.io.search.GeodeSearch;
+import gedi.solutions.geode.io.search.TextPageCriteria;
 import nyla.solutions.core.util.Config;
+
 
 
 /**
@@ -102,6 +105,7 @@ public class GeodeClient
 		return select(oql,null);
 	}//------------------------------------------------
 	
+	
 	public <ReturnType> Collection<ReturnType> select(String oql, RegionFunctionContext rfc)
 	{
 		return  Querier.query(oql, rfc);
@@ -121,6 +125,30 @@ public class GeodeClient
 		cachingProxy = false;
 		this.clientCache = clientCache;
 		this.factory = factory;
+	}//------------------------------------------------
+	/**
+	 * 
+	 * @param criteria the search criteria
+	 * @param pageRegion the page region to put results of collections keys
+	 * @return
+	 */
+	public Collection<String> searchWithPageKeys(TextPageCriteria criteria)
+	{
+		 Region<String,Collection<?>> pageRegion = this.getRegion(criteria.getPageRegionName());
+		 
+		GeodeSearch search = new GeodeSearch(this.clientCache);
+		
+		return search.searchWithPageKeys(criteria,pageRegion);
+	}//------------------------------------------------
+	
+	public <T> Collection<T> researchSearchResults(TextPageCriteria criteria, int pageNumber)
+	{
+		GeodeSearch search = new GeodeSearch(this.clientCache);
+		
+		Region<String,Collection<?>> pageRegion = this.getRegion(criteria.getPageRegionName());
+		Region<?,?> region = this.getRegion(criteria.getRegionName());
+		
+		return search.researchSearchResults(criteria,pageNumber,region,pageRegion);
 	}
 	
 	/**
@@ -133,6 +161,9 @@ public class GeodeClient
 	@SuppressWarnings("unchecked")
 	public <K,V> Region<K,V> getRegion(String regionName)
 	{
+		if(regionName == null || regionName.length() == 0)
+			return null;
+		
 		Region<K,V> region = (Region<K,V>)clientCache.getRegion(regionName);
 		
 		if(region != null )
@@ -184,6 +215,8 @@ public class GeodeClient
 		}
 	}
 	//------------------------------------------------
+	
+	
 	/**
 	 * 
 	 * @return the GEODE client
