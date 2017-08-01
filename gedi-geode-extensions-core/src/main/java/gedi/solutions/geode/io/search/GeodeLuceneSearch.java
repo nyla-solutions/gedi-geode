@@ -83,7 +83,7 @@ public class GeodeLuceneSearch
 			 Collection<Map.Entry<Object,Object>> results = null;
 			 if(sortField != null && sortField.trim().length() > 0 )
 			 {
-				 beanComparator = new BeanComparator(sortField);
+				 beanComparator = new BeanComparator(sortField,criteria.isSortDescending());
 				 
 				 Collection<Map.Entry<Object,Object>> set = new TreeSet<Map.Entry<Object,Object>>(beanComparator);
 				 list.parallelStream().forEach(e -> set.add(new MapEntry<Object,Object>(e.getKey(), e.getValue())));

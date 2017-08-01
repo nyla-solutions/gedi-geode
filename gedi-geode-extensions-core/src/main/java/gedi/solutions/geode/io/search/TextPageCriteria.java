@@ -150,6 +150,21 @@ public class TextPageCriteria implements  Serializable
 		this.filter = filter;
 	}
 
+	/**
+	 * @return the sortDescending
+	 */
+	public boolean isSortDescending()
+	{
+		return sortDescending;
+	}
+	/**
+	 * @param sortDescending the sortDescending to set
+	 */
+	public void setSortDescending(boolean sortDescending)
+	{
+		this.sortDescending = sortDescending;
+	}
+
 
 	private String query;
 	private String regionName;
@@ -157,6 +172,8 @@ public class TextPageCriteria implements  Serializable
 	private String indexName;
 	private String defaultField;
 	private String sortField;
+	private boolean sortDescending = false;
+	
 	private String id;
 	private int pageSize;
 	private Set<?> filter;
