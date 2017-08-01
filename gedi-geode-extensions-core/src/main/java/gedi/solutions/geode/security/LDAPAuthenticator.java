@@ -28,7 +28,6 @@ public class LDAPAuthenticator implements SecurityManager, SecurityConstants
 	 * The Authenticator will construct the initial directory context. 
 	 * The security credentials (username/password) will be provided to the context.
 	 * @param properties the input login properties
-	 * @param distributedMember the distribute member information 
 	 * @return the security credentials
 	 */
 	//@Override

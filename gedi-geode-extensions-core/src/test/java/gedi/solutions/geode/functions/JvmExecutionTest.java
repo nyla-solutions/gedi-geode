@@ -32,7 +32,7 @@ public class JvmExecutionTest {
         Region<?,?> region = Mockito.mock(Region.class);
         JvmExecution jvm = new JvmExecution(region);
 
-        Execution exe = jvm.withArgs(Mockito.anySet());
+        Execution exe = jvm.withArgs(Mockito.any());
 
         Assert.assertEquals(jvm,exe);
 

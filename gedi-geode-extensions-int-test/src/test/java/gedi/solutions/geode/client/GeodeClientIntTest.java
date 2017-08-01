@@ -3,6 +3,8 @@ package gedi.solutions.geode.client;
 import static org.junit.Assert.*;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
@@ -65,12 +67,32 @@ public class GeodeClientIntTest
 		
 		TextPageCriteria criteria = new TextPageCriteria();
 		criteria.setRegionName("USER_TEST");
+		criteria.setPageRegionName("PAGING");
+		criteria.setDefaultField("lastName");
+		criteria.setIndexName("USER_INDEX");
+		criteria.setId("JUNIT");
+		criteria.setPageSize(2);
 		
 		///put some data
-		String email ="nyl2@test.com", loginID ="nyla",firstName = "nyla", lastName = "green";
+		String email ="nyla@test.com", loginID ="nyla",firstName = "nyla", lastName = "green";
 		userTestRegion.put("nyla", new UserProfile(email,loginID,firstName,lastName));
 		
-		criteria.setQuery("greg");
+		
+		email ="ggreen@test.com";
+		loginID ="ggreen";
+		firstName = "ggreen";
+		lastName = "green";
+		userTestRegion.put("ggreen", new UserProfile(email,loginID,firstName,lastName));
+		
+		
+		email ="rgreen@test.com";
+		loginID ="rgreen";
+		firstName = "rgreen";
+		lastName = "green";
+		userTestRegion.put("rgreen", new UserProfile(email,loginID,firstName,lastName));
+		
+		
+		criteria.setQuery("gr*");
 		
 		Collection<String> pages = geodeClient.searchWithPageKeys(criteria);
 		
@@ -80,13 +102,27 @@ public class GeodeClientIntTest
 		
 		
 		//get pages
-		Collection<User> users = geodeClient.researchSearchResults(criteria, 0);
+		Map<String,User> users = geodeClient.readResultsByPage(criteria, 0);
 		
 		assertTrue(users != null && !users.isEmpty());
+		assertEquals(2, users.size());
 		
-	}
+		
+		criteria.setFilter(Collections.singleton("nyla"));
+		pages = geodeClient.searchWithPageKeys(criteria);
+		
+		assertNotNull(pages);
+		
+		assertTrue(!pages.isEmpty());
+		
+		//clean paging
+		
+		
+		
+		
+	}//------------------------------------------------
 
-	@Test
+	//@Test
 	public void testGeodeClientConnect()
 	{
 		System.setProperty("LOCATOR_HOST", "localhost");

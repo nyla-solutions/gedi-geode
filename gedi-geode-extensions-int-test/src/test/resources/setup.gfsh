@@ -1,6 +1,6 @@
-configure pdx --read-serialized=true
+configure pdx --read-serialized=true --disk-store=DEFAULT  --portable-auto-serializable-classes="gedi.*,nyla.*"
 
-create lucene index --name=USER_INDEX --region=USER_TEST --field=id,firstName,lastName
+create lucene index --name=USER_INDEX --region=USER_TEST --field=loginID,firstName,lastName
 
 create region --name=USER_TEST --type=PARTITION
 
@@ -8,3 +8,7 @@ create region --name=USER_TEST --type=PARTITION
 create region --name=Test --type=PARTITION
 
 create region --name=PAGING  --type=PARTITION
+
+deploy --jar=/Projects/solutions/nyla/dev/nyla.solutions.core/build/libs/nyla.solutions.core-1.0.1-SNAPSHOT.jar
+
+deploy --jar=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-0.0.2-SNAPSHOT.jar

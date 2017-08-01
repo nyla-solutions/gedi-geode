@@ -15,26 +15,6 @@ import org.apache.geode.cache.execute.ResultCollector;
 public abstract class ExecutionAdapter implements Execution
 {
 
-	
-	public Execution withFilter(Set<?> paramSet)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Execution withArgs(Object paramObject)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Execution withCollector(ResultCollector<?, ?> paramResultCollector)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 	public ResultCollector<?, ?> execute(String paramString) throws FunctionException
 	{
 		// TODO Auto-generated method stub

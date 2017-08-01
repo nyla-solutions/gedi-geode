@@ -86,6 +86,8 @@ public class GemFireIO
 		
 		flatten(collectionResults, list);
 
+		if(list.isEmpty())
+			return null;
 					
 		return (Collection<T>)list;		
 		
@@ -136,7 +138,8 @@ public class GemFireIO
 			if(inputObj instanceof Exception )
 				throw (Exception)inputObj;
 			
-			
+			if(inputObj == null)
+				continue;
 			
 			if(inputObj instanceof Collection)
 				flatten((Collection<Object>)inputObj,flattenOutput);

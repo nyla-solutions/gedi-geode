@@ -4,6 +4,7 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -14,7 +15,7 @@ import java.util.Properties;
 
 public class GeodeClientTest  {
 
-    @Test
+    @Ignore
     public void testing_security()
             throws Exception
     {

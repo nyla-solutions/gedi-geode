@@ -1,6 +1,7 @@
 package gedi.solutions.geode.io.search;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class TextPageCriteria implements  Serializable
 {
@@ -134,6 +135,22 @@ public class TextPageCriteria implements  Serializable
 	}
 
 
+	/**
+	 * @return the filter
+	 */
+	public Set<?> getFilter()
+	{
+		return filter;
+	}
+	/**
+	 * @param filter the filter to set
+	 */
+	public void setFilter(Set<?> filter)
+	{
+		this.filter = filter;
+	}
+
+
 	private String query;
 	private String regionName;
 	private String pageRegionName;
@@ -142,4 +159,5 @@ public class TextPageCriteria implements  Serializable
 	private String sortField;
 	private String id;
 	private int pageSize;
+	private Set<?> filter;
 }

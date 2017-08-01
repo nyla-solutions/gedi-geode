@@ -13,9 +13,6 @@ import org.apache.geode.cache.execute.ResultCollector;
  * 
  * @author Gregory Green
  *
- * @param <K> the key type
- * @param <V> the value value
- * @param <T> the generic type
  */
 public class JvmExecution extends ExecutionAdapter
 {
@@ -26,29 +23,36 @@ public class JvmExecution extends ExecutionAdapter
 			throw new IllegalArgumentException("region: required");
 		this.dataSet = region;
 	}//-------------------------------------------------------------------
-	public Execution withFilter(Set<?> filter)
+	
+	@Override
+	public Execution withFilter(Set filter)
 	{
 		this.filter = filter;
-
+		// TODO Auto-generated method stub
 		return this;
-	}//-------------------------------------------------------------------
+	}
 
-	public Execution withArgs(Object args)
+	@Override
+	public Execution withCollector(ResultCollector arg0)
 	{
-		this.arguments = args;
-		
+		// TODO Auto-generated method stub
 		return this;
-	}//-------------------------------------------------------------------
-
-	/**
-	 *
-	 * @param resultCollector the result collector
-	 * @return the execution with the set result collector
-	 */
-	public Execution withCollector(ResultCollector<?,?> resultCollector)
+	}
+	@Override
+	public Execution withArgs(Object arg0)
 	{
-		throw new RuntimeException("Not implemented");
-	}//-------------------------------------------------------------------
+		this.arguments = arg0;
+		return this;
+	}
+
+	@Override
+	public Execution setArguments(Object args)
+	{
+	
+		 this.arguments = args;
+		 
+		 return this;
+	}
 	/**
 	 * 
 	 * @param function the function to exe

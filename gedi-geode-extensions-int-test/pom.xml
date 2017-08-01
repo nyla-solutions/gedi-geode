@@ -11,7 +11,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	  	<maven.javadoc.skip>true</maven.javadoc.skip>		
-	  	<gemfire.version>9.0.2</gemfire.version>	
+	  	<gemfire.version>9.1.0</gemfire.version>	
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
 	<licenses>
@@ -68,11 +68,7 @@
 			<version>${gemfire.version}</version>
 		</dependency>		
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-		<dependency>
-		    <groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-api</artifactId>
-		    <version>2.6.2</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>nyla.solutions.core</artifactId>

@@ -1,1 +1,1 @@
-start locator --locators=localhost[10334] --enable-cluster-configuration
+start locator --locators=localhost[10334] --name=local --enable-cluster-configuration

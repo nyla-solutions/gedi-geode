@@ -1,0 +1,14 @@
+search lucene --name=USER_INDEX --region=/USER_TEST  --queryStrings="n*" --defaultField=firstName --limit=100  --keys-only=true
+
+
+search lucene --name=USER_INDEX --region=/USER_TEST  --queryStrings="g*" --defaultField=lastName --limit=100  --keys-only=true
+
+
+query --query="select * from /PAGING.keySet()"
+
+query --query="select p.get(0) from /PAGING p"
+
+query --query="select * from /PAGING.keySet() p"
+
+
+query --query="select * from /USER_TEST"

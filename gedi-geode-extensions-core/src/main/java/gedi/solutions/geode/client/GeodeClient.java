@@ -1,6 +1,7 @@
 package gedi.solutions.geode.client;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 
@@ -10,6 +11,8 @@ import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.apache.geode.cache.execute.Execution;
+import org.apache.geode.cache.execute.FunctionService;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqAttributesFactory;
@@ -23,9 +26,11 @@ import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
 import gedi.solutions.geode.client.cq.CqQueueListener;
+import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
-import gedi.solutions.geode.io.search.GeodeSearch;
+import gedi.solutions.geode.io.search.GeodeLuceneSearch;
 import gedi.solutions.geode.io.search.TextPageCriteria;
+import gedi.solutions.geode.io.search.functions.GeodeSearchFunction;
 import nyla.solutions.core.util.Config;
 
 
@@ -129,26 +134,36 @@ public class GeodeClient
 	/**
 	 * 
 	 * @param criteria the search criteria
-	 * @param pageRegion the page region to put results of collections keys
-	 * @return
+	 * @return the collection keys in the page region
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<String> searchWithPageKeys(TextPageCriteria criteria)
+	throws Exception
 	{
-		 Region<String,Collection<?>> pageRegion = this.getRegion(criteria.getPageRegionName());
-		 
-		GeodeSearch search = new GeodeSearch(this.clientCache);
+		if(criteria == null)
+			return null;
 		
-		return search.searchWithPageKeys(criteria,pageRegion);
-	}//------------------------------------------------
-	
-	public <T> Collection<T> researchSearchResults(TextPageCriteria criteria, int pageNumber)
-	{
-		GeodeSearch search = new GeodeSearch(this.clientCache);
-		
-		Region<String,Collection<?>> pageRegion = this.getRegion(criteria.getPageRegionName());
 		Region<?,?> region = this.getRegion(criteria.getRegionName());
 		
-		return search.researchSearchResults(criteria,pageNumber,region,pageRegion);
+		Execution<TextPageCriteria,Collection<String>,?> exe = FunctionService.onRegion(region).setArguments(criteria);
+		
+		if(criteria.getFilter() != null)
+		{
+			exe = exe.withFilter(criteria.getFilter());
+		}
+		
+	    return GemFireIO.exeWithResults(exe, new GeodeSearchFunction());
+	    
+	}//------------------------------------------------
+	
+	public <K,V> Map<K,V> readResultsByPage(TextPageCriteria criteria, int pageNumber)
+	{
+		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
+		
+		Region<String,Collection<?>> pageRegion = this.getRegion(criteria.getPageRegionName());
+		Region<K,V> region = this.getRegion(criteria.getRegionName());
+		
+		return search.readResultsByPage(criteria,pageNumber,region,pageRegion);
 	}
 	
 	/**
@@ -226,7 +241,7 @@ public class GeodeClient
 		if(geodeClient != null)
 			return geodeClient;
 		
-		geodeClient = new GeodeClient(true,".*");
+		geodeClient = new GeodeClient(true,Config.getProperty("PDX_CLASS_PATTERN"));
 		
 		return geodeClient;
 	}//------------------------------------------------
