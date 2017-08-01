@@ -15,6 +15,7 @@ import org.apache.geode.cache.lucene.LuceneResultStruct;
 import org.apache.geode.cache.lucene.LuceneService;
 import org.apache.geode.cache.lucene.LuceneServiceProvider;
 
+import gedi.solutions.geode.io.Querier;
 import nyla.solutions.core.data.MapEntry;
 import nyla.solutions.core.exception.SystemException;
 import nyla.solutions.core.util.BeanComparator;
@@ -96,9 +97,7 @@ public class GeodeLuceneSearch
 			 
 			 //add to pages
 			 List<Collection<Object>> pagesCollection = Organizer.toKeyPages(results, criteria.getPageSize());
-			 
-			 //pagesCollection.forEach(p -> this.pageRegion.put(toKeyPage.apply(e), arg1));
-			 
+		 
 			 int pageIndex = 0;
 			 String key = null;
 			 ArrayList<String> keys = new ArrayList<String>(10);
@@ -180,7 +179,16 @@ public class GeodeLuceneSearch
 			return list;
 			
 		}
-	}
+	}//------------------------------------------------
+	public Collection<String> clearSearchResultsByPage(TextPageCriteria criteria, Region<String,Collection<?>> pageRegion)
+	{		
+		Collection<String> pageKeys = Querier.query("select * from /"+criteria.getPageRegionName()+".keySet() k where k like '"+criteria.getId()+"%'");
+		
+		
+		pageRegion.removeAll(pageKeys);
+		
+		return pageKeys;
+	}//------------------------------------------------
 	
 	private final LuceneService luceneService;
 

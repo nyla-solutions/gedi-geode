@@ -156,7 +156,7 @@ public class GeodeClient
 	    
 	}//------------------------------------------------
 	
-	public <K,V> Map<K,V> readResultsByPage(TextPageCriteria criteria, int pageNumber)
+	public <K,V> Map<K,V> readSearchResultsByPage(TextPageCriteria criteria, int pageNumber)
 	{
 		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
 		
@@ -164,7 +164,14 @@ public class GeodeClient
 		Region<K,V> region = this.getRegion(criteria.getRegionName());
 		
 		return search.readResultsByPage(criteria,pageNumber,region,pageRegion);
-	}
+	}//------------------------------------------------
+	public Collection<String> clearSearchResultsByPage(TextPageCriteria criteria)
+	{
+		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
+	
+		return search.clearSearchResultsByPage(criteria,this.getRegion(criteria.getPageRegionName()));
+		
+	}//------------------------------------------------
 	
 	/**
 	 * This is an example to get or create a region
