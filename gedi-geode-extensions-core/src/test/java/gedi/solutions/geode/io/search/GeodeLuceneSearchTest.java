@@ -7,13 +7,11 @@ import org.apache.geode.cache.lucene.LuceneQuery;
 import org.apache.geode.cache.lucene.LuceneQueryFactory;
 import org.apache.geode.cache.lucene.LuceneResultStruct;
 import org.apache.geode.cache.lucene.LuceneService;
-import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class GeodeLuceneSearchTest
 {
@@ -47,7 +45,7 @@ public class GeodeLuceneSearchTest
 		
 		assertNull(searcher.saveSearchResultsWithPageKeys(null,pageRegion));
 		
-		TextPageCriteria criteria = new TextPageCriteria();
+		SearchPageCriteria criteria = new SearchPageCriteria();
 		assertNull(searcher.saveSearchResultsWithPageKeys(criteria,pageRegion));
 		
 		criteria.setIndexName("TestIndex");
@@ -56,6 +54,13 @@ public class GeodeLuceneSearchTest
 		criteria.setDefaultField("test");
 		
 		assertNotNull(searcher.saveSearchResultsWithPageKeys(criteria,pageRegion));
+		
+		
+		criteria.setLimit(10);
+		assertNotNull(searcher.saveSearchResultsWithPageKeys(criteria,pageRegion));
+		
+		verify(factory).setLimit(10);
+		
 		
 	}
 

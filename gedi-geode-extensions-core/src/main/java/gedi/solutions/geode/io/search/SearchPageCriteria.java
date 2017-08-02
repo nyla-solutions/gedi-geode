@@ -3,7 +3,7 @@ package gedi.solutions.geode.io.search;
 import java.io.Serializable;
 import java.util.Set;
 
-public class TextPageCriteria implements  Serializable
+public class SearchPageCriteria implements  Serializable
 {
 
 	/**
@@ -165,6 +165,22 @@ public class TextPageCriteria implements  Serializable
 		this.sortDescending = sortDescending;
 	}
 
+	
+	/**
+	 * @return the limit
+	 */
+	public int getLimit()
+	{
+		return limit;
+	}
+	/**
+	 * @param limit the limit to set
+	 */
+	public void setLimit(int limit)
+	{
+		this.limit = limit;
+	}
+
 
 	private String query;
 	private String regionName;
@@ -173,6 +189,7 @@ public class TextPageCriteria implements  Serializable
 	private String defaultField;
 	private String sortField;
 	private boolean sortDescending = false;
+	private int limit =0 ;
 	
 	private String id;
 	private int pageSize;

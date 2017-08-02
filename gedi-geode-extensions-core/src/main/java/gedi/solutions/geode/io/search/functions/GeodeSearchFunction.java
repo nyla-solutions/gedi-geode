@@ -13,7 +13,7 @@ import org.apache.geode.pdx.PdxInstance;
 import org.apache.geode.pdx.PdxSerializationException;
 
 import gedi.solutions.geode.io.search.GeodeLuceneSearch;
-import gedi.solutions.geode.io.search.TextPageCriteria;
+import gedi.solutions.geode.io.search.SearchPageCriteria;
 
 public class GeodeSearchFunction implements Function<Object>
 {
@@ -37,7 +37,7 @@ public class GeodeSearchFunction implements Function<Object>
 		if (args == null)
 			throw new IllegalArgumentException("arguments is required");
 		
-		TextPageCriteria criteria = null;
+		SearchPageCriteria criteria = null;
 		
 		if(args instanceof PdxInstance)
 		{
@@ -45,7 +45,7 @@ public class GeodeSearchFunction implements Function<Object>
 			
 			try
 			{
-				criteria = (TextPageCriteria)(pdxInstance.getObject());
+				criteria = (SearchPageCriteria)(pdxInstance.getObject());
 			}
 			catch (PdxSerializationException e)
 			{
@@ -54,7 +54,7 @@ public class GeodeSearchFunction implements Function<Object>
 		}
 		else 
 		{
-			criteria = (TextPageCriteria)((Object[])args)[0];
+			criteria = (SearchPageCriteria)args;
 		}
 		
 		

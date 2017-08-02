@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import gedi.solutions.geode.io.search.TextPageCriteria;
+import gedi.solutions.geode.io.search.SearchPageCriteria;
 import nyla.solutions.core.security.user.data.User;
 import nyla.solutions.core.security.user.data.UserProfile;
 import nyla.solutions.core.util.Config;
@@ -65,7 +65,7 @@ public class GeodeClientIntTest
 		Region<Object,Object> userTestRegion = geodeClient.getRegion("USER_TEST");
 		assertNotNull(userTestRegion);
 		
-		TextPageCriteria criteria = new TextPageCriteria();
+		SearchPageCriteria criteria = new SearchPageCriteria();
 		criteria.setRegionName("USER_TEST");
 		criteria.setPageRegionName("PAGING");
 		criteria.setDefaultField("lastName");
@@ -102,7 +102,7 @@ public class GeodeClientIntTest
 		
 		
 		//get pages
-		Map<String,User> users = geodeClient.readResultsByPage(criteria, 0);
+		Map<String,User> users = geodeClient.readSearchResultsByPage(criteria, 0);
 		
 		assertTrue(users != null && !users.isEmpty());
 		assertEquals(2, users.size());
@@ -117,8 +117,9 @@ public class GeodeClientIntTest
 		
 		//clean paging
 		
+		Collection<String> deletedKeys = geodeClient.clearSearchResultsByPage(criteria);
 		
-		
+		assertTrue(deletedKeys != null && !deletedKeys.isEmpty());
 		
 	}//------------------------------------------------
 

@@ -11,6 +11,7 @@ import org.apache.geode.cache.GemFireCache;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.lucene.LuceneQuery;
 import org.apache.geode.cache.lucene.LuceneQueryException;
+import org.apache.geode.cache.lucene.LuceneQueryFactory;
 import org.apache.geode.cache.lucene.LuceneResultStruct;
 import org.apache.geode.cache.lucene.LuceneService;
 import org.apache.geode.cache.lucene.LuceneServiceProvider;
@@ -45,7 +46,7 @@ public class GeodeLuceneSearch
 		this.luceneService = luceneService;
 	}//------------------------------------------------
 
-	public Collection<String>  saveSearchResultsWithPageKeys(TextPageCriteria criteria, Region<String,Collection<?>> pageKeysRegion)
+	public Collection<String>  saveSearchResultsWithPageKeys(SearchPageCriteria criteria, Region<String,Collection<?>> pageKeysRegion)
 	{
 		if(criteria == null)
 			return null;
@@ -64,8 +65,15 @@ public class GeodeLuceneSearch
 			
 		try
 		{	
+			LuceneQueryFactory factory = luceneService.createLuceneQueryFactory();
 			
-			LuceneQuery<Object, Object> luceneQuery = luceneService.createLuceneQueryFactory()
+			if(criteria.getLimit() > 0)
+			{
+				factory.setLimit(criteria.getLimit());
+				
+			}
+			
+			LuceneQuery<Object, Object> luceneQuery = factory
 			  .create(criteria.getIndexName(), 
 			  criteria.getRegionName(), 
 			  criteria.getQuery(), criteria.getDefaultField());
@@ -129,7 +137,7 @@ public class GeodeLuceneSearch
 	 * @param pageRegion the page region with key contains the pageKey and value the keys to the region
 	 * @return region.getAll(pageKey)
 	 */
-	public <K,V> Map<K,V> readResultsByPage(TextPageCriteria criteria, int pageNumber, Region<K,V> region, Region<String,Collection<?>> pageRegion)
+	public <K,V> Map<K,V> readResultsByPage(SearchPageCriteria criteria, int pageNumber, Region<K,V> region, Region<String,Collection<?>> pageRegion)
 	{
 		if(pageRegion == null )
 			return null;
@@ -143,7 +151,7 @@ public class GeodeLuceneSearch
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <K,V> Collection<V> readResultsByPageValues(TextPageCriteria criteria, int pageNumber, Region<K,V> region, Region<String,Collection<?>> pageRegion)
+	public <K,V> Collection<V> readResultsByPageValues(SearchPageCriteria criteria, int pageNumber, Region<K,V> region, Region<String,Collection<?>> pageRegion)
 	{
 		if(pageRegion == null )
 			return null;
@@ -180,7 +188,7 @@ public class GeodeLuceneSearch
 			
 		}
 	}//------------------------------------------------
-	public Collection<String> clearSearchResultsByPage(TextPageCriteria criteria, Region<String,Collection<?>> pageRegion)
+	public Collection<String> clearSearchResultsByPage(SearchPageCriteria criteria, Region<String,Collection<?>> pageRegion)
 	{		
 		Collection<String> pageKeys = Querier.query("select * from /"+criteria.getPageRegionName()+".keySet() k where k like '"+criteria.getId()+"%'");
 		

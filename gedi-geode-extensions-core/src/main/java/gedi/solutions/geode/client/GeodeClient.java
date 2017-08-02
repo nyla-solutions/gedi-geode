@@ -29,7 +29,7 @@ import gedi.solutions.geode.client.cq.CqQueueListener;
 import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
 import gedi.solutions.geode.io.search.GeodeLuceneSearch;
-import gedi.solutions.geode.io.search.TextPageCriteria;
+import gedi.solutions.geode.io.search.SearchPageCriteria;
 import gedi.solutions.geode.io.search.functions.GeodeSearchFunction;
 import nyla.solutions.core.util.Config;
 
@@ -137,7 +137,7 @@ public class GeodeClient
 	 * @return the collection keys in the page region
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<String> searchWithPageKeys(TextPageCriteria criteria)
+	public Collection<String> searchWithPageKeys(SearchPageCriteria criteria)
 	throws Exception
 	{
 		if(criteria == null)
@@ -145,7 +145,7 @@ public class GeodeClient
 		
 		Region<?,?> region = this.getRegion(criteria.getRegionName());
 		
-		Execution<TextPageCriteria,Collection<String>,?> exe = FunctionService.onRegion(region).setArguments(criteria);
+		Execution<SearchPageCriteria,Collection<String>,?> exe = FunctionService.onRegion(region).setArguments(criteria);
 		
 		if(criteria.getFilter() != null)
 		{
@@ -156,7 +156,7 @@ public class GeodeClient
 	    
 	}//------------------------------------------------
 	
-	public <K,V> Map<K,V> readSearchResultsByPage(TextPageCriteria criteria, int pageNumber)
+	public <K,V> Map<K,V> readSearchResultsByPage(SearchPageCriteria criteria, int pageNumber)
 	{
 		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
 		
@@ -165,7 +165,7 @@ public class GeodeClient
 		
 		return search.readResultsByPage(criteria,pageNumber,region,pageRegion);
 	}//------------------------------------------------
-	public Collection<String> clearSearchResultsByPage(TextPageCriteria criteria)
+	public Collection<String> clearSearchResultsByPage(SearchPageCriteria criteria)
 	{
 		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
 	

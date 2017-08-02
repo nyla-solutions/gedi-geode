@@ -8,7 +8,7 @@
 	<name>gedi-geode</name>
   <modules> 
         <module>gedi-geode-extensions-core</module>
-        <module>gedi-geode-extensions-rest</module>		
+        <!--module>gedi-geode-extensions-rest</module-->		
     </modules>
 
 	<properties>
