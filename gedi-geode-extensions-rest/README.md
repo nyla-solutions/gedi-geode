@@ -1,4 +1,4 @@
-# GEDI Geode REST
+ # GEDI Geode REST
 
 This is an Spring Boot based app that provides the following GemFire features 
 - POST region with region key and value to put data into a region
@@ -60,3 +60,8 @@ http://localhost:8080/region/Test/hello
 RESPONSE
 
 { "name" : "world"}
+
+
+
+	
+	

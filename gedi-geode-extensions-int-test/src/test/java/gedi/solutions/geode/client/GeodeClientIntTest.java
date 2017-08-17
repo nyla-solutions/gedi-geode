@@ -102,10 +102,10 @@ public class GeodeClientIntTest
 		
 		
 		//get pages
-		Map<String,User> users = geodeClient.readResultsByPage(criteria, 0);
+		//Map<String,User> users = geodeClient.readResultsByPage(criteria, 0);
 		
-		assertTrue(users != null && !users.isEmpty());
-		assertEquals(2, users.size());
+		//assertTrue(users != null && !users.isEmpty());
+		//assertEquals(2, users.size());
 		
 		
 		criteria.setFilter(Collections.singleton("nyla"));
@@ -136,9 +136,10 @@ public class GeodeClientIntTest
 		Assert.assertTrue(geodeClient.getClientCache() != null);
 	}
 	
-	//@Test
-	@Ignore
+	@Test
+	//@Ignore
 	public void testPutAmmountOfData()
+	throws Exception
 	{
 		
 		GeodeClient geodeClient = GeodeClient.connect();
@@ -147,7 +148,8 @@ public class GeodeClientIntTest
 		while(true)
 		{
 			i ++;
-			geodeClient.getRegion("TEST_PARTITION_PERSISTENT_OVERFLOW").put(i, new UserProfile());
+			geodeClient.getRegion("tweets").put(i, new UserProfile());
+			Thread.sleep(5);
 			
 		}
 		

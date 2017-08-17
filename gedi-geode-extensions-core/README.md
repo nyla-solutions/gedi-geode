@@ -37,3 +37,11 @@ Get the Apache Geode client cache
     
     //get first recod
     PdxInstance pdxRow = queue.poll();
+    
+    
+## GemFire Commericial Repository
+
+
+See the following for instruction to down the GemFire artifacts.
+
+	https://gemfire.docs.pivotal.io/gemfire/getting_started/installation/obtain_gemfire_maven.html

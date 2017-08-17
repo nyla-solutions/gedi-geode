@@ -248,7 +248,7 @@ public class GeodeClient
 		if(geodeClient != null)
 			return geodeClient;
 		
-		geodeClient = new GeodeClient(true,Config.getProperty("PDX_CLASS_PATTERN"));
+		geodeClient = new GeodeClient(true,Config.getProperty("PDX_CLASS_PATTERN,.*"));
 		
 		return geodeClient;
 	}//------------------------------------------------

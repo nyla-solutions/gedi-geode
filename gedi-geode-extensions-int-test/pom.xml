@@ -77,7 +77,7 @@
 		<dependency>
 				<groupId>com.github.nyla-solutions</groupId>
 				<artifactId>gedi-geode-extensions-core</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
