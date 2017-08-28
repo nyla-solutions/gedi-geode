@@ -12,10 +12,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.javadoc.skip>false</maven.javadoc.skip>
 		<gemfire.version>9.0.2</gemfire.version>
-		<jacoco.method.coverage>0.0</jacoco.method.coverage>
-		 <jacoco.branch.coverage>0.0</jacoco.branch.coverage>
-  		 <jacoco.line.coverage>0.00</jacoco.line.coverage>
-	  	<maven.javadoc.skip>false</maven.javadoc.skip>		
+		<jacoco.method.coverage>0.0</jacoco.method.coverage>	
 	  	<!-- gemfire.version>9.1.0</gemfire.version-->	
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
@@ -86,7 +83,7 @@
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>nyla.solutions.core</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
