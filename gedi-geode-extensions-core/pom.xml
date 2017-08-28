@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode-extensions-core</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<name>gedi-geode-extensions-core</name>
-	<description>GemFire Enterprise Data Integration - Powered by Apache Geode</description>
+	<description>GemFire Enterprise Data Integration - common development extensions powered by Apache Geode</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>

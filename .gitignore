@@ -13,3 +13,4 @@ buildNumber.properties
 *.iml
 .gradle
 bin/
+.DS_Store
