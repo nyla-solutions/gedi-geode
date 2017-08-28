@@ -1,4 +1,4 @@
-#Overview
+# Overview
 
 The Grid Enterprise Data Integration (GEDI) Apache Geode/GemFire extenstions aPI.
 
@@ -23,6 +23,9 @@ deploy --jar=/Projects/solutions/nyla/dev/nyla.solutions.core/build/libs/nyla.so
 deploy --jar=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-0.0.1-SNAPSHOT.jar
 
 
+# core
 
+- [gedi-geode-extensions-core](https://github.com/nyla-solutions/gedi-geode/tree/master/gedi-geode-extensions-core) - developer friendly Apache Geode API(s)
+- [gedi-geode-extensions-int-test](https://github.com/nyla-solutions/gedi-geode/tree/master/gedi-geode-extensions-int-test) - developer friendly Apache Geode API(s)
     
  

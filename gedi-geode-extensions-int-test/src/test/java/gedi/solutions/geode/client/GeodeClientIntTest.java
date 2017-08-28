@@ -3,8 +3,10 @@ package gedi.solutions.geode.client;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import nyla.solutions.core.security.user.data.UserProfile;
 import nyla.solutions.core.util.Config;
 
 public class GeodeClientIntTest
@@ -55,4 +57,23 @@ public class GeodeClientIntTest
 		Assert.assertNotNull(geodeClient.getRegion("Test"));
 		Assert.assertTrue(geodeClient.getClientCache() != null);
 	}
+	
+	//@Test
+	@Ignore
+	public void testPutAmmountOfData()
+	{
+		
+		GeodeClient geodeClient = GeodeClient.connect();
+		
+		int i = 0;
+		while(true)
+		{
+			i ++;
+			geodeClient.getRegion("TEST_PARTITION_PERSISTENT_OVERFLOW").put(i, new UserProfile());
+			
+		}
+		
+	}
+	
+	
 }
