@@ -45,7 +45,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 	 * @param resultCollector the result collector
 	 * @return the execution with the set result collector
 	 */
-	public Execution withCollector(ResultCollector resultCollector)
+	public Execution withCollector(@SuppressWarnings("rawtypes") ResultCollector resultCollector)
 	{
 		throw new RuntimeException("Not implemented");
 	}//-------------------------------------------------------------------

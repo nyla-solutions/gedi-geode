@@ -19,7 +19,7 @@ import org.apache.geode.cache.snapshot.SnapshotOptions.SnapshotFormat;
 import org.apache.geode.internal.cache.snapshot.SnapshotOptionsImpl;
 
 import gedi.solutions.geode.data.ExportFileType;
-import gedi.solutions.geode.operations.functions.util.FunctionAssistant;
+import nyla.solutions.core.util.Debugger;
 
 /**
  * <pre>
@@ -90,7 +90,7 @@ public class GfdExportFunction  implements Function, Declarable
 		catch (Exception e)
 		{
 			
-			String stackTrace = FunctionAssistant.stackTrace(e);
+			String stackTrace = Debugger.stackTrace(e);
 			
 			FunctionException functionException = new FunctionException(stackTrace);
 			
@@ -158,7 +158,7 @@ public class GfdExportFunction  implements Function, Declarable
 		}
 	    catch(Exception e)
 	    {
-	    	throw new FunctionException("Error exporting ERROR:"+ e.getMessage()+" "+FunctionAssistant.stackTrace(e));
+	    	throw new FunctionException("Error exporting ERROR:"+ e.getMessage()+" "+Debugger.stackTrace(e));
 	    }
 	}// ------------------------------------------------
 	

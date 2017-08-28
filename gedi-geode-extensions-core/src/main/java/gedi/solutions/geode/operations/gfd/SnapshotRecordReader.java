@@ -99,7 +99,9 @@ public class SnapshotRecordReader implements Closeable
 
       // open new stream with buffering for reading entries
       dis = new DataInputStream(new BufferedInputStream(new FileInputStream(in)));
-      dis.skip(entryPosition);
+      if(dis.skip(entryPosition)< 0)
+      {
+      }
     }
 
     /**

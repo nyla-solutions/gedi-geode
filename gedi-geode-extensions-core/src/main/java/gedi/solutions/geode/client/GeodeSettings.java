@@ -94,7 +94,7 @@ public class GeodeSettings
 		
 		int port = 10334;
 		
-		String host = Config.getProperty("LOCATOR_HOST","");
+		String host = Config.getProperty(GeodeConfigConstants.LOCATOR_HOST_PROP,"");
 		
 		if (host.trim().length() == 0)
 		{
@@ -107,10 +107,10 @@ public class GeodeSettings
 		}
 		else
 		{
-			port = Config.getPropertyInteger("LOCATOR_PORT",10334).intValue();
+			port = Config.getPropertyInteger(GeodeConfigConstants.LOCATOR_PORT_PROP,10334).intValue();
 			
 			if(host.trim().length() == 0)
-				throw new ConfigException("LOCATOR_HOST configuration property required");
+				throw new ConfigException(GeodeConfigConstants.LOCATOR_PORT_PROP+" configuration property required");
 		}
 		
 		this.locatorHost = host;

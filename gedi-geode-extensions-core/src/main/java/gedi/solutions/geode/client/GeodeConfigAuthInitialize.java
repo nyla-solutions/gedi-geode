@@ -13,7 +13,8 @@ import nyla.solutions.core.util.Config;
  * <pre>
  * Set ENVIRONMENT
  * 
- * security-username
+ * security-username or SECURITY_USERNAME
+ * security-password or SECURITY_PASSWORD 
  * 
  * USER_NAME);
 	    String token = Config.getProperty(TOKEN,"")
@@ -23,14 +24,10 @@ import nyla.solutions.core.util.Config;
  *
  */
 public class GeodeConfigAuthInitialize
-implements AuthInitialize 
+implements AuthInitialize, GeodeConfigConstants
 {
 	private final GeodeSettings vcapConfig;
-
-	  public static final String USER_NAME = "security-username";
-	  public static final String PASSWORD = "security-password";
-	  public static final String TOKEN = "security-token";
-	  
+ 
 	  //private LogWriter logWriter, securityLogWriter;
 
 	  /**
@@ -55,8 +52,8 @@ implements AuthInitialize
 	  {
 
 	    Properties props = new Properties();
-	    String username = Config.getProperty(USER_NAME,"");
-	    String password = Config.getProperty(PASSWORD,"");
+	    String username = getSecurityUserName();
+	    String password = getSecurityPassword();
 	    String token = Config.getProperty(TOKEN,"");
 	    
 	    
@@ -77,7 +74,17 @@ implements AuthInitialize
 	      props.setProperty(TOKEN, token);
 	      
 	    return props;
-	  }
+	  }//------------------------------------------------
+	protected String getSecurityPassword()
+	{
+		String password = Config.getProperty(PASSWORD,Config.getProperty("SECURITY_PASSWORD",""));
+		return password;
+	}//------------------------------------------------
+	protected String getSecurityUserName()
+	{
+		String username = Config.getProperty(USER_NAME,Config.getProperty("SECURITY_USERNAME",""));
+		return username;
+	}//------------------------------------------------
 
 	  @Override
 	  public void init(LogWriter logWriter, LogWriter securityLogWriter)

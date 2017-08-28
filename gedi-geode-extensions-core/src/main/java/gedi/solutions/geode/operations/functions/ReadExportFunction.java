@@ -15,7 +15,8 @@ import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.ResultSender;
 
 import gedi.solutions.geode.data.ExportFileType;
-import gedi.solutions.geode.operations.functions.util.FunctionAssistant;
+import nyla.solutions.core.io.IO;
+import nyla.solutions.core.util.Debugger;
 
 
 
@@ -114,7 +115,7 @@ public class ReadExportFunction  implements Function
 		}
 		catch (Exception e)
 		{
-			String stackTrace = FunctionAssistant.stackTrace(e);
+			String stackTrace = Debugger.stackTrace(e);
 			logWriter.error(stackTrace);
 			
 			throw new FunctionException(stackTrace);
@@ -130,9 +131,9 @@ public class ReadExportFunction  implements Function
 		
 		switch(exportFileType)
 		{
-			case gfd: return FunctionAssistant.readBinaryFile(file);
+			case gfd: return IO.readBinaryFile(file);
 			
-			case json: return FunctionAssistant.readFile(file.getAbsolutePath(),StandardCharsets.UTF_8);
+			case json: return IO.readFile(file.getAbsolutePath(),StandardCharsets.UTF_8);
 			default:
 				throw new RuntimeException("Unknown extension file type:"+exportFileType);
 		}

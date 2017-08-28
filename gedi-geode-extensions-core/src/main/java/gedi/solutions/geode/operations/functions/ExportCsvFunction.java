@@ -17,6 +17,7 @@ import org.apache.geode.cache.partition.PartitionRegionHelper;
 
 import gedi.solutions.geode.operations.csv.CsvHeaderConverter;
 import gedi.solutions.geode.operations.csv.CsvRowConverter;
+import nyla.solutions.core.exception.SystemException;
 import nyla.solutions.core.io.converter.ConversionFileAuthor;
 import nyla.solutions.core.util.Config;
 
@@ -138,7 +139,7 @@ public class ExportCsvFunction  implements Function
 	    
 	    if(keySet == null || keySet.isEmpty())
 	    {
-	    	return false;	    	
+	    		return false;	    	
 	    }
 	    
 	    String regionName = region.getName();
@@ -151,7 +152,10 @@ public class ExportCsvFunction  implements Function
 	    
 	    
 	    if(resultFile.exists())
-	    	resultFile.delete();
+	    {
+	    		if(!resultFile.delete())
+	    			throw new SystemException("Cannot delete:"+resultFile);
+	    }
 	    
 	    ConversionFileAuthor<Object> author = new ConversionFileAuthor<>(resultFile, new CsvHeaderConverter(), new CsvRowConverter());
 	    

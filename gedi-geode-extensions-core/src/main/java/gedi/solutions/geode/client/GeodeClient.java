@@ -3,6 +3,7 @@ package gedi.solutions.geode.client;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.Queue;
+import java.util.Set;
 
 import org.apache.geode.cache.CacheClosedException;
 import org.apache.geode.cache.Region;
@@ -10,6 +11,8 @@ import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.apache.geode.cache.execute.Execution;
+import org.apache.geode.cache.execute.FunctionService;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqAttributesFactory;
@@ -23,8 +26,14 @@ import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
 import gedi.solutions.geode.client.cq.CqQueueListener;
+import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
+import gedi.solutions.geode.lucene.TextPageCriteria;
+import gedi.solutions.geode.lucene.function.LuceneSearchFunction;
+import nyla.solutions.core.exception.SystemException;
+import nyla.solutions.core.patterns.iteration.Paging;
 import nyla.solutions.core.util.Config;
+import nyla.solutions.core.util.Debugger;
 
 
 /**
@@ -68,13 +77,14 @@ public class GeodeClient
 		}
 		catch(CacheClosedException e)
 		{
+			Debugger.println(e.getMessage());
 		}
 		
 		try{
 			if(cache != null)
 				cache.close(); //close old connection
 		}catch(Exception e)
-		{}
+		{Debugger.println(e.getMessage());}
 		
 		
 			this.clientCache = new ClientCacheFactory(props).addPoolLocator(host, port)
@@ -101,6 +111,37 @@ public class GeodeClient
 	{
 		return select(oql,null);
 	}//------------------------------------------------
+	/**
+	 * @param <K> the key class
+	 * @param <V> the value class
+	 * @param criteria the search criteria
+	 * @param region the region
+	 * @param filter the filter set
+	 * @return collection of results
+	 */
+	
+	public <K,V> Paging<V>  searchText(TextPageCriteria criteria, Region<K,V> region, Set<K> filter)
+	{
+		try
+		{
+			
+			LuceneSearchFunction func = new LuceneSearchFunction();
+			
+			
+			Execution exe = FunctionService.onRegion(region).withFilter(filter);
+			
+			
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			Paging<V> paging = (Paging)GemFireIO.exeWithResults(exe, func);
+			
+			
+			return paging;
+		}
+		catch (Exception e)
+		{
+			throw new SystemException(e);
+		}		
+	}
 	
 	public <ReturnType> Collection<ReturnType> select(String oql, RegionFunctionContext rfc)
 	{
@@ -184,6 +225,8 @@ public class GeodeClient
 		}
 	}
 	//------------------------------------------------
+	
+	
 	/**
 	 * 
 	 * @return the GEODE client
@@ -193,7 +236,7 @@ public class GeodeClient
 		if(geodeClient != null)
 			return geodeClient;
 		
-		geodeClient = new GeodeClient(true,".*");
+		geodeClient = new GeodeClient(true,Config.getProperty(GeodeConfigConstants.PDX_CLASS_PATTERN_PROP));
 		
 		return geodeClient;
 	}//------------------------------------------------

@@ -4,9 +4,8 @@ import java.security.Principal;
 import java.util.Properties;
 
 import org.apache.geode.LogWriter;
-import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.security.AuthenticationFailedException;
-import org.apache.geode.security.Authenticator;
+import org.apache.geode.security.SecurityManager;
 
 import nyla.solutions.core.ds.LDAP;
 import nyla.solutions.core.util.Config;
@@ -18,7 +17,7 @@ import nyla.solutions.core.util.Debugger;
  * @author Gregory Green
  *
  */
-public class LDAPAuthenticator implements Authenticator, SecurityConstants
+public class LDAPAuthenticator implements SecurityManager, SecurityConstants
 {
 	//@Override
 	public void close()
@@ -29,12 +28,11 @@ public class LDAPAuthenticator implements Authenticator, SecurityConstants
 	 * The Authenticator will construct the initial directory context. 
 	 * The security credentials (username/password) will be provided to the context.
 	 * @param properties the input login properties
-	 * @param distributedMember the distribute member information 
 	 * @return the security credentials
 	 */
 	//@Override
-	public Principal authenticate(Properties properties, DistributedMember distributedMember)
-			throws AuthenticationFailedException
+	@Override
+	public Object authenticate(Properties properties) throws AuthenticationFailedException
 	{
 		if(properties == null)
 			    	throw new AuthenticationFailedException("properties not provided");
@@ -94,4 +92,6 @@ public class LDAPAuthenticator implements Authenticator, SecurityConstants
 	}// ------------------------------------------------
 
 	private boolean mustEncryptPassword = Config.getPropertyBoolean(LDAPAuthenticator.class,"mustEncryptPassword",false);
+
+	
 }

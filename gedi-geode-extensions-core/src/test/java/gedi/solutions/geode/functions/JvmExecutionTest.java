@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.Execution;
-import org.apache.geode.cache.execute.ResultCollector;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,11 +13,12 @@ import org.mockito.Mockito;
  */
 public class JvmExecutionTest {
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void test_withFilter(){
 
-        Region<?,?> region = Mockito.mock(Region.class);
-        JvmExecution jvm = new JvmExecution(region);
+        Region<Object,Object> region = Mockito.mock(Region.class);
+        JvmExecution<Object,Object,Object> jvm = new JvmExecution<Object,Object,Object>(region);
 
         Set<?> set = Mockito.mock(Set.class);
         Execution exe = jvm.withFilter(set);
@@ -27,11 +27,12 @@ public class JvmExecutionTest {
 
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void test_withArgs(){
 
-        Region<?,?> region = Mockito.mock(Region.class);
-        JvmExecution jvm = new JvmExecution(region);
+        Region<Object,Object> region = Mockito.mock(Region.class);
+        JvmExecution<Object,Object,Object> jvm = new JvmExecution<Object,Object,Object>(region);
 
         Execution exe = jvm.withArgs(Mockito.anySet());
 

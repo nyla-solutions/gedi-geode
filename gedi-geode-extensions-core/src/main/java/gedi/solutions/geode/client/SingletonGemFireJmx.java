@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 
+import nyla.solutions.core.exception.SystemException;
 import nyla.solutions.core.io.IO;
 import nyla.solutions.core.patterns.jmx.JMX;
 import nyla.solutions.core.util.Config;
@@ -34,7 +35,9 @@ public class SingletonGemFireJmx
 		
 		for (File file : files)
 		{
-			file.delete();
+			if(!file.delete())
+				throw new SystemException("cannot delete:"+file);
+				
 		}
 	}// --------------------------------------------------------
 	/**

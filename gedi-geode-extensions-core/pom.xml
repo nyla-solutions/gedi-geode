@@ -3,15 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode-extensions-core</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>gedi-geode-extensions-core</name>
 	<description>GemFire Enterprise Data Integration - Power by Apache Geode</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-	  	<maven.javadoc.skip>false</maven.javadoc.skip>		
-	  	<gemfire.version>9.0.2</gemfire.version>	
+		<maven.javadoc.skip>false</maven.javadoc.skip>
+		<gemfire.version>9.0.2</gemfire.version>
+		<jacoco.method.coverage>0.0</jacoco.method.coverage>
+		 <jacoco.branch.coverage>0.0</jacoco.branch.coverage>
+  		 <jacoco.line.coverage>0.00</jacoco.line.coverage>
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
 	<licenses>
@@ -52,11 +55,11 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-	<dependency>
+		<dependency>
 			<groupId>io.pivotal.gemfire</groupId>
 			<artifactId>geode-core</artifactId>
 			<version>${gemfire.version}</version>
-	</dependency>
+		</dependency>
 		<dependency>
 			<groupId>io.pivotal.gemfire</groupId>
 			<artifactId>geode-wan</artifactId>
@@ -66,27 +69,75 @@
 			<groupId>io.pivotal.gemfire</groupId>
 			<artifactId>geode-cq</artifactId>
 			<version>${gemfire.version}</version>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>io.pivotal.gemfire</groupId>
+			<artifactId>geode-lucene</artifactId>
+			<version>${gemfire.version}</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 		<dependency>
-		    <groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-api</artifactId>
-		    <version>2.6.2</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.6.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>nyla.solutions.core</artifactId>
-			<version>0.4</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.7.22</version>
-        </dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.7.22</version>
+			<scope>test</scope>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
+				<executions>
+					<execution>
+						<id>prepare</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>check</id>
+						<phase>package</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<!-- Until tests completed, don't break build
+							 -->
+							<haltOnFailure>true</haltOnFailure>
+							<rules>
+								<!-- Validate the ratio of lines covered by unit tests is acceptable -->
+								<rule>
+									<element>CLASS</element>
+									<excludes>
+										<exclude>*Test</exclude>
+									</excludes>
+									<limits>
+									<limit>
+											<counter>METHOD</counter>
+											<minimum>${jacoco.method.coverage}</minimum>
+											<value>COVEREDRATIO</value>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
@@ -123,7 +174,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.8</version>
-					<configuration>
+				<configuration>
 					<outputDirectory>${project.build.directory}/javadoc</outputDirectory>
 					<reportOutputDirectory>${project.reporting.outputDirectory}/javadoc</reportOutputDirectory>
 					<version>2.8</version>
@@ -176,23 +227,25 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.0.5</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<xmlOutput>true</xmlOutput>
+				</configuration>
 				<executions>
 					<execution>
-						<phase>compile</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
-						<configuration>
-							<failOnError>false</failOnError>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -228,5 +281,20 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<!-- select non-aggregate reports -->
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

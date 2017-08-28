@@ -193,6 +193,7 @@ implements Serializable
 	/**
 	 * Set name to key
 	 * 
+	 * @param key the key to set
 	 */
 	public void setKey(Object key)
 	{

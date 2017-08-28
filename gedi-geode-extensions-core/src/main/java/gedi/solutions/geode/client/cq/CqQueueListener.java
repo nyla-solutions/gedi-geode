@@ -9,6 +9,7 @@ import org.apache.geode.cache.query.CqListener;
 import org.apache.geode.cache.query.CqQuery;
 
 import nyla.solutions.core.patterns.Disposable;
+import nyla.solutions.core.util.Debugger;
 
 public class CqQueueListener<E> extends LinkedList<E> 
 implements CqListener, Queue<E>, Disposable
@@ -55,10 +56,10 @@ implements CqListener, Queue<E>, Disposable
 	{
 		if (cqQuery != null)
 		{
-			try { cqQuery.close(); } catch (Exception e){}
+			try { cqQuery.close(); } catch (Exception e){Debugger.println(e.getMessage());}
 		}
 	}//------------------------------------------------
 	  
-	private CqQuery cqQuery = null;
+	private transient CqQuery cqQuery = null;
 	 
 }

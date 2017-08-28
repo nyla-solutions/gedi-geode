@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
  */
 public class ImportJsonFunction implements Function
 {
-	private String directoryPath = null;
+	private String directoryPath = "./";
 
 	private static String fileSeparator = System.getProperty("file.separator");
 	private static String suffix = ".json";
@@ -167,33 +167,36 @@ public class ImportJsonFunction implements Function
 			return false;
 		}
 
-		FileReader reader = new FileReader(file);
-
-		// TokenBuffer buffer = new TokenBuffer
-		JsonNode tree = mapper.readTree(reader);
-
-		Iterator<JsonNode> children = tree.elements();
-
-		if (children == null || !children.hasNext()) {
-			return false;
-		}
-
-		while (children.hasNext())
+		try(FileReader reader = new FileReader(file))
 		{
-			node = children.next();
-			keyNode = node.get("key");
-			valueNode = node.get("value");
-			keyClassName = node.get("keyClassName");
-			valueClassName = node.get("valueClassName");
 
-			key = mapper.readValue(keyNode.traverse(),
-					forClassName(keyClassName));
-			value = mapper.readValue(valueNode.traverse(),
-					forClassName(valueClassName));
+			// TokenBuffer buffer = new TokenBuffer
+			JsonNode tree = mapper.readTree(reader);
 
-			region.put(key, value);
+			Iterator<JsonNode> children = tree.elements();
+
+			if (children == null || !children.hasNext()) {
+				return false;
+			}
+
+			while (children.hasNext())
+			{
+				node = children.next();
+				keyNode = node.get("key");
+				valueNode = node.get("value");
+				keyClassName = node.get("keyClassName");
+				valueClassName = node.get("valueClassName");
+
+				key = mapper.readValue(keyNode.traverse(),
+						forClassName(keyClassName));
+				value = mapper.readValue(valueNode.traverse(),
+						forClassName(valueClassName));
+
+				region.put(key, value);
+			}
+			return true;
 		}
-		return true;
+
 
 	}// ------------------------------------------------
 	/**
