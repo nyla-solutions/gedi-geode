@@ -13,7 +13,7 @@ The Grid Enterprise Data Integration (GEDI) Apache Geode/GemFire extenstions aPI
  
 
 
-#Apache Geode/GemFire Installation
+# Installation
 
 
 start locator --name=local --enable-cluster-configuration
