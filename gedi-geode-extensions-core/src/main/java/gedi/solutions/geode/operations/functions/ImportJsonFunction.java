@@ -1,10 +1,12 @@
 package gedi.solutions.geode.operations.functions;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Iterator;
 
 import org.apache.geode.cache.Cache;
@@ -167,7 +169,7 @@ public class ImportJsonFunction implements Function
 			return false;
 		}
 
-		try(FileReader reader = new FileReader(file))
+		try(Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8))
 		{
 
 			// TokenBuffer buffer = new TokenBuffer

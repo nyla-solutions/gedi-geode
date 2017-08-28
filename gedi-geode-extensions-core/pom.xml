@@ -13,6 +13,7 @@
 		<maven.javadoc.skip>false</maven.javadoc.skip>
 		<gemfire.version>9.0.2</gemfire.version>
 		<jacoco.method.coverage>0.0</jacoco.method.coverage>	
+		<findbugs.skip>true</findbugs.skip>
 	  	<!-- gemfire.version>9.1.0</gemfire.version-->	
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
@@ -242,9 +243,11 @@
 					<effort>Max</effort>
 					<threshold>Low</threshold>
 					<xmlOutput>true</xmlOutput>
+					<skip>${findbugs.skip}</skip>
 				</configuration>
 				<executions>
 					<execution>
+						<phase>package</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>

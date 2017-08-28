@@ -635,8 +635,6 @@ public class GfStatsReader implements StatsInfo
 				switch (stats[i].getTypeCode())
 				{
 				case BOOLEAN_CODE:
-					v = dataIn.readByte();
-					break;
 				case BYTE_CODE:
 				case CHAR_CODE:
 					v = dataIn.readByte();
@@ -709,29 +707,19 @@ public class GfStatsReader implements StatsInfo
 	private long readCompactValue() throws IOException
 	{
 		long v = dataIn.readByte();
-		if (dump)
-		{
-			// System.out.print("compactValue(byte1)=" + v);
-		}
+
 		if (v < MIN_1BYTE_COMPACT_VALUE)
 		{
 			if (v == COMPACT_VALUE_2_TOKEN)
 			{
 				v = dataIn.readShort();
-				if (dump)
-				{
-					// System.out.print("compactValue(short)=" + v);
-				}
 			}
 			else
 			{
 				int bytesToRead = ((byte) v - COMPACT_VALUE_2_TOKEN) + 2;
 				v = dataIn.readByte(); // note the first byte will be a signed
 										// byte.
-				if (dump)
-				{
-					System.out.print("compactValue(" + bytesToRead + ")=" + v);
-				}
+
 				bytesToRead--;
 				while (bytesToRead > 0)
 				{
@@ -766,8 +754,6 @@ public class GfStatsReader implements StatsInfo
 				switch (stats[statOffset].getTypeCode())
 				{
 				case BOOLEAN_CODE:
-					statDeltaBits = dataIn.readByte();
-					break;
 				case BYTE_CODE:
 				case CHAR_CODE:
 					statDeltaBits = dataIn.readByte();

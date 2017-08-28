@@ -100,7 +100,7 @@ public class LuceneSearchFunction implements Function
 			
 			if(collection == null)
 			{
-				functionContext.getResultSender().lastResult(collection);
+				functionContext.getResultSender().lastResult(null);
 				return;
 				
 			}

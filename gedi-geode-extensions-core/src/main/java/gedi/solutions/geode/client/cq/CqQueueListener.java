@@ -1,7 +1,6 @@
 package gedi.solutions.geode.client.cq;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 import org.apache.geode.cache.Operation;
 import org.apache.geode.cache.query.CqEvent;
@@ -12,7 +11,7 @@ import nyla.solutions.core.patterns.Disposable;
 import nyla.solutions.core.util.Debugger;
 
 public class CqQueueListener<E> extends LinkedList<E> 
-implements CqListener, Queue<E>, Disposable
+implements CqListener, Disposable
 {
 	 /**
 	 * 

@@ -97,7 +97,7 @@ public class SplitGfdFile implements Runnable
 		split.setInFile(file);
 		split.setOutDirectory(directory);
 
-		int batchSize = Integer.valueOf(args[3]);
+		int batchSize = Integer.valueOf(args[3]).intValue();
 		split.setBatchSize(batchSize);
 		
 		split.run();

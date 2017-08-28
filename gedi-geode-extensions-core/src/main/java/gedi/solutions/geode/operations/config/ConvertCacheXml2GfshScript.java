@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -62,7 +63,7 @@ public class ConvertCacheXml2GfshScript
 				if(type == null)
 					continue;
 				
-				type = type.toUpperCase();
+				type = type.toUpperCase(Locale.US);
 			
 				
 				gfsh.append("create region  --name=")

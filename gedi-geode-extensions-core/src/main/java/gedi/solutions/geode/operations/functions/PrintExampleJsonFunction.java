@@ -6,6 +6,7 @@ import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.ResultSender;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -39,7 +40,7 @@ public class PrintExampleJsonFunction implements Function
 			rs.lastResult(objectMapper.writeValueAsString(obj));
 		}
 	
-		catch (Exception e)
+		catch (ClassNotFoundException| IllegalAccessException | InstantiationException | JsonProcessingException| RuntimeException e)
 		{
 			CacheFactory.getAnyInstance().getLogger().error(e.toString());
 			rs.sendException(e);

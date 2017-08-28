@@ -169,7 +169,10 @@ public class FunctionFacts implements Serializable, Transactional
 	 */
 	public OnRegionFilterKeyFacts[] getOnRegionFilterKeyFacts()
 	{
-		return onRegionFilterKeyFacts;
+		if(onRegionFilterKeyFacts == null)
+			return null;
+		
+		return Arrays.copyOf(onRegionFilterKeyFacts, onRegionFilterKeyFacts.length);
 	}
 	/**
 	 * @param onRegionFilterKeyFacts the onRegionFilterKeyFacts to set

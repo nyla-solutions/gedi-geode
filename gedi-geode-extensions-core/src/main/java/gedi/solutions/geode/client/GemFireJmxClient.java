@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
@@ -103,7 +104,7 @@ public class GemFireJmxClient
 		
 		String type = distributedRegionMXBean.getRegionType();
 		
-		return type != null && type.toUpperCase().contains("REPLICATE");
+		return type != null && type.toUpperCase(Locale.US).contains("REPLICATE");
 	}// --------------------------------------------------------
 	/**
 	 * 
@@ -382,7 +383,7 @@ public class GemFireJmxClient
 			// get port
 			return jmx.getAttribute(locatorServiceObjName, "Port");
 		}
-		catch (Exception e)
+		catch (InstanceNotFoundException | MalformedObjectNameException e)
 		{
 			throw new RuntimeException(e.getMessage(),e);
 		}
@@ -728,8 +729,6 @@ public class GemFireJmxClient
 			hostLists.add(memberMXBean.getHost());
 		}
 		
-		if(hostLists == null || hostLists.isEmpty())
-			return null;
 		
 		return hostLists;
 	}// --------------------------------------------------------
@@ -758,9 +757,6 @@ public class GemFireJmxClient
 				hostLists.add(memberMXBean.getHost());
 		}
 		
-		if(hostLists == null || hostLists.isEmpty())
-			return null;
-		
 		return hostLists;
 	}// --------------------------------------------------------
 	/**
@@ -787,9 +783,6 @@ public class GemFireJmxClient
 			if(memberMXBean.isCacheServer())
 				hostLists.add(memberMXBean.getHost());
 		}
-		
-		if(hostLists == null || hostLists.isEmpty())
-			return null;
 		
 		return hostLists;
 	}// --------------------------------------------------------
@@ -828,7 +821,7 @@ public class GemFireJmxClient
 			
 			return jmx.getAttribute(on, "TotalRegionEntryCount");
 		}
-		catch (Exception e)
+		catch (InstanceNotFoundException | MalformedObjectNameException e)
 		{
 			throw new RuntimeException("Unable to obtain TotalRegionEntryCount ERROR:"+e.getMessage(),e);
 		}
@@ -905,7 +898,7 @@ public class GemFireJmxClient
 			
 			return newHost;
 		}
-		catch(Exception e)
+		catch(RuntimeException e)
 		{
 			System.out.println("Using host:"+host);
 			return host;
