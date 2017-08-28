@@ -13,42 +13,43 @@ import org.apache.geode.cache.execute.ResultCollector;
  * 
  * @author Gregory Green
  *
- * @param <K> the key type
- * @param <V> the value value
- * @param <T> the generic type
  */
-public class JvmExecution<K,V,T> extends ExecutionAdapter
+public class JvmExecution extends ExecutionAdapter
 {
 	
-	public JvmExecution(Region<K,V> region)
+	public JvmExecution(Region<?,?> region)
 	{
 		if (region == null)
 			throw new IllegalArgumentException("region: required");
 		this.dataSet = region;
 	}//-------------------------------------------------------------------
+	
+	@Override
 	public Execution withFilter(Set<?> filter)
 	{
 		this.filter = filter;
-
 		return this;
-	}//-------------------------------------------------------------------
+	}
 
-	public Execution withArgs(Object args)
+	@Override
+	public Execution withCollector(ResultCollector<?,?> arg0)
 	{
-		this.arguments = args;
-		
+		// TODO Auto-generated method stub
 		return this;
-	}//-------------------------------------------------------------------
-
-	/**
-	 *
-	 * @param resultCollector the result collector
-	 * @return the execution with the set result collector
-	 */
-	public Execution withCollector(@SuppressWarnings("rawtypes") ResultCollector resultCollector)
+	}
+	@Override
+	public Execution withArgs(Object arg0)
 	{
-		throw new RuntimeException("Not implemented");
-	}//-------------------------------------------------------------------
+		this.arguments = arg0;
+		return this;
+	}
+
+
+	public Execution setArguments(Object args)
+	{
+		 this.arguments = args;
+		 return this;
+	}
 	/**
 	 * 
 	 * @param function the function to exe
@@ -61,7 +62,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 		JvmResultsSender resultSender = new JvmResultsSender();
 		JvmResultCollector jmvResultCollector = new JvmResultCollector(resultSender);
 		
-		JvmRegionFunctionContext<K, V, T> rfc = new JvmRegionFunctionContext
+		JvmRegionFunctionContext<?,?, ?> rfc = new JvmRegionFunctionContext
 				(dataSet, resultSender, arguments, filter);
 		
 		function.execute(rfc);
@@ -70,7 +71,7 @@ public class JvmExecution<K,V,T> extends ExecutionAdapter
 		return jmvResultCollector;
 	}//-------------------------------------------------------------------
 
-	private final Region<K,V> dataSet;
+	private final Region<?,?> dataSet;
 	private Set<?> filter = null;
 	
 	private Object arguments = null;

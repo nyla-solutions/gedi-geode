@@ -1,11 +1,23 @@
 package gedi.solutions.geode.client;
 
+import static org.junit.Assert.*;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+<<<<<<< HEAD
+=======
+import gedi.solutions.geode.io.search.TextPageCriteria;
+import nyla.solutions.core.security.user.data.User;
+>>>>>>> cb4f94dc875e4fd64e846b3bf4bab4b58504c803
 import nyla.solutions.core.security.user.data.UserProfile;
 import nyla.solutions.core.util.Config;
 
@@ -43,24 +55,100 @@ public class GeodeClientIntTest
 		
 		Assert.assertTrue(geodeClient.getClientCache() != null);
 		
-		
 	}
-
+	
 	@Test
+	public void test_SearchTextWithPages() throws Exception
+	{
+		GeodeClient geodeClient = GeodeClient.connect();
+		
+		Region<String,Collection<?>> pageRegion = geodeClient.getRegion("PAGING");
+		assertNotNull(pageRegion);
+		
+		Region<Object,Object> userTestRegion = geodeClient.getRegion("USER_TEST");
+		assertNotNull(userTestRegion);
+		
+		TextPageCriteria criteria = new TextPageCriteria();
+		criteria.setRegionName("USER_TEST");
+		criteria.setPageRegionName("PAGING");
+		criteria.setDefaultField("lastName");
+		criteria.setIndexName("USER_INDEX");
+		criteria.setId("JUNIT");
+		criteria.setPageSize(2);
+		
+		///put some data
+		String email ="nyla@test.com", loginID ="nyla",firstName = "nyla", lastName = "green";
+		userTestRegion.put("nyla", new UserProfile(email,loginID,firstName,lastName));
+		
+		
+		email ="ggreen@test.com";
+		loginID ="ggreen";
+		firstName = "ggreen";
+		lastName = "green";
+		userTestRegion.put("ggreen", new UserProfile(email,loginID,firstName,lastName));
+		
+		
+		email ="rgreen@test.com";
+		loginID ="rgreen";
+		firstName = "rgreen";
+		lastName = "green";
+		userTestRegion.put("rgreen", new UserProfile(email,loginID,firstName,lastName));
+		
+		
+		criteria.setQuery("gr*");
+		
+		Collection<String> pages = geodeClient.searchWithPageKeys(criteria);
+		
+		assertNotNull(pages);
+		
+		assertTrue(!pages.isEmpty());
+		
+		
+		//get pages
+		//Map<String,User> users = geodeClient.readResultsByPage(criteria, 0);
+		
+		//assertTrue(users != null && !users.isEmpty());
+		//assertEquals(2, users.size());
+		
+		
+		criteria.setFilter(Collections.singleton("nyla"));
+		pages = geodeClient.searchWithPageKeys(criteria);
+		
+		assertNotNull(pages);
+		
+		assertTrue(!pages.isEmpty());
+		
+		//clean paging
+		
+		
+		
+		
+	}//------------------------------------------------
+
+	//@Test
 	public void testGeodeClientConnect()
 	{
 		System.setProperty("LOCATOR_HOST", "localhost");
 		System.setProperty("LOCATOR_PORT", "10334");
 		Config.reLoad();
 		
+		
 		GeodeClient geodeClient = GeodeClient.connect();
+		
 		Assert.assertNotNull(geodeClient.getRegion("Test"));
 		Assert.assertTrue(geodeClient.getClientCache() != null);
 	}
 	
+<<<<<<< HEAD
 	//@Test
 	@Ignore
 	public void testPutAmmountOfData()
+=======
+	@Test
+	//@Ignore
+	public void testPutAmmountOfData()
+	throws Exception
+>>>>>>> cb4f94dc875e4fd64e846b3bf4bab4b58504c803
 	{
 		
 		GeodeClient geodeClient = GeodeClient.connect();
@@ -69,7 +157,12 @@ public class GeodeClientIntTest
 		while(true)
 		{
 			i ++;
+<<<<<<< HEAD
 			geodeClient.getRegion("TEST_PARTITION_PERSISTENT_OVERFLOW").put(i, new UserProfile());
+=======
+			geodeClient.getRegion("tweets").put(i, new UserProfile());
+			Thread.sleep(5);
+>>>>>>> cb4f94dc875e4fd64e846b3bf4bab4b58504c803
 			
 		}
 		

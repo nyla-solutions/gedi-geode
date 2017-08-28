@@ -10,7 +10,6 @@
         <module>gedi-geode-extensions-core</module>
         <module>gedi-geode-extensions-rest</module>		
     </modules>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>

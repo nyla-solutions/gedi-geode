@@ -1,8 +1,5 @@
 package gedi.solutions.geode.functions;
 
-
-import java.util.Set;
-
 import org.apache.geode.cache.execute.Execution;
 import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionException;
@@ -14,26 +11,6 @@ import org.apache.geode.cache.execute.ResultCollector;
  */
 public abstract class ExecutionAdapter implements Execution
 {
-
-	
-	public Execution withFilter(Set<?> paramSet)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Execution withArgs(Object paramObject)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Execution withCollector(ResultCollector<?, ?> paramResultCollector)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	public ResultCollector<?, ?> execute(String paramString) throws FunctionException
 	{

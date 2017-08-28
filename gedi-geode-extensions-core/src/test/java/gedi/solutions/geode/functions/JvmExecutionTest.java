@@ -18,7 +18,7 @@ public class JvmExecutionTest {
     public void test_withFilter(){
 
         Region<Object,Object> region = Mockito.mock(Region.class);
-        JvmExecution<Object,Object,Object> jvm = new JvmExecution<Object,Object,Object>(region);
+        JvmExecution jvm = new JvmExecution(region);
 
         Set<?> set = Mockito.mock(Set.class);
         Execution exe = jvm.withFilter(set);
@@ -32,9 +32,9 @@ public class JvmExecutionTest {
     public void test_withArgs(){
 
         Region<Object,Object> region = Mockito.mock(Region.class);
-        JvmExecution<Object,Object,Object> jvm = new JvmExecution<Object,Object,Object>(region);
+        JvmExecution jvm = new JvmExecution(region);
 
-        Execution exe = jvm.withArgs(Mockito.anySet());
+        Execution exe = jvm.withArgs(Mockito.any());
 
         Assert.assertEquals(jvm,exe);
 

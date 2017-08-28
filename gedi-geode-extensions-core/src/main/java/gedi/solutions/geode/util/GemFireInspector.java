@@ -65,7 +65,7 @@ public class GemFireInspector
 	/**
 	 * 
 	 * @return list of gateway senders
-	 * @throws Exception an unknown error occurs
+	 * @throws Exception when an unknown error occurs
 	 */
 	public static Collection<GatewaySenderMXBean> listGatewaySenders()
 	throws Exception
@@ -262,7 +262,7 @@ public class GemFireInspector
 	/**
 	 * 
 	 * @return the region name that do not have redundancy
-	 * @throws Exception unknown error occurs
+	 * @throws Exception when unknown error occurs
 	 */
 	public static Collection<String> listRegionsWithNumBucketsWithoutRedundancy()
 	throws Exception

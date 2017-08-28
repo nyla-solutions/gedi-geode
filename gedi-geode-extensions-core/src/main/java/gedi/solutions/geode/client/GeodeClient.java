@@ -1,6 +1,7 @@
 package gedi.solutions.geode.client;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
@@ -28,12 +29,14 @@ import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 import gedi.solutions.geode.client.cq.CqQueueListener;
 import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
+import gedi.solutions.geode.lucene.GeodeLuceneSearch;
 import gedi.solutions.geode.lucene.TextPageCriteria;
 import gedi.solutions.geode.lucene.function.LuceneSearchFunction;
 import nyla.solutions.core.exception.SystemException;
 import nyla.solutions.core.patterns.iteration.Paging;
 import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Debugger;
+
 
 
 /**
@@ -143,6 +146,7 @@ public class GeodeClient
 		}		
 	}
 	
+	
 	public <ReturnType> Collection<ReturnType> select(String oql, RegionFunctionContext rfc)
 	{
 		return  Querier.query(oql, rfc);
@@ -162,7 +166,47 @@ public class GeodeClient
 		cachingProxy = false;
 		this.clientCache = clientCache;
 		this.factory = factory;
-	}
+	}//------------------------------------------------
+	/**
+	 * 
+	 * @param criteria the search criteria
+	 * @return the collection keys in the page region
+	 */
+	public Collection<String> searchWithPageKeys(TextPageCriteria criteria)
+	throws Exception
+	{
+		if(criteria == null)
+			return null;
+		
+		Region<?,?> region = this.getRegion(criteria.getRegionName());
+		
+		Execution exe = FunctionService.onRegion(region).withArgs(criteria);
+		
+		if(criteria.getFilter() != null)
+		{
+			exe = exe.withFilter(criteria.getFilter());
+		}
+		
+	    return GemFireIO.exeWithResults(exe, new LuceneSearchFunction());
+	    
+	}//------------------------------------------------
+	
+	public <K,V> Map<K,V> readSearchResultsByPage(TextPageCriteria criteria, int pageNumber)
+	{
+		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
+		
+		Region<String,Collection<?>> pageRegion = this.getRegion(criteria.getPageRegionName());
+		Region<K,V> region = this.getRegion(criteria.getRegionName());
+		
+		return search.readResultsByPage(criteria,pageNumber,region,pageRegion);
+	}//------------------------------------------------
+	public Collection<String> clearSearchResultsByPage(TextPageCriteria criteria)
+	{
+		GeodeLuceneSearch search = new GeodeLuceneSearch(this.clientCache);
+	
+		return search.clearSearchResultsByPage(criteria,this.getRegion(criteria.getPageRegionName()));
+		
+	}//------------------------------------------------
 	
 	/**
 	 * This is an example to get or create a region
@@ -174,6 +218,9 @@ public class GeodeClient
 	@SuppressWarnings("unchecked")
 	public <K,V> Region<K,V> getRegion(String regionName)
 	{
+		if(regionName == null || regionName.length() == 0)
+			return null;
+		
 		Region<K,V> region = (Region<K,V>)clientCache.getRegion(regionName);
 		
 		if(region != null )
