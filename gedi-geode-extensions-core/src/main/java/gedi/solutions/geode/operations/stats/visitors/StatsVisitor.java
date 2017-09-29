@@ -9,13 +9,13 @@ import gedi.solutions.geode.operations.stats.TimeStampSeries;
 public interface StatsVisitor
 {
 
-	default  void visitArchInfo(ArchiveInfo archiveInfo){}
+	default  void visitArchInfo(ArchiveInfo archiveInfo){System.out.println("archiveInfo:"+archiveInfo.getMachine());}
 	
-	default void visitResourceType(ResourceType resourceType){}
+	default void visitResourceType(ResourceType resourceType){System.out.println("resourceType:"+resourceType.getName());}
 	
-	default  void visitTimeStampSeries(TimeStampSeries timeStampSeries){}
+	default  void visitTimeStampSeries(TimeStampSeries timeStampSeries){System.out.println("timeStampSeries:"+timeStampSeries);}
 	
-	default void visitResourceInst(ResourceInst resourceInst){}
+	default void visitResourceInst(ResourceInst resourceInst){System.out.println("resourceInst:"+resourceInst.getName());}
 	
-	default void visitSimpleValue(SimpleValue simpleValue) {}
+	default void visitSimpleValue(SimpleValue simpleValue) {System.out.println("simpleValue:"+simpleValue);}
 }

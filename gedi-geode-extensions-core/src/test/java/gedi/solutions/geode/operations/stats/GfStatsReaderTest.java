@@ -2,15 +2,41 @@ package gedi.solutions.geode.operations.stats;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import gedi.solutions.geode.operations.stats.ArchiveInfo;
-import gedi.solutions.geode.operations.stats.visitors.CsvWriterRegionStatsVisitor;
+import gedi.solutions.geode.operations.stats.visitors.RegionCsvStatsVisitor;
+import nyla.solutions.core.io.IO;
 
 public class GfStatsReaderTest
 {
-
+	@Test
+	public void testMain()
+	throws Exception
+	{
+		String csvFilePath = "runtime/VMStats.csv";
+		
+		String archiveName = "src/test/resources/stats/server1.gfs";
+		
+		if(IO.delete(Paths.get(csvFilePath).toFile()))
+		{
+			System.out.println("file deleted");
+		}
+		
+		String [] args = {archiveName,"VMStats",csvFilePath};
+		GfStatsReader.main(args);
+		
+		File file = Paths.get(csvFilePath).toFile();
+		assertTrue(file.exists());
+		assertTrue(file.delete());
+		
+		args[1] = "VMMemoryUsageStats";
+		//svFilePath = "runtime/VMStats.csv";
+		
+	}
 	@Test
 	public void testDump()
 	throws Exception
@@ -35,7 +61,7 @@ public class GfStatsReaderTest
 		File file = new File("runtime/out.csv");
 		file.delete();
 		
-		CsvWriterRegionStatsVisitor visitor = new CsvWriterRegionStatsVisitor(file);
+		RegionCsvStatsVisitor visitor = new RegionCsvStatsVisitor(file);
 		for(int i= 27; i <= 38;i++)
 		{
 			archiveName = "src/test/resources/stats/rdrlnxm"+i+"-server1.gfs";

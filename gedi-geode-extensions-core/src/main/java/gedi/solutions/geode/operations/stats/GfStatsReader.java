@@ -33,15 +33,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
+import gedi.solutions.geode.operations.stats.visitors.GenericCsvStatsVisitor;
 import gedi.solutions.geode.operations.stats.visitors.StatsVisitor;
 
 /**
@@ -284,8 +287,23 @@ public class GfStatsReader implements StatsInfo
 			updateTokenCount++;
 		}
 		return updateTokenCount != 0;
-	}
+	}//------------------------------------------------
 
+	/**
+	 * Print to standard out 
+	 */
+	public void dump()
+	{
+		try(PrintWriter pw = new PrintWriter(System.out))
+		{
+			dump(pw);
+		}
+	}//------------------------------------------------
+	
+	/**
+	 * 
+	 * @param stream the stream to print output
+	 */
 	public void dump(PrintWriter stream)
 	{
 		stream.print("archive=" + archive);
@@ -905,6 +923,58 @@ public class GfStatsReader implements StatsInfo
 			}
 		}
 
+	}//------------------------------------------------
+	/**
+	 * Main method to extract GF Stats to file
+	 * @param args archiveFile csvFile [statName ]*
+	 */
+	public static void main(String[] args)
+	{
+		File archiveFile, csvFile;
+		
+		if(args.length < 1)
+		{
+			System.err.println("Usage: java "+GfStatsReader.class.getName()+" archiveFile csvFile [statName ]*");
+			return;
+		}
+		try
+		{
+			archiveFile = Paths.get(args[0]).toFile();
+			
+			if(args.length < 3)
+			{
+				return;
+			}
+			
+			
+			GfStatsReader reader = new GfStatsReader(archiveFile.getAbsolutePath());
+			//reader.dump();
+			
+		
+			String typeName = args[1];
+			
+		
+			csvFile = Paths.get(args[2]).toFile();
+			
+			GenericCsvStatsVisitor visitor = null;
+			
+			if(args.length > 3)
+			{
+				String[] stateNames = Arrays.copyOfRange(args, 2, args.length-1);
+				visitor = new GenericCsvStatsVisitor(csvFile,typeName,stateNames);
+			}
+			else
+				visitor = new GenericCsvStatsVisitor(csvFile,typeName);
+			
+			System.out.println("accepting");
+			reader.accept(visitor);
+			
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

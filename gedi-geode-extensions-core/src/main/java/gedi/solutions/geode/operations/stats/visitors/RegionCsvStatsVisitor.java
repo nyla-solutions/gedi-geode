@@ -10,12 +10,41 @@ import java.util.ArrayList;
 import gedi.solutions.geode.operations.stats.ResourceInst;
 import gedi.solutions.geode.operations.stats.StatValue;
 import nyla.solutions.core.io.csv.CsvWriter;
+import nyla.solutions.core.util.Config;
 
-public class CsvWriterRegionStatsVisitor implements StatsVisitor
+/**
+ * Extracts details about regions
+ * @author Gregory Green
+ *
+ */
+public class RegionCsvStatsVisitor implements StatsVisitor
 {
+	private static final String [] defaultStateNames = {"dataStoreEntryCount",
+			"dataStoreBytesInUse",
+			"lowRedundancyBucketCount",
+			"localMaxMemory"};
+	
 	private final CsvWriter csvWriter;
-	public CsvWriterRegionStatsVisitor(File file)
+	private final String[] statNames;
+	
+	/**
+	 * 
+	 * @param file the STAT file
+	 */
+	public RegionCsvStatsVisitor(File file)
 	{
+		this(file,null);
+	}//------------------------------------------------
+	public RegionCsvStatsVisitor(File file,String[] statNames)
+	{
+		if(statNames !=null)
+		{
+			this.statNames = statNames;
+		}
+		else
+		{
+			this.statNames = Config.getPropertyStrings(RegionCsvStatsVisitor.class,"statNames",defaultStateNames);
+		}
 		csvWriter = new CsvWriter(file);
 	}
 
@@ -52,7 +81,7 @@ public class CsvWriterRegionStatsVisitor implements StatsVisitor
 		 */
 
 		
-		String[] statNames = {"dataStoreEntryCount","dataStoreBytesInUse"};
+		
 		
 		for (String statName : statNames)
 		{

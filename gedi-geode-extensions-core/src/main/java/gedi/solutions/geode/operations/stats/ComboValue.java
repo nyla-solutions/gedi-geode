@@ -116,7 +116,10 @@ import java.util.Set;
 	    }
 
 	    /**
-	     * Return true if v is closer to prev. Return false if v is closer to next.
+	     * @param v the v
+	     * @param prev the previous
+	     * @param next the next
+	     * @return  true if v is closer to prev. Return false if v is closer to next.
 	     * Return true if v is the same distance from both.
 	     */
 	    public static boolean closer(long v, long prev, long next) {
