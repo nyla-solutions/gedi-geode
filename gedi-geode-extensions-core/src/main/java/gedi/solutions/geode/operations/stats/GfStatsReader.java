@@ -911,21 +911,29 @@ public class GfStatsReader implements StatsInfo
 			visitor.visitArchInfo(info);
 		}
 
-		for (ResourceType aResourceTypeTable : resourceTypeTable)
+		if(resourceTypeTable != null)
 		{
-			if (aResourceTypeTable != null)
+			for (ResourceType aResourceTypeTable : resourceTypeTable)
 			{
-				visitor.visitResourceType(aResourceTypeTable);
+				if (aResourceTypeTable != null)
+				{
+					visitor.visitResourceType(aResourceTypeTable);
+				}
 			}
 		}
-
+	
 		visitor.visitTimeStampSeries(timeSeries);
-		for (ResourceInst inst : resourceInstTable)
+		
+		if(resourceInstTable != null)
 		{
-			if (inst != null)
+			for (ResourceInst inst : resourceInstTable)
 			{
-				visitor.visitResourceInst(inst);
+				if (inst != null)
+				{
+					visitor.visitResourceInst(inst);
+				}
 			}
+			
 		}
 
 	}//------------------------------------------------
