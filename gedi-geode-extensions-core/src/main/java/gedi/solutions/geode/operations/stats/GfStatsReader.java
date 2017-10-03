@@ -300,6 +300,11 @@ public class GfStatsReader implements StatsInfo
 		}
 	}//------------------------------------------------
 	
+	public void dumpCsvFiles()
+	{
+		GenericCsvStatsVisitor visitor = new GenericCsvStatsVisitor(this.archive);
+		this.accept(visitor);
+	}
 	/**
 	 * 
 	 * @param stream the stream to print output
@@ -934,22 +939,19 @@ public class GfStatsReader implements StatsInfo
 		
 		if(args.length < 1)
 		{
-			System.err.println("Usage: java "+GfStatsReader.class.getName()+" archiveFile csvFile [statName ]*");
+			System.err.println("Usage: java "+GfStatsReader.class.getName()+" archiveFile [csvFile [statName ]*]");
 			return;
 		}
 		try
 		{
 			archiveFile = Paths.get(args[0]).toFile();
-			
-			if(args.length < 3)
+					
+			if(args.length < 2)
 			{
+				GfStatsReader reader = new GfStatsReader(archiveFile.getAbsolutePath());
+				reader.dumpCsvFiles();
 				return;
 			}
-			
-			
-			GfStatsReader reader = new GfStatsReader(archiveFile.getAbsolutePath());
-			//reader.dump();
-			
 		
 			String typeName = args[1];
 			
@@ -967,6 +969,7 @@ public class GfStatsReader implements StatsInfo
 				visitor = new GenericCsvStatsVisitor(csvFile,typeName);
 			
 			System.out.println("accepting");
+			GfStatsReader reader = new GfStatsReader(archiveFile.getAbsolutePath());
 			reader.accept(visitor);
 			
 		}

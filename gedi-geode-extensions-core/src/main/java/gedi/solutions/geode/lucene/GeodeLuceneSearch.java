@@ -124,6 +124,8 @@ public class GeodeLuceneSearch
 	}//------------------------------------------------
 	/**
 	 * Read Results from region by keys in pageRegion
+	 * @param <K> the key type
+	 * @param <V> the value type
 	 * @param criteria the text page criteria
 	 * @param pageNumber the page number to retrieve
 	 * @param region the region where data is retrieved

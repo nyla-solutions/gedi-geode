@@ -207,6 +207,7 @@ public class FunctionFacts implements Serializable, Transactional
 	 * TransactionType.NONE - no transaction support
 	 * TransactionType.READONLY- read (not write) transaction
 	 * TransactionType.WRITE - read/write or read transaction data
+	 * @param transactionType the transaction tyep
 	 */
 	//@Override
 	public void setTransactionType(TransactionType transactionType)
@@ -215,6 +216,7 @@ public class FunctionFacts implements Serializable, Transactional
 	}// -----------------------------------------------
 	/**
 	 * Get the current transaction type
+	 * @return the transaction type
 	 */
 	//@Override
 	public TransactionType getTransactionType()

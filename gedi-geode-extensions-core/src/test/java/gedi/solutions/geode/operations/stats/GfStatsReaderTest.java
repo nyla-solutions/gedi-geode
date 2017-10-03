@@ -38,6 +38,19 @@ public class GfStatsReaderTest
 		
 	}
 	@Test
+	public void testMainJustStat()
+	throws Exception
+	{
+		
+		String archiveName = "src/test/resources/stats/server1.gfs";
+	
+		String [] args = {archiveName};
+		GfStatsReader.main(args);
+		
+
+		
+	}
+	@Test
 	public void testDump()
 	throws Exception
 	{

@@ -34,9 +34,9 @@ public class JvmExecutionTest {
         Region<Object,Object> region = Mockito.mock(Region.class);
         JvmExecution jvm = new JvmExecution(region);
 
-        Execution exe = jvm.withArgs(Mockito.any());
+        Execution exe = jvm.withArgs("");
 
-        Assert.assertEquals(jvm,exe);
+        Assert.assertEquals(jvm,exe); 
 
     }
 }

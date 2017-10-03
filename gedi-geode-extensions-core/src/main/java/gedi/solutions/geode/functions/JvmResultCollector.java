@@ -9,6 +9,8 @@ import org.apache.geode.distributed.DistributedMember;
 
 /**
  * @author Gregory Green
+ * @param <T> the input type
+ * @param <S> the output type
  *
  */
 public class JvmResultCollector<T, S> implements ResultCollector<T, S>

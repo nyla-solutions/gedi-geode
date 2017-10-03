@@ -5,11 +5,15 @@ package gedi.solutions.geode.operations.stats.visitors;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import gedi.solutions.geode.operations.stats.ResourceInst;
 import gedi.solutions.geode.operations.stats.ResourceType;
+import gedi.solutions.geode.operations.stats.StatDescriptor;
 import gedi.solutions.geode.operations.stats.StatValue;
 import nyla.solutions.core.io.csv.CsvWriter;
 
@@ -21,11 +25,22 @@ import nyla.solutions.core.io.csv.CsvWriter;
 public class GenericCsvStatsVisitor implements StatsVisitor
 {
 	
-	private final CsvWriter csvWriter;
 	private final String typeName;
 	
 	
 	private String[]  statNames = null;
+	private final File statsFile;
+	private final File csvFile;
+	
+	private Path outputDirectory;
+	
+	public GenericCsvStatsVisitor(File file)
+	{
+		this.statsFile = file;
+		this.csvFile = null;
+		this.typeName = null;
+		this.outputDirectory =  file.getParentFile().toPath();
+	}//------------------------------------------------
 	/**
 	 * 
 	 * @param file the STAT file
@@ -35,33 +50,44 @@ public class GenericCsvStatsVisitor implements StatsVisitor
 	{
 		this(file,typeName,(String[])null);
 	}//------------------------------------------------
+	/**
+	 * 
+	 * @param outputDirectory the output directory to set
+	 */
+	public void setOutputDirectory(Path outputDirectory)
+	{
+		this.outputDirectory = outputDirectory;
+	}//------------------------------------------------
 	public GenericCsvStatsVisitor(File file,String typeName, String... statNames)
 	{
 		if(typeName == null || typeName.length() == 0)
-					throw new IllegalArgumentException("typeName is required");
-	
-		this.typeName = typeName.toUpperCase();
+			this.typeName = null;
+		else
+			this.typeName = typeName.toUpperCase();
 		
 		this.statNames = statNames;
-		csvWriter = new CsvWriter(file);
+		
+		this.statsFile = null;
+		this.csvFile = file;
+		
+		this.outputDirectory = file.getParentFile().toPath();
 	}//------------------------------------------------
 
 	@Override
 	public void visitResourceInst(ResourceInst resourceInst)
 	{
-	
 		String name = resourceInst.getName();
 		
 		ResourceType resourceType= resourceInst.getType();
 		
-		boolean skip = resourceType == null || resourceType.getName() == null || !resourceType.getName().toUpperCase().contains(this.typeName);
+		boolean skip =  resourceType == null || resourceType.getName() == null || 
+		(this.typeName != null && !resourceType.getName().toUpperCase().contains(this.typeName));
 		
 		if(skip)
 		{
-			System.out.println("skipping resourceType:"+resourceType.getName()+" name:"+name);
+			System.out.println("skipping resourceType:"+resourceType+" name:"+name);
 			return;
 		}
-		
 		
 		ArrayList<String> values = new ArrayList<String>();
 		ArrayList<String> headers = new ArrayList<String>();
@@ -78,8 +104,6 @@ public class GenericCsvStatsVisitor implements StatsVisitor
 		{
 			String statName = statValue.getDescriptor().getName();
 			
-			//System.out.println("JUNIT statName="+statName);
-			
 			if(this.statNames != null && this.statNames.length > 0)
 			{
 				if(Arrays.binarySearch(statNames, statName) < 0)
@@ -87,10 +111,28 @@ public class GenericCsvStatsVisitor implements StatsVisitor
 			}
 			StatValue dataStoreEntryCount = resourceInst.getStatValue(statName);
 
-			headers.add(statName+"        "+resourceInst.getType().getStat(statName).getDescription());
+			StatDescriptor statDescriptor = resourceInst.getType().getStat(statName);
+			
+			headers.add(statName+"        "+statDescriptor.getDescription());
 			
 			values.add(String.valueOf(dataStoreEntryCount.getSnapshotsMaximum()));
 		}
+		
+		writeCsv(resourceInst,headers,values);
+		
+	}//------------------------------------------------
+	
+	
+	void writeCsv(ResourceInst resourceInst,List<String> headers,List<String> values)
+	{
+		File file =  null;
+		
+		if(this.statsFile == null)
+			file = csvFile;
+		else
+			file = Paths.get(this.outputDirectory.toFile().getAbsolutePath(), this.statsFile.getName()+"."+resourceInst.getType().getName()+".csv").toFile();
+	
+		CsvWriter csvWriter = new CsvWriter(file);
 		
 		try
 		{

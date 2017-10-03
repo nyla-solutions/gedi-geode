@@ -171,6 +171,7 @@ public class GeodeClient
 	 * 
 	 * @param criteria the search criteria
 	 * @return the collection keys in the page region
+	 * @throws Exception when an unknow exception occurs
 	 */
 	public Collection<String> searchWithPageKeys(TextPageCriteria criteria)
 	throws Exception

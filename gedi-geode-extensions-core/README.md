@@ -37,9 +37,20 @@ Get the Apache Geode client cache
     
     //get first recod
     PdxInstance pdxRow = queue.poll();
-    
-    
-## GemFire Commericial Repository
+ 
+ ## Convert Statistics to CSV file
+ 
+ The following will extract a single statistic type with the name "CachePerfStats"
+ 
+ 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs CachePerfStats   /Projects/LifeSciences/Humana/analysis/DigitIT/stats/CachePerfStats.csv`
+ 
+ 
+ To export all statistics with a file name pattern `<name>.gfs.<type>.csv` in the same directory as the stat file.
+ 
+ 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs`
+ 
+ 
+## GemFire Commercial Repository
 
 
 See the following for instruction to down the GemFire artifacts.
