@@ -37,6 +37,8 @@ Also see the following the scripts build the docker image, start Apache DS and a
 
 2) Setup GemFire Security Property File
 
+The following is an example security property file content (ex: gfldapsecurity.properties)
+
 		# LDAP PROXY user DN used to for all authentication LDAP request
 		security-ldap-proxy-dn=uid=admin,ou=system
 		
