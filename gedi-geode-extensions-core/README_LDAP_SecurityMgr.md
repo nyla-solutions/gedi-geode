@@ -37,8 +37,7 @@ Also see the following the scripts build the docker image, start Apache DS and a
 
 2) Setup GemFire Security Property File
 
-
-	# LDAP PROXY user DN used to for all authentication LDAP request
+	`# LDAP PROXY user DN used to for all authentication LDAP request
 	security-ldap-proxy-dn=uid=admin,ou=system
 	
 	# LDAP PROXY user password (encrypted or un-encrypted passwords supported) 
@@ -74,7 +73,7 @@ Also see the following the scripts build the docker image, start Apache DS and a
 	
 	# User credentials used to join the GemFire cluster
 	security-username=cluster
-	security-password={cryption}rjJzxB9T36rEtzcHtXsChQ==
+	security-password={cryption}rjJzxB9T36rEtzcHtXsChQ==`
 
 
 **ACL Permissions**
