@@ -27,7 +27,7 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 {
 
 	/**
-	 * CRYPTION_KEY = Cryption.getCryptionKey()
+	 * CRYPTION_KEY_PROP = Cryption.getCryptionKey()
 	 */
 	public static String CRYPTION_KEY = Cryption.getCryptionKey();
 	

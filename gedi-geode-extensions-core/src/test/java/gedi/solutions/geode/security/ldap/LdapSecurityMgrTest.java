@@ -12,8 +12,6 @@ import org.apache.geode.LogWriter;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.ResourcePermission;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
@@ -23,27 +21,27 @@ import gedi.solutions.geode.security.ldap.LdapSecurityMgr;
 import nyla.solutions.core.ds.LDAP;
 import nyla.solutions.core.ds.security.LdapSecurityGroup;
 import nyla.solutions.core.ds.security.LdapSecurityUser;
+import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Cryption;
 
 public class LdapSecurityMgrTest
 {
-	private static  LdapSecurityMgr mgr = new LdapSecurityMgr();
+
+	static
+	{
+		System.setProperty(Cryption.CRYPTION_KEY_PROP, "GEDI-GEODE");
+		Config.reLoad();
+	}
+	
 	private static LDAP ldap;
 	private static LogWriter securityLogger;
 	private static LDAPConnectionFactory ldapConnectionFactory ;
 	private static Cache cache;
-
-	@BeforeClass
-	public static void setUp()
-	{
-		//System.setProperty(GeodeCryption.SECURITY_ENCRYPTION_KEY_PROP, "GEDI-GEODE");
-	}
 	
-	@Before
-	public void init()
+	public LdapSecurityMgr init()
 	throws NamingException
 	{
-		
+		LdapSecurityMgr mgr = new LdapSecurityMgr();
 		
 		ldap = mock(LDAP.class);
 		
@@ -74,13 +72,18 @@ public class LdapSecurityMgrTest
 		mgr.setup(props, cache);
 		
 		System.out.println("setup");
+		
+		return mgr;
 	}
 	/**
 	 * Testing the setup of the Ldap and making an initial connection
+	 * @throws Exception when an unknown error occurs
 	 */
 	@Test
 	public synchronized  void testSetup()
+	throws Exception
 	{
+		LdapSecurityMgr mgr = init();
 		LogWriter securityLogger = mock(LogWriter.class);
 		Cache cache = mock(Cache.class);
 		LDAPConnectionFactory ldapConnectionFactory = mock(LDAPConnectionFactory.class);
@@ -197,6 +200,8 @@ public class LdapSecurityMgrTest
 	public synchronized void test_authenticate()
 	throws Exception
 	{
+		LdapSecurityMgr mgr = init();
+		
 		synchronized (ldapConnectionFactory)
 		{
 
@@ -235,6 +240,8 @@ public class LdapSecurityMgrTest
 	public void test_authorize_user()
 	throws Exception
 	{
+		LdapSecurityMgr mgr = init();
+		
 		Cryption.interpret("test".toCharArray());
 		
 		synchronized (ldapConnectionFactory)
@@ -260,6 +267,8 @@ public class LdapSecurityMgrTest
 	public void test_authorize_group()
 	throws Exception
 	{
+		LdapSecurityMgr mgr = init();
+		
 		synchronized (ldapConnectionFactory)
 		{
 			
