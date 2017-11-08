@@ -32,48 +32,48 @@ Also see the following the scripts build the docker image, start Apache DS and a
 ## Cluster Startup
 
 1) Set the CRYPTION_KEY environment variable used for encrypting/decrypting passwords prior to starting the cluster
-
-	export CRYPTION_KEY=GEDI-GEODI
+	
+		export CRYPTION_KEY=GEDI-GEODI
 
 2) Setup GemFire Security Property File
 
-	`# LDAP PROXY user DN used to for all authentication LDAP request
-	security-ldap-proxy-dn=uid=admin,ou=system
-	
-	# LDAP PROXY user password (encrypted or un-encrypted passwords supported) 
-	security-ldap-proxy-password=secret
-	
-	# LDAP server URL
-	security-ldap-server-url=ldap://localhost:389
-	
-	# LDAP base dn to search for user for authentication reques
-	security-ldap-base-dn=ou=system
-	
-	# LDAP attribute that will match the user ID
-	security-ldap-uid-attribute=uid
-	
-	# The LDAP  attribute the indicates the users' group associations
-	security-ldap-memberOf-attribute=memberOf
-	
-	# The LDAP GROUP attribute that will match the security-ldap-acl-group-${??} property
-	security-ldap-group-attribute=CN
-	
-	# Example Access Control Lists
-	# user nyla has permission to read daata
-	
-	security-ldap-acl-user-nyla=DATA:READ
-	
-	# user cluster has permission to performance any cluster operation
-	security-ldap-acl-user-cluster=CLUSTER
-	
-	# user admin ALL permissions
-	security-ldap-acl-user-admin=ALL
-	security-ldap-acl-group-administrator=ALL
-	
-	
-	# User credentials used to join the GemFire cluster
-	security-username=cluster
-	security-password={cryption}rjJzxB9T36rEtzcHtXsChQ==`
+		# LDAP PROXY user DN used to for all authentication LDAP request
+		security-ldap-proxy-dn=uid=admin,ou=system
+		
+		# LDAP PROXY user password (encrypted or un-encrypted passwords supported) 
+		security-ldap-proxy-password=secret
+		
+		# LDAP server URL
+		security-ldap-server-url=ldap://localhost:389
+		
+		# LDAP base dn to search for user for authentication reques
+		security-ldap-base-dn=ou=system
+		
+		# LDAP attribute that will match the user ID
+		security-ldap-uid-attribute=uid
+		
+		# The LDAP  attribute the indicates the users' group associations
+		security-ldap-memberOf-attribute=memberOf
+		
+		# The LDAP GROUP attribute that will match the security-ldap-acl-group-${??} property
+		security-ldap-group-attribute=CN
+		
+		# Example Access Control Lists
+		# user nyla has permission to read daata
+		
+		security-ldap-acl-user-nyla=DATA:READ
+		
+		# user cluster has permission to performance any cluster operation
+		security-ldap-acl-user-cluster=CLUSTER
+		
+		# user admin ALL permissions
+		security-ldap-acl-user-admin=ALL
+		security-ldap-acl-group-administrator=ALL
+		
+		
+		# User credentials used to join the GemFire cluster
+		security-username=cluster
+		security-password={cryption}rjJzxB9T36rEtzcHtXsChQ==
 
 
 **ACL Permissions**
