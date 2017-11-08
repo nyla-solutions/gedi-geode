@@ -11,5 +11,8 @@ public interface GeodeConfigConstants
 	public final String TOKEN = "security-token";
 	
 	public final String PDX_CLASS_PATTERN_PROP = "PDX_CLASS_PATTERN";
+	
+	
+	public final String USE_CACHING_PROXY_PROP = "USE_CACHING_PROXY";
 	 
 }

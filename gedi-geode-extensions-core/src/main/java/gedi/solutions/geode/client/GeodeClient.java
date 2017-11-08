@@ -158,7 +158,7 @@ public class GeodeClient
 	protected GeodeClient(ClientCache clientCache)
 	{
 		this(clientCache,
-		clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY));
+		clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY_HEAP_LRU));
 	}//------------------------------------------------
 
 	protected GeodeClient(ClientCache clientCache,  ClientRegionFactory<?, ?> factory)
@@ -284,7 +284,9 @@ public class GeodeClient
 		if(geodeClient != null)
 			return geodeClient;
 		
-		geodeClient = new GeodeClient(true,Config.getProperty(GeodeConfigConstants.PDX_CLASS_PATTERN_PROP,".*"));
+		boolean cachingProxy = Config.getPropertyBoolean(GeodeConfigConstants.USE_CACHING_PROXY_PROP,false).booleanValue();
+		
+		geodeClient = new GeodeClient(cachingProxy,Config.getProperty(GeodeConfigConstants.PDX_CLASS_PATTERN_PROP,".*"));
 		
 		return geodeClient;
 	}//------------------------------------------------
