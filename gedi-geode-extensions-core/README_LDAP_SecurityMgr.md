@@ -1,6 +1,6 @@
 # Overview
 
-The [gedi-geode-extensions-core](README.md) module contains LDAP based implementation of the GemFire/Geode 9.x integrated security manager.
+The [gedi-geode-extensions-core](README.md) module contains a LDAP based implementation of the GemFire/Geode 9.x [integrated security manager](https://gemfire.docs.pivotal.io/geode/managing/security/implementing_authentication.html).
 
 Note this package supports [GemFire](https://gemfire.docs.pivotal.io/gemfire/about_gemfire.html) version 9.0.2 or higher and [nyla.solutions.core](https://github.com/nyla-solutions/nyla/tree/master/nyla.solutions.core) version 1.1.0 or higher.
 
