@@ -29,15 +29,6 @@ Also see the following the scripts build the docker image, start Apache DS and a
 - src/test/resources/ldap/start.sh  
 - src/test/resources/ldap/addusers.sh
 
-  
-
-## Build 
-
-You use maven build the gedi-geode-extensions-core-1.0.4.jar
-
-	mvn package
-	
-
 ## Cluster Startup
 
 1) The CRYPTION_KEY environment variable MUST set 
