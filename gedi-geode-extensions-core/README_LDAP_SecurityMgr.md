@@ -5,29 +5,29 @@ The package gedi.solutions.geode.security.ldap contains LDAP based GemFire/Geode
 
 ## Setup LDAP 
 
-For local testing, it is recommended to the use [ApacheDS](http://directory.apache.org/apacheds/).
+For local testing, it is recommended to use [ApacheDS](http://directory.apache.org/apacheds/).
 
 For an easy install on a Mac, it is also recommended to use the [h3nrik/apacheds](https://hub.docker.com/r/h3nrik/apacheds) docker image.
 
-Build the image
+Use the following to build the image
 
 	docker build -t h3nrik/apacheds .
 
-Run the container
+Run the container using the following command
 
 	docker run --name ldap -d -p 389:10389 h3nrik/apacheds
 
 
-The Apache DS will not be available on port 389. 
+The Apache DS will now be available on port 389. 
 The default user/password is admin/secret.
 
-You can use the [ApacheDS Studio](http://directory.apache.org/studio/). the add users for testing.
+You can use  [ApacheDS Studio](http://directory.apache.org/studio/) the add users for testing.
 
-Also see rhe following the build the images, start Apache DS and add a test user
+Also see the following the scripts build the docker image, start Apache DS and add test LDAP users
 
 - src/test/resources/ldap/build.sh 
 - src/test/resources/ldap/start.sh  
-- src/test/resources/ldap/adduser1.sh
+- src/test/resources/ldap/addusers.sh
 
   
 
