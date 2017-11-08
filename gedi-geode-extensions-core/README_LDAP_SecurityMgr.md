@@ -82,7 +82,7 @@ The following is an example security property file content (ex: gfldapsecurity.p
 
 **ACL Permissions**
 
-The Access Control List (ACL) permissions the property file are based on the GemFire ResourePermission (Resource:Operation). The format of the property are **security-ldap-acl-user-${UID}** or  security-ldap-acl-group-${groupID}.
+The Access Control List (ACL) permissions the property file are based on the GemFire ResourePermission (Resource:Operation). The format of the property are **security-ldap-acl-user-${UID}** or  **security-ldap-acl-group-${groupID}**.
 
 The following are example ACLs permissions
 
