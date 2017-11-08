@@ -3,6 +3,8 @@ package gedi.solutions.geode.security;
 import org.apache.geode.security.AuthInitialize;
 import org.apache.geode.security.SecurityManager;
 
+import gedi.solutions.geode.security.ldap.LdapSecurityMgr;
+
 /**
  * SecurityFactory is representable for the create authorization/authentication objects
  * @author Gregory Green
@@ -29,6 +31,6 @@ public class SecurityFactory
 	 */
 	public static SecurityManager createAuthenticator()
 	{
-		return new LDAPAuthenticator();
+		return LdapSecurityMgr.create();
 	}// ------------------------------------------------
 }

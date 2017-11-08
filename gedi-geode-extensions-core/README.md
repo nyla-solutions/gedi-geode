@@ -48,7 +48,12 @@ Get the Apache Geode client cache
  To export all statistics with a file name pattern `<name>.gfs.<type>.csv` in the same directory as the stat file.
  
  	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs`
- 
+
+
+# LDAP Security Manager
+
+See [LDAP Security manager](README_LDAP_SecurityMgr.md)
+
  
 ## GemFire Commercial Repository
 

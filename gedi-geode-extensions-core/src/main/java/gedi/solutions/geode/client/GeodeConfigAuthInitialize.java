@@ -16,7 +16,7 @@ import nyla.solutions.core.util.Config;
  * security-username or SECURITY_USERNAME
  * security-password or SECURITY_PASSWORD 
  * 
- * USER_NAME);
+ * USER_NAME_PROP);
 	    String token = Config.getProperty(TOKEN,"")
 	    
    </pre>

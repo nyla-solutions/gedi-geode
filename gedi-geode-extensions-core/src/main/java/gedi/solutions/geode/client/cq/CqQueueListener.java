@@ -12,21 +12,23 @@ import nyla.solutions.core.util.Debugger;
 
 public class CqQueueListener<E> extends LinkedList<E> 
 implements CqListener, Disposable
-{
-	 /**
+{	
+	
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -249306773716810501L;
-	
+	private static final long serialVersionUID = -1260014730371989800L;
 	
 	@SuppressWarnings("unchecked")
 	public void onEvent(CqEvent cqEvent)
 	  {
-	    // org.apache.geode.cache Operation associated with the query op
-	    Operation queryOperation = cqEvent.getQueryOperation();
+		//get the type of operation being performed
+	    Operation operation = cqEvent.getBaseOperation();
 
-	    if (queryOperation.isDestroy())
-	    	return;
+	    if (!operation.isCreate() &&
+	    		!operation.isUpdate() && 
+	    		!operation.isPutAll())
+	    			return; //Ignore some operations (ex: non WRITEs) 
 	    
 	    // key and new value from the event
 	    E entry = (E)cqEvent.getNewValue();
@@ -36,10 +38,15 @@ implements CqListener, Disposable
 	 
 	  public void onError(CqEvent cqEvent)
 	  {
+		  System.err.println("ERROR"+cqEvent);
 	  }//------------------------------------------------
 	  @Override
 	  public void close()
 	  {
+		  if (cqQuery != null)
+			{
+				try { cqQuery.close(); } catch (Exception e){Debugger.println(e.getMessage());}
+			}
 	  }//------------------------------------------------
 
 	/**
@@ -53,12 +60,8 @@ implements CqListener, Disposable
 	@Override
 	public void dispose()
 	{
-		if (cqQuery != null)
-		{
-			try { cqQuery.close(); } catch (Exception e){Debugger.println(e.getMessage());}
-		}
+		this.close();
 	}//------------------------------------------------
-	  
 	private transient CqQuery cqQuery = null;
 	 
 }

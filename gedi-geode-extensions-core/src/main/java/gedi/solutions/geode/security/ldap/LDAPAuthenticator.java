@@ -1,13 +1,14 @@
-package gedi.solutions.geode.security;
+package gedi.solutions.geode.security.ldap;
 
 import java.security.Principal;
 import java.util.Properties;
 
 import org.apache.geode.LogWriter;
 import org.apache.geode.security.AuthenticationFailedException;
+import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.SecurityManager;
 
-import nyla.solutions.core.ds.LDAP;
+import gedi.solutions.geode.security.SecurityConstants;
 import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Cryption;
 import nyla.solutions.core.util.Debugger;
@@ -15,7 +16,7 @@ import nyla.solutions.core.util.Debugger;
 /**
  * The Authenticator instance is called during the client cache connection for security. 
  * @author Gregory Green
- *
+ * @deprecated  user LdapSecurityMgr
  */
 public class LDAPAuthenticator implements SecurityManager, SecurityConstants
 {
@@ -24,6 +25,12 @@ public class LDAPAuthenticator implements SecurityManager, SecurityConstants
 	{
 
 	}// ------------------------------------------------
+	@Override
+	public boolean authorize(Object principal, ResourcePermission permission)
+	{
+		// TODO Auto-generated method stub
+		return SecurityManager.super.authorize(principal, permission);
+	}
 	/**
 	 * The Authenticator will construct the initial directory context. 
 	 * The security credentials (username/password) will be provided to the context.
@@ -54,7 +61,9 @@ public class LDAPAuthenticator implements SecurityManager, SecurityConstants
 	    {
 		    //check if password prefixed with cryption
 		    passwd = Cryption.interpret(passwd);	    	
-		    Principal principal =  LDAP.authenicateUID(userName, passwd.toCharArray());
+		    Principal principal =  null;
+		    
+		    //TODO: new LD.(userName, passwd.toCharArray());
 		    
 		    Debugger.println(this,principal);
 		    
