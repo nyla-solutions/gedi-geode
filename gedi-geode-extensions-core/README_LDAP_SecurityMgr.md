@@ -31,7 +31,7 @@ Also see the following the scripts build the docker image, start Apache DS and a
 
 ## Cluster Startup
 
-1) The CRYPTION_KEY environment variable MUST set 
+1) Set the CRYPTION_KEY environment variable used for encrypting/decrypting passwords prior to starting the cluster
 
 	export CRYPTION_KEY=GEDI-GEODI
 
@@ -79,9 +79,9 @@ Also see the following the scripts build the docker image, start Apache DS and a
 
 **ACL Permissions**
 
-The Access Control List (ACL) permission are based on the GemFire ResourePermission (Resource:Operation).
+The Access Control List (ACL) permissions the property file are based on the GemFire ResourePermission (Resource:Operation). The format of the property are **security-ldap-acl-user-${UID}** or  security-ldap-acl-group-${groupID}.
 
-Use a security
+The following are example ACLs permissions
 
 - ALL - admin level user access with no restrictions
 - CLUSTER - all cluster read, write and manage permissions
