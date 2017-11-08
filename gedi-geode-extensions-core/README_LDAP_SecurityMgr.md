@@ -100,7 +100,7 @@ The following are example ACLs permissions
 
 *Password Encryption Support*
 
-You can use the nyla solution core Cryption object to generate an encrypted password. 
+You can use the [nyla solution core](https://github.com/nyla-solutions/nyla/tree/master/nyla.solutions.core) [Cryption](https://github.com/nyla-solutions/nyla/blob/master/nyla.solutions.core/src/main/java/nyla/solutions/core/util/Cryption.java) object to generate an encrypted password. 
 
 Usage java nyla.solutions.core.util.Cryption <pass>
 
