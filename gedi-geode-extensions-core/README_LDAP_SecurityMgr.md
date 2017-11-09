@@ -63,7 +63,7 @@ The following is an example security property file content (ex: gfldapsecurity.p
 		security-ldap-group-attribute=CN
 		
 		# Example Access Control Lists
-		# user nyla has permission to read daata
+		# user nyla has permission to read data
 		
 		security-ldap-acl-user-nyla=DATA:READ
 		
@@ -115,7 +115,7 @@ The encrypted password is always prefixed with {cryption}. This prefixed should 
 
 The following are example gfsh commands to start a single locator
 
-		start locator --name=local --http-service-bind-address=localhost   --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-1.0.4.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0jar --enable-cluster-configuration
+		start locator --name=local --http-service-bind-address=localhost --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-1.0.4.jar --enable-cluster-configuration  --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr 
 		
 	
 4) **Start Servers**

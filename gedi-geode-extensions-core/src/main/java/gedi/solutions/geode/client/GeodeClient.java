@@ -40,7 +40,7 @@ import nyla.solutions.core.util.Debugger;
 
 
 /**
- * Example GemFire (power by Apache Geode) API wrapper
+ *  GemFire (power by Apache Geode) API wrapper
  * @author Gregory Green
  *
  */
@@ -51,8 +51,9 @@ public class GeodeClient
 	 * GemFire connection object is a Client Cache
 	 */
 	private final ClientCache clientCache;
-	private final boolean cachingProxy;
-	private final ClientRegionFactory<?, ?> factory;
+	private boolean cachingProxy;
+	private final ClientRegionFactory<?, ?> proxyRegionfactory;
+	private final ClientRegionFactory<?, ?> cachingRegionfactory;
 	private static GeodeClient geodeClient = null;
 	
 	protected GeodeClient(boolean cachingProxy, String... classPatterns)
@@ -99,15 +100,11 @@ public class GeodeClient
 			.create();
 
 		
-		if(cachingProxy)
-		{
+
 			//Caching Proxy
-			factory = clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
-		}
-		else
-		{
-			factory = clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY);
-		}
+			cachingRegionfactory = clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
+			proxyRegionfactory = clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY);
+		
 	}//------------------------------------------------
 	
 	public <ReturnType> Collection<ReturnType>  select(String oql)
@@ -158,14 +155,19 @@ public class GeodeClient
 	protected GeodeClient(ClientCache clientCache)
 	{
 		this(clientCache,
-		clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY_HEAP_LRU));
+		clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY),
+		clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY_HEAP_LRU)
+		);
 	}//------------------------------------------------
 
-	protected GeodeClient(ClientCache clientCache,  ClientRegionFactory<?, ?> factory)
+	protected GeodeClient(ClientCache clientCache,  ClientRegionFactory<?, ?> proxyRegionfactory,
+	 ClientRegionFactory<?, ?> cachingRegionfactory
+	)
 	{
 		cachingProxy = false;
 		this.clientCache = clientCache;
-		this.factory = factory;
+		this.proxyRegionfactory = proxyRegionfactory;
+		this.cachingRegionfactory = cachingRegionfactory;
 	}//------------------------------------------------
 	/**
 	 * 
@@ -209,6 +211,17 @@ public class GeodeClient
 		
 	}//------------------------------------------------
 	
+	@SuppressWarnings("unchecked")
+	private <K,V> Region<K,V> createRegion(String regionName)
+	{
+		if(regionName.startsWith("/"))
+			regionName = regionName.substring(1); //remove prefix
+		
+		if(this.cachingProxy)
+			return (Region<K,V>)this.cachingRegionfactory.create(regionName);
+		else
+			return (Region<K,V>)this.proxyRegionfactory.create(regionName);
+	}//------------------------------------------------
 	/**
 	 * This is an example to get or create a region
 	 * @param regionName the  name
@@ -227,7 +240,7 @@ public class GeodeClient
 		if(region != null )
 			return (Region<K,V>)region;
 		
-		region = (Region<K,V>)this.factory.create(regionName);
+		region = (Region<K,V>)this.createRegion(regionName);
 		
 		//Client side data policy is typically NORMAL or EMPTY
 		if(cachingProxy)
@@ -275,6 +288,7 @@ public class GeodeClient
 	//------------------------------------------------
 	
 	
+	
 	/**
 	 * 
 	 * @return the GEODE client
@@ -290,6 +304,7 @@ public class GeodeClient
 		
 		return geodeClient;
 	}//------------------------------------------------
+	
 	/**
 	 * @return the clientCache
 	 */
@@ -297,4 +312,19 @@ public class GeodeClient
 	{
 		return clientCache;
 	}
+	/**
+	 * @return the cachingProxy
+	 */
+	public boolean isCachingProxy()
+	{
+		return cachingProxy;
+	}
+	/**
+	 * @param cachingProxy the cachingProxy to set
+	 */
+	public void setCachingProxy(boolean cachingProxy)
+	{
+		this.cachingProxy = cachingProxy;
+	}
+	
 }
