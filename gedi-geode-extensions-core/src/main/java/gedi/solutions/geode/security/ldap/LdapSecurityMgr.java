@@ -3,12 +3,12 @@ package gedi.solutions.geode.security.ldap;
 import java.security.Principal;
 import java.util.Properties;
 import javax.naming.NamingException;
-import org.apache.geode.LogWriter;
-import org.apache.geode.cache.Cache;
-import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.NotAuthorizedException;
 import org.apache.geode.security.ResourcePermission;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import gedi.solutions.geode.security.AclSecurityPropertiesDirector;
 import gedi.solutions.geode.security.exceptions.MissingSecurityProperty;
 import nyla.solutions.core.ds.LDAP;
@@ -67,21 +67,21 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 			boolean authorized = acl.checkPermission((Principal) principal, toString(context));
 
 			securityLogger
-			.fine("principal:" + principal + " context:" + context + " authorized:" + authorized + " acl:" + acl);
+			.debug("principal:" + principal + " context:" + context + " authorized:" + authorized + " acl:" + acl);
 
 			return authorized;
 
 		}
 		catch (AuthenticationFailedException e)
 		{
-			this.securityLogger.warning(e);
+			this.securityLogger.warn(e);
 			
 			throw e;
 		}
 		catch (RuntimeException e)
 		{
 
-			this.securityLogger.warning(e);
+			this.securityLogger.warn(e);
 
 			throw new AuthenticationFailedException(e.getMessage() + " STACK:" + Debugger.stackTrace(e));
 
@@ -93,52 +93,28 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 	public void init(final Properties securityProps)
 	throws NotAuthorizedException
 	{
-
-		Cache cache = CacheFactory.getAnyInstance();
-
-		setup(securityProps, cache);
+		setup(securityProps);
 	}// --------------------------------------------------------------
 
 	String toString(ResourcePermission resourcePermission)
 	{
-
-		if (resourcePermission == null)
-			return "NULL";
-
-		if (ResourcePermission.ALL_REGIONS.equals(resourcePermission.getRegionName()))
-		{
-			return new StringBuilder().append(resourcePermission.getResource()).append(":")
-			.append(resourcePermission.getOperation()).toString();
-		}
-		else if (ResourcePermission.ALL_KEYS.equals(resourcePermission.getKey()))
-		{
-			return new StringBuilder().append(resourcePermission.getResource()).append(":")
-			.append(resourcePermission.getOperation()).append(":").append(resourcePermission.getRegionName())
-			.toString();
-		}
-		else
-		{
-			return new StringBuilder().append(resourcePermission.getResource()).append(":")
-			.append(resourcePermission.getOperation()).append(":").append(resourcePermission.getRegionName())
-			.append(":").append(resourcePermission.getKey()).toString();
-		}
+		return String.valueOf(resourcePermission);
 
 	}//------------------------------------------------
 	/**
 	 * Set up the security manager
 	 * @param securityProps the security properties
-	 * @param cache the cache
 	 * @throws MissingSecurityProperty when a required property does not exist
 	 * 
 	 */
-	protected void setup(Properties securityProps, Cache cache)
+	protected void setup(Properties securityProps)
 	throws MissingSecurityProperty
 	{
-		securityLogger = cache.getSecurityLogger();
+		securityLogger = LogManager.getLogger(getClass());
 		
 		this.serviceAccountDn = securityProps.getProperty(LdapSecurityConstants.LDAP_PROXY_DN);
 
-		securityLogger.fine(LdapSecurityConstants.LDAP_PROXY_DN + " *************" + serviceAccountDn);
+		securityLogger.debug(LdapSecurityConstants.LDAP_PROXY_DN + " *************" + serviceAccountDn);
 
 		if (serviceAccountDn == null || serviceAccountDn.length() == 0)
 		{
@@ -178,7 +154,7 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 		}
 		catch (NamingException e)
 		{
-			securityLogger.warning(e);
+			securityLogger.warn(e);
 			throw new AuthenticationFailedException(e.getMessage(), e);
 		}
 
@@ -237,23 +213,39 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 			"property ["+ LdapSecurityConstants.PASSWORD_PROP + "] not provided");
 		}
 
-		passwd = Cryption.interpret(passwd);
 		
 		try (LDAP ldap = this.ldapConnectionFactory.connect(this.ldapUrl, this.serviceAccountDn,
 		this.proxyPassword.toCharArray()))
-		{
+		{		
+			try
+			{
+				passwd = Cryption.interpret(passwd);
+			}
+			catch(Exception e)
+			{
+				securityLogger.warn("Detected password interpration error. This may be caused by an incorrect password, but you should check that the CRYPTION_KEY environment variable is a minimum of 16 characters, then regenerate any needed passwords.");
+				throw new AuthenticationFailedException(e.getMessage());
+			
+			}
+		
 			if (ldap == null)
 				throw new IllegalArgumentException("ldap is required from factory: "+ldapConnectionFactory.getClass().getName());
 			
-			return ldap.authenicate(userName, passwd.toCharArray(), this.basedn, uidAttribute, memberOfAttrNm,
+			Object principal = ldap.authenicate(userName, passwd.toCharArray(), this.basedn, uidAttribute, memberOfAttrNm,
 			groupAttrNm, timeout);
+			
+			securityLogger.debug("AUTHENTICATED:"+principal);
+			
+			return principal;
 		}
-		catch (NamingException e)
+		catch(AuthenticationFailedException e)
 		{
-			throw new AuthenticationFailedException(e.getMessage());
+			securityLogger.warn(e);
+			throw e;
 		}
-		catch (SecurityException e)
+		catch (NamingException |RuntimeException e)
 		{
+			securityLogger.warn(e);
 			throw new AuthenticationFailedException(e.getMessage());
 		}
 
@@ -278,7 +270,7 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 	private String uidAttribute = null;
 	private String memberOfAttrNm = "memberOf"; 
 	private String groupAttrNm  = null; //Ex: "CN";
-	protected LogWriter securityLogger;
+	protected Logger securityLogger;
 	private String serviceAccountDn = null;
 	private int timeout = Config.getPropertyInteger("LDAP_TIMEOUT", 10).intValue();
 	private LDAPConnectionFactory ldapConnectionFactory = new LDAPConnectionFactory();

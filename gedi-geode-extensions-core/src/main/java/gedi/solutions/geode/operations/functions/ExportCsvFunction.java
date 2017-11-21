@@ -14,6 +14,7 @@ import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
 import org.apache.geode.cache.partition.PartitionRegionHelper;
+import org.apache.logging.log4j.LogManager;
 
 import gedi.solutions.geode.operations.csv.CsvHeaderConverter;
 import gedi.solutions.geode.operations.csv.CsvRowConverter;
@@ -36,7 +37,7 @@ import nyla.solutions.core.util.Config;
  * @author Gregory Green
  *
  */
-public class ExportCsvFunction  implements Function
+public class ExportCsvFunction  implements Function<Object>
 {
 	/**
 	 * 
@@ -58,7 +59,7 @@ public class ExportCsvFunction  implements Function
 	 * Export region data in JSON format
 	 * @param fc the function context
 	 */
-	public void execute(FunctionContext fc)
+	public void execute(FunctionContext<Object> fc)
 	{
 		
 		ResultSender<Object> rs = fc.getResultSender();
@@ -84,13 +85,13 @@ public class ExportCsvFunction  implements Function
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
 			
-			CacheFactory.getAnyInstance().getLogger().error(sw.toString());
+			LogManager.getLogger(getClass()).error(sw.toString());
 			rs.sendException(e);
 		}
 		
 	    
 	}// --------------------------------------------------------
-	private boolean exportAllRegions(FunctionContext fc)
+	private boolean exportAllRegions(FunctionContext<Object> fc)
 	{
 		
 		  String[] args = (String[]) fc.getArguments();

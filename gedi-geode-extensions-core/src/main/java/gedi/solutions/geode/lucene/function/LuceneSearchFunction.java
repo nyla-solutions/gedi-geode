@@ -21,7 +21,7 @@ import nyla.solutions.core.patterns.iteration.PagingCollection;
 import nyla.solutions.core.util.Debugger;
 
 
-public class LuceneSearchFunction implements Function
+public class LuceneSearchFunction<T> implements Function<Object>
 {
 	
 	/**

@@ -15,6 +15,7 @@ import nyla.solutions.core.util.settings.Settings;
  * @author Gregory Green
  *
  */
+@SuppressWarnings("deprecation")
 public class CryptionPropertyAuthInitialize implements AuthInitialize
 //TODO:, SecurityConstants
 {

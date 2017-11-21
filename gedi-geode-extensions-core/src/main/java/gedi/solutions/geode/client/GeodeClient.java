@@ -95,7 +95,6 @@ public class GeodeClient
 			.setPoolSubscriptionEnabled(true)
 			.setPdxSerializer(new ReflectionBasedAutoSerializer(classPatterns))
 			.set("log-level", Config.getProperty("log-level","config"))
-			.set("log-file", Config.getProperty("log-file","client.log"))
 			.set("name", name)
 			.create();
 
@@ -120,6 +119,7 @@ public class GeodeClient
 	 * @return collection of results
 	 */
 	
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public <K,V> Paging<V>  searchText(TextPageCriteria criteria, Region<K,V> region, Set<K> filter)
 	{
 		try
@@ -128,10 +128,8 @@ public class GeodeClient
 			LuceneSearchFunction func = new LuceneSearchFunction();
 			
 			
-			Execution exe = FunctionService.onRegion(region).withFilter(filter);
+			Execution<Object,Object,Object> exe = FunctionService.onRegion(region).withFilter(filter);
 			
-			
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			Paging<V> paging = (Paging)GemFireIO.exeWithResults(exe, func);
 			
 			
@@ -175,6 +173,7 @@ public class GeodeClient
 	 * @return the collection keys in the page region
 	 * @throws Exception when an unknow exception occurs
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<String> searchWithPageKeys(TextPageCriteria criteria)
 	throws Exception
 	{
@@ -183,14 +182,14 @@ public class GeodeClient
 		
 		Region<?,?> region = this.getRegion(criteria.getRegionName());
 		
-		Execution exe = FunctionService.onRegion(region).withArgs(criteria);
+		Execution<?,?,?> exe = FunctionService.onRegion(region).setArguments(criteria);
 		
 		if(criteria.getFilter() != null)
 		{
 			exe = exe.withFilter(criteria.getFilter());
 		}
 		
-	    return GemFireIO.exeWithResults(exe, new LuceneSearchFunction());
+	    return GemFireIO.exeWithResults(exe, new LuceneSearchFunction<Object>());
 	    
 	}//------------------------------------------------
 	

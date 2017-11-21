@@ -17,6 +17,7 @@ import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
 import org.apache.geode.cache.partition.PartitionRegionHelper;
+import org.apache.logging.log4j.LogManager;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,7 +42,7 @@ import nyla.solutions.core.util.Config;
  * @author Gregory Green
  *
  */
-public class ExportJsonFunction  implements Function
+public class ExportJsonFunction  implements Function<Object>
 {
 	private String directoryPath = Config.getProperty(this.getClass(),"directoryPath",".");
 	
@@ -62,7 +63,7 @@ public class ExportJsonFunction  implements Function
 	 * Export region data in JSON format
 	 * @param fc the function context
 	 */
-	public void execute(FunctionContext fc)
+	public void execute(FunctionContext<Object> fc)
 	{
 		
 		ResultSender<Object> rs = fc.getResultSender();
@@ -88,13 +89,13 @@ public class ExportJsonFunction  implements Function
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
 			
-			CacheFactory.getAnyInstance().getLogger().error(sw.toString());
+			LogManager.getLogger(getClass()).error(sw.toString());
 			rs.sendException(e);
 		}
 		
 	    
 	}// --------------------------------------------------------
-	private boolean exportAllRegions(FunctionContext fc)
+	private boolean exportAllRegions(FunctionContext<Object> fc)
 	{
 		
 		  String[] args = (String[]) fc.getArguments();

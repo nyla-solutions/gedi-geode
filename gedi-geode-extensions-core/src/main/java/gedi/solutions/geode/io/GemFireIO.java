@@ -52,7 +52,7 @@ public class GemFireIO
 	 * @throws Exception when remote execution errors occur
 	 */
 	@SuppressWarnings("unchecked")
-	public  static <T> Collection<T> exeWithResults(Execution execution, Function function)
+	public  static <T> Collection<T> exeWithResults(Execution<?,?,?> execution, Function<?> function)
 			throws Exception
 	{
 		ResultCollector<?, ?> resultCollector;

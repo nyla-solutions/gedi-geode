@@ -61,7 +61,7 @@ public class GeodeConfigAuthInitializeTest
 			
 			Properties in = new Properties();
 			
-			Properties out = auth.getCredentials(in);
+			Properties out = auth.getCredentials(in,null,false);
 			
 			System.out.println("output properties:"+out);
 			

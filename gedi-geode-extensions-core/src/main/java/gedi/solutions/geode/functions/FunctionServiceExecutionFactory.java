@@ -16,7 +16,7 @@ public class FunctionServiceExecutionFactory implements ExecutionFactory, Serial
 	private static final long serialVersionUID = 3157567950099427294L;
 
 	@Override
-	public Execution onRegion(Region<?, ?> region)
+	public Execution<?,?,?> onRegion(Region<?, ?> region)
 	{
 		return FunctionService.onRegion(region);
 	}

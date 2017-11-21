@@ -6,4 +6,4 @@ objectClass: organizationalPerson
 cn: datawrite 
 uid: datawrite 
 sn: administrator
-userPassword: datawrite 
+userPassword: datawrite

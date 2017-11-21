@@ -7,6 +7,6 @@ import org.apache.geode.cache.execute.Execution;
 public interface ExecutionFactory
 {
 	
-	Execution onRegion(Region<?,?> region);
+	Execution<?,?,?> onRegion(Region<?,?> region);
 
 }

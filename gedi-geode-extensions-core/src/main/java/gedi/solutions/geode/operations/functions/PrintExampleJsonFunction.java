@@ -1,18 +1,18 @@
 package gedi.solutions.geode.operations.functions;
 
-import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.ResultSender;
+import org.apache.logging.log4j.LogManager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-public class PrintExampleJsonFunction implements Function
+public class PrintExampleJsonFunction implements Function<Object>
 {
-	public void execute(FunctionContext fc)
+	public void execute(FunctionContext<Object> fc)
 	{
 		ResultSender<String> rs = fc.getResultSender();
 		
@@ -42,7 +42,7 @@ public class PrintExampleJsonFunction implements Function
 	
 		catch (ClassNotFoundException| IllegalAccessException | InstantiationException | JsonProcessingException| RuntimeException e)
 		{
-			CacheFactory.getAnyInstance().getLogger().error(e.toString());
+			LogManager.getLogger(getClass()).error(e.toString());
 			rs.sendException(e);
 		}
 	}// --------------------------------------------------------

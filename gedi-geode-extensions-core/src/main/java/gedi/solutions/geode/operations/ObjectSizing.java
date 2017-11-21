@@ -3,8 +3,6 @@ package gedi.solutions.geode.operations;
 
 import java.util.Iterator;
 import java.util.Set;
-
-import org.apache.geode.LogWriter;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.partition.PartitionRegionHelper;
 import org.apache.geode.internal.cache.CachedDeserializable;
@@ -15,11 +13,12 @@ import org.apache.geode.internal.cache.RegionEntry;
 import org.apache.geode.internal.size.ObjectGraphSizer;
 import org.apache.geode.internal.size.ReflectionObjectSizer;
 import org.apache.geode.pdx.PdxInstance;
+import org.apache.logging.log4j.Logger;
 
 import nyla.solutions.core.patterns.reflection.ObjectClassSizer;
 public class ObjectSizing
 {
-	 private LogWriter logger = null;
+	 private Logger logger = null;
 	  
 	  private int totalDeserializedRegionEntrySizeBefore;
 	  private int totalDeserializedKeySize;
@@ -39,7 +38,7 @@ public class ObjectSizing
 	   * @param logger
 	   *        <code>LogWriter</code> to use for all the output. 
 	   */
-	  public ObjectSizing(LogWriter logger) {
+	  public ObjectSizing(Logger logger) {
 	    this.logger = logger;
 	  }
 	  

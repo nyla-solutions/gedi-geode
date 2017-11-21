@@ -5,14 +5,13 @@ import java.util.Properties;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-
-import org.apache.geode.LogWriter;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Declarable;
 import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.distributed.DistributedSystem;
+import org.apache.logging.log4j.Logger;
 
 
 
@@ -33,7 +32,7 @@ import org.apache.geode.distributed.DistributedSystem;
  * @author Gregory Green
  *
  */
-public class SystemShutDownFunction implements Function, Declarable
+public class SystemShutDownFunction implements Function<Object>, Declarable
 {	
 	//@Autowired
 	//private LoggingService loggingService;
@@ -47,11 +46,11 @@ public class SystemShutDownFunction implements Function, Declarable
 	private static final long serialVersionUID = -4345180049555487810L;
 
 	@Override
-	public void execute(FunctionContext functionContext) 
+	public void execute(FunctionContext<Object> functionContext) 
 	{
 		
 		String distributeMemberName = "unknown";
-		LogWriter logWriter = null;
+		Logger logger = null;
 		
 		try {
 			
@@ -72,10 +71,10 @@ public class SystemShutDownFunction implements Function, Declarable
 					ObjectName on = new ObjectName("GemFire:service=System,type=Distributed");
 					
 					
-					logWriter = distributedSystem.getLogWriter();
+					logger = org.apache.logging.log4j.LogManager.getLogger(getClass());
 					
-					if(logWriter != null)
-						logWriter.severe("FUNCTION:SystemDownFunction invoking shutDownAllMembers on member:"+distributeMemberName);
+					if(logger != null)
+						logger.fatal("FUNCTION:SystemDownFunction invoking shutDownAllMembers on member:"+distributeMemberName);
 				
 					try
 					{
@@ -88,9 +87,9 @@ public class SystemShutDownFunction implements Function, Declarable
 						if(message !=  null && message.contains("distributed system has been disconnected"))
 						{
 							//ignore and just exit JVM
-							if(logWriter != null)
+							if(logger != null)
 							{
-								logWriter.warning("FUNCTION:SystemDownFunction shutting down disconnected member:"+distributeMemberName);
+								logger.warn("FUNCTION:SystemDownFunction shutting down disconnected member:"+distributeMemberName);
 							}
 							
 							System.exit(0);
@@ -106,14 +105,14 @@ public class SystemShutDownFunction implements Function, Declarable
 			}
 	
 		} catch (Exception e) {
-			if(logWriter != null) {
-				logWriter.warning(e.toString());
+			if(logger != null) {
+				logger.warn(e.toString());
 			}
 		}
 		
-		if(logWriter != null)
+		if(logger != null)
 		{
-			logWriter.warning("FUNCTION:SystemDownFunction shutting down member:"+distributeMemberName);
+			logger.warn("FUNCTION:SystemDownFunction shutting down member:"+distributeMemberName);
 		}
 		
 		System.exit(0);

@@ -17,6 +17,7 @@ import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.partition.PartitionRegionHelper;
 import org.apache.geode.pdx.PdxInstance;
+import org.apache.logging.log4j.LogManager;
 
 import nyla.solutions.core.security.MD;
 import nyla.solutions.core.util.Debugger;
@@ -27,7 +28,7 @@ import nyla.solutions.core.util.Debugger;
  * @author Gregory Green
  *
  */
-public class GetEntriesChecksumFunction implements Function, Declarable
+public class GetEntriesChecksumFunction implements Function<Object>, Declarable
 {
 
 	/**
@@ -42,7 +43,7 @@ public class GetEntriesChecksumFunction implements Function, Declarable
 	 * 
 	 */
 	@Override
-	public void execute(FunctionContext functionContext)
+	public void execute(FunctionContext<Object> functionContext)
 	{
 		try
 		{
@@ -65,7 +66,7 @@ public class GetEntriesChecksumFunction implements Function, Declarable
 		catch (Exception e)
 		{
 			String stack = Debugger.stackTrace(e);
-			CacheFactory.getAnyInstance().getLogger().error(stack);
+			LogManager.getLogger(getClass()).error(stack);
 			throw new FunctionException(stack);
 		}
 	}// --------------------------------------------------------

@@ -12,10 +12,10 @@ public class JvmExecutionFactory implements ExecutionFactory
 {
 
 	@Override
-	public Execution onRegion(Region<?, ?> region)
+	public Execution<?,?,?> onRegion(Region<?, ?> region)
 	{
 		
-		JvmExecution exe = new JvmExecution(region);
+		JvmExecution<?,?,?> exe = new JvmExecution<Object,Object,Object>(region);
 		
 		return exe;
 	}

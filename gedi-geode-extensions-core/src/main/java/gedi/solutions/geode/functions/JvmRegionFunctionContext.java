@@ -2,23 +2,36 @@ package gedi.solutions.geode.functions;
 
 import java.util.Set;
 
+import org.apache.geode.cache.Cache;
+import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
 
 public class JvmRegionFunctionContext<K, V,T> implements RegionFunctionContext
 {
-	
 	public JvmRegionFunctionContext()
 	{
+		this(CacheFactory.getAnyInstance());
+	}
+
+	public JvmRegionFunctionContext(Cache cache)
+	{
+		this.cache = cache;
 	}
 
 	public JvmRegionFunctionContext(Region<K,V> dataSet,ResultSender<T> resultSender, Object arguments, Set<?> filter)
+	{
+		this(CacheFactory.getAnyInstance(),dataSet,resultSender,arguments,filter);
+		
+	}
+	public JvmRegionFunctionContext(Cache cache, Region<K,V> dataSet,ResultSender<T> resultSender, Object arguments, Set<?> filter)
 	{
 		this.dataSet = dataSet;
 		this.resultSender = resultSender;
 		this.filter = filter;
 		this.arguments = arguments;
+		this.cache = cache;
 	}//-------------------------------------------------------------------
 	
 	public Object getArguments()
@@ -31,7 +44,6 @@ public class JvmRegionFunctionContext<K, V,T> implements RegionFunctionContext
 		return this.functionId;
 	}
 
-	@SuppressWarnings("unchecked")
 	public ResultSender<T> getResultSender()
 	{
 		return this.resultSender;
@@ -61,10 +73,20 @@ public class JvmRegionFunctionContext<K, V,T> implements RegionFunctionContext
 		this.functionId = functionId;
 	}
 
+	/**
+	 * @return the cache
+	 */
+	@Override
+	public Cache getCache()
+	{
+		return cache;
+	}
+
 	private String functionId;
 	private Region<K, V> dataSet;
 	private Object arguments;
 	private Set<?> filter;
 	private ResultSender<T> resultSender;
+	private final Cache cache;
 
 }

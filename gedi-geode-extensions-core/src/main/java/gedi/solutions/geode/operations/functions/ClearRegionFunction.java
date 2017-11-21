@@ -2,22 +2,21 @@ package gedi.solutions.geode.operations.functions;
 
 import java.util.Properties;
 import java.util.Set;
-
-import org.apache.geode.LogWriter;
-import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Declarable;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Deletes all entries in a given region
  * @author Gregory Green
  *
  */
-public class ClearRegionFunction implements Function, Declarable
+public class ClearRegionFunction implements Function<Object>, Declarable
 {
 
 	@Override
@@ -26,10 +25,9 @@ public class ClearRegionFunction implements Function, Declarable
 	}
 
 	@Override
-	public void execute(FunctionContext functionContext)
+	public void execute(FunctionContext<Object> functionContext)
 	{
-		LogWriter logWriter = CacheFactory.getAnyInstance().getLogger();
-		
+		Logger logWriter = LogManager.getLogger(ClearRegionFunction.class);
 		
 		if(!(functionContext instanceof RegionFunctionContext))
 		{
@@ -42,7 +40,7 @@ public class ClearRegionFunction implements Function, Declarable
 		
 		Region<Object,Object> region = rfc.getDataSet();
 		
-		logWriter.warning("Executing "+this.getClass().getName()+"  for region:"+region.getFullPath());
+		logWriter.warn("Executing "+this.getClass().getName()+"  for region:"+region.getFullPath());
 		
 		Set<Object> keySet = region.keySet();
 		

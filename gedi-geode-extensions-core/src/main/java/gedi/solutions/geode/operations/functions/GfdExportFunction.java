@@ -2,8 +2,6 @@ package gedi.solutions.geode.operations.functions;
 
 import java.io.File;
 import java.util.Properties;
-
-import org.apache.geode.LogWriter;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Declarable;
@@ -17,6 +15,8 @@ import org.apache.geode.cache.partition.PartitionRegionHelper;
 import org.apache.geode.cache.snapshot.RegionSnapshotService;
 import org.apache.geode.cache.snapshot.SnapshotOptions.SnapshotFormat;
 import org.apache.geode.internal.cache.snapshot.SnapshotOptionsImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import gedi.solutions.geode.data.ExportFileType;
 import nyla.solutions.core.util.Debugger;
@@ -35,7 +35,7 @@ import nyla.solutions.core.util.Debugger;
  * @author Gregory Green
  *
  */
-public class GfdExportFunction  implements Function, Declarable
+public class GfdExportFunction  implements Function<Object>, Declarable
 {	
 	/**
 	 * String keyFileExtension = ".key"
@@ -50,7 +50,7 @@ public class GfdExportFunction  implements Function, Declarable
 	 * Export region data in JSON format
 	 * @param fc the function context
 	 */
-	public void execute(FunctionContext fc)
+	public void execute(FunctionContext<Object> fc)
 	{
 		
 		ResultSender<Object> rs = fc.getResultSender();
@@ -95,7 +95,7 @@ public class GfdExportFunction  implements Function, Declarable
 			
 			FunctionException functionException = new FunctionException(stackTrace);
 			
-			CacheFactory.getAnyInstance().getLogger().error(stackTrace);
+			LogManager.getLogger(getClass()).error(stackTrace);
 			rs.sendException(functionException);
 			throw functionException;
 		}
@@ -125,9 +125,9 @@ public class GfdExportFunction  implements Function, Declarable
 			region = PartitionRegionHelper.getLocalData(region);
 		}
 		
-		LogWriter logWriter = CacheFactory.getAnyInstance().getLogger();
+		Logger logger = LogManager.getLogger(getClass());
 		
-		logWriter.info("Exporting region"+region.getName());
+		logger.info("Exporting region"+region.getName());
 		
 		//get name
 	    String regionName = region.getName();
@@ -135,10 +135,10 @@ public class GfdExportFunction  implements Function, Declarable
 		File resultFile = DataOpsSecretary.determineFile(ExportFileType.gfd, regionName);
 		
 		//delete previous
-		logWriter.info("deleting file:"+resultFile.getAbsolutePath());
+		logger.info("deleting file:"+resultFile.getAbsolutePath());
 		boolean wasDeleted = resultFile.delete();
 		
-		logWriter.info("delete:"+wasDeleted);
+		logger.info("delete:"+wasDeleted);
 		
 	    try
 		{

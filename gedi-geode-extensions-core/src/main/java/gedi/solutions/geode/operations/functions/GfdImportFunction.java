@@ -14,6 +14,7 @@ import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
 import org.apache.geode.cache.snapshot.SnapshotOptions.SnapshotFormat;
+import org.apache.logging.log4j.LogManager;
 
 import gedi.solutions.geode.data.ExportFileType;
 import nyla.solutions.core.util.Debugger;
@@ -25,7 +26,7 @@ import nyla.solutions.core.util.Debugger;
  * @author Gregory Green
  * 
  */
-public class GfdImportFunction implements Function, Declarable
+public class GfdImportFunction implements Function<Object>, Declarable
 {
 
 
@@ -33,7 +34,7 @@ public class GfdImportFunction implements Function, Declarable
 	{
 	}// ------------------------------------------------
 
-	public void execute(FunctionContext fc)
+	public void execute(FunctionContext<Object> fc)
 	{
 		ResultSender<Object> rs = fc.getResultSender();
 
@@ -60,7 +61,7 @@ public class GfdImportFunction implements Function, Declarable
 		{
 			String stackTrace = Debugger.stackTrace(e);
 
-			CacheFactory.getAnyInstance().getLogger().error(stackTrace);
+			LogManager.getLogger(getClass()).error(stackTrace);
 			rs.sendException(e);
 			
 			throw new FunctionException(stackTrace);

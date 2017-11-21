@@ -4,12 +4,11 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Properties;
 
 import javax.naming.NamingException;
-
-import org.apache.geode.LogWriter;
-import org.apache.geode.cache.Cache;
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.ResourcePermission;
 import org.junit.Test;
@@ -34,9 +33,7 @@ public class LdapSecurityMgrTest
 	}
 	
 	private static LDAP ldap;
-	private static LogWriter securityLogger;
 	private static LDAPConnectionFactory ldapConnectionFactory ;
-	private static Cache cache;
 	
 	public LdapSecurityMgr init()
 	throws NamingException
@@ -45,14 +42,12 @@ public class LdapSecurityMgrTest
 		
 		ldap = mock(LDAP.class);
 		
-		securityLogger = mock(LogWriter.class);
-		cache = mock(Cache.class);
+
 		ldapConnectionFactory = mock(LDAPConnectionFactory.class);
 		
 		when(ldapConnectionFactory.connect(any(), any(), any()))
 		.thenReturn(ldap).thenReturn(ldap).thenReturn(ldap);
 		
-		when(cache.getSecurityLogger()).thenReturn(securityLogger);
 		
 		mgr.setLdapConnectionFactory(ldapConnectionFactory);
 		
@@ -69,7 +64,7 @@ public class LdapSecurityMgrTest
 		props.setProperty("security-ldap-acl-user-readonly", "DATA:READ");
 		props.setProperty("security-ldap-acl-group-readonly","DATA:READ");
 		
-		mgr.setup(props, cache);
+		mgr.setup(props);
 		
 		System.out.println("setup");
 		
@@ -84,18 +79,15 @@ public class LdapSecurityMgrTest
 	throws Exception
 	{
 		LdapSecurityMgr mgr = init();
-		LogWriter securityLogger = mock(LogWriter.class);
-		Cache cache = mock(Cache.class);
 		LDAPConnectionFactory ldapConnectionFactory = mock(LDAPConnectionFactory.class);
 		
-		when(cache.getSecurityLogger()).thenReturn(securityLogger);
 		Properties props = new Properties();
 		
 		mgr.setLdapConnectionFactory(ldapConnectionFactory);
 		
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
@@ -105,7 +97,7 @@ public class LdapSecurityMgrTest
 
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
@@ -115,7 +107,7 @@ public class LdapSecurityMgrTest
 
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
@@ -124,7 +116,7 @@ public class LdapSecurityMgrTest
 		props.setProperty("security-ldap-server", "ldap://localhost:389");
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
@@ -134,7 +126,7 @@ public class LdapSecurityMgrTest
 		props.setProperty(LdapSecurityConstants.LDAP_MEMBEROF_ATTRIB_NM_PROP, "memberOf");
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
@@ -144,7 +136,7 @@ public class LdapSecurityMgrTest
 		props.setProperty(LdapSecurityConstants.LDAP_SERVER_URL_PROP, "test");
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
@@ -153,22 +145,20 @@ public class LdapSecurityMgrTest
 		props.setProperty(LdapSecurityConstants.LDAP_GROUP_ATTRIB_NM_PROP, "test");
 		try
 		{
-			mgr.setup(props,cache);
+			mgr.setup(props);
 			fail();
 		}
 		catch(MissingSecurityProperty e)
 		{}
 		
 		props.setProperty("security-ldap-base-dn", "password");
-		mgr.setup(props,cache);
+		mgr.setup(props);
 		
 
 	}//------------------------------------------------
 	@Test
 	public void testSetupPassword() throws Exception
 	{
-
-		
 		LdapSecurityMgr  mgr = new LdapSecurityMgr();
 		try
 		{
@@ -234,6 +224,21 @@ public class LdapSecurityMgrTest
 			
 			
 		}
+		
+	}//------------------------------------------------
+	@Test
+	public void test_decrypt()
+	throws Exception
+	{
+		byte[] keyBytes = Arrays.copyOf("GEDI-GEODI".getBytes(StandardCharsets.UTF_8), 16);
+		
+		Cryption c = new Cryption(keyBytes,"AES");
+		String k = "{cryption}A0tyyt5QHch/hIinaQeKmw==";
+		assertTrue(Cryption.isEncrypted(k));
+		k = k.substring(Cryption.CRYPTION_PREFIX.length());
+		assertEquals("A0tyyt5QHch/hIinaQeKmw==",k);
+	
+		assertEquals("cluster", c.decryptText(k));
 		
 	}//------------------------------------------------
 	@Test

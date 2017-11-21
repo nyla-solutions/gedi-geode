@@ -1,6 +1,7 @@
 package gedi.solutions.geode.client;
 
 import java.util.Properties;
+
 import org.apache.geode.LogWriter;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.security.AuthInitialize;
@@ -23,6 +24,7 @@ import nyla.solutions.core.util.Config;
  * @author Gregory Green
  *
  */
+@SuppressWarnings("deprecation")
 public class GeodeConfigAuthInitialize
 implements AuthInitialize, GeodeConfigConstants
 {
@@ -86,7 +88,8 @@ implements AuthInitialize, GeodeConfigConstants
 		return username;
 	}//------------------------------------------------
 
-	  @Override
+
+	@Override
 	  public void init(LogWriter logWriter, LogWriter securityLogWriter)
 	      throws AuthenticationFailedException 
 	  {

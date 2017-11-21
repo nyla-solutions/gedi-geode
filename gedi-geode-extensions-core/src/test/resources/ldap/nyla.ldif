@@ -6,4 +6,4 @@ objectClass: organizationalPerson
 cn: nyla 
 uid: nyla 
 sn: administrator
-userPassword: nyla 
+userPassword: nyla

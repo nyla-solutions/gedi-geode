@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-
-import org.apache.geode.LogWriter;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.Region;
@@ -13,6 +11,8 @@ import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.FunctionException;
 import org.apache.geode.cache.execute.ResultSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import gedi.solutions.geode.data.ExportFileType;
 import nyla.solutions.core.io.IO;
@@ -34,7 +34,7 @@ import nyla.solutions.core.util.Debugger;
  * @author Gregory Green
  *
  */
-public class ReadExportFunction  implements Function
+public class ReadExportFunction  implements Function<Object>
 {
 	/**
 	 * 
@@ -56,12 +56,12 @@ public class ReadExportFunction  implements Function
 	 * 
 	 */
 	@Override
-	public void execute(FunctionContext functionContext)
+	public void execute(FunctionContext<Object> functionContext)
 	{
 
 		ResultSender<Object> sender = functionContext.getResultSender();
 		Cache cache = CacheFactory.getAnyInstance();
-		LogWriter logWriter = cache.getLogger();
+		Logger logWriter = LogManager.getLogger(getClass());
 		
 		try
 		{
@@ -122,7 +122,7 @@ public class ReadExportFunction  implements Function
 		}
 			
 	}// --------------------------------------------------------
-	private Serializable readContent(File file, ExportFileType exportFileType, LogWriter logWriter)
+	private Serializable readContent(File file, ExportFileType exportFileType, Logger logWriter)
 	throws IOException
 	{
 		String filePath = file.getAbsolutePath();

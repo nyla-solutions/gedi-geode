@@ -6,4 +6,4 @@ objectClass: organizationalPerson
 cn: cluster 
 uid: cluster 
 sn: administrator
-userPassword: cluster 
+userPassword: cluster
