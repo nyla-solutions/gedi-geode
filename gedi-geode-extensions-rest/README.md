@@ -8,7 +8,15 @@ When starting the application you must provide the ENVironment
 
 - LOCATOR_HOST=**public IP address or Public Host Name**
 - LOCATOR_PORT =**Locator Port**
+- name =**Client Name**
+
+
+Example 
 	
+	export LOCATOR_HOST=localhost
+	export LOCATOR_PORT=10334
+	export name=GEDI_GEDI_REST_CLIENT
+
 
 
 # REST Region Service

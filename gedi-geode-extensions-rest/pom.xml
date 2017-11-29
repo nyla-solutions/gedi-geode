@@ -5,7 +5,7 @@
 
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode-extensions-rest</artifactId>
-	<version>$version</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>gedi-geode-extensions-rest</name>

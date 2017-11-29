@@ -108,7 +108,7 @@ Usage java nyla.solutions.core.util.Cryption <pass>
 
 Example:
 
-	java -classpath lib/nyla.solutions.core-1.1.0-SNAPSHOT.jar nyla.solutions.core.util.Cryption password
+	java -classpath lib/nyla.solutions.core-1.1.0.jar nyla.solutions.core.util.Cryption password
 	{cryption}Hepk7h7LmK3WO+dQlGQB0A==
 
 The encrypted password is always prefixed with {cryption}. This prefixed should be included in the property passwords.

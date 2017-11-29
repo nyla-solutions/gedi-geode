@@ -196,11 +196,8 @@ public class LdapSecurityMgr implements org.apache.geode.security.SecurityManage
 
 		String userName = props.getProperty(LdapSecurityConstants.USER_NAME_PROP);
 
-		// securityLogger.info("username is"+ userName);
-
 		if (userName == null)
 		{
-
 			throw new AuthenticationFailedException(
 			"property ["+ LdapSecurityConstants.USER_NAME_PROP + "] not provided");
 		}

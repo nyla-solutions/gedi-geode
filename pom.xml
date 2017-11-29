@@ -4,7 +4,7 @@
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode</artifactId>
          <packaging>pom</packaging>
-	<version>$version</version>
+	<version>1.0.4</version>
 	<name>gedi-geode</name>
   <modules> 
         <module>gedi-geode-extensions-core</module>
