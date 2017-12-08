@@ -12,15 +12,12 @@ import javax.management.ObjectName;
 import javax.management.Query;
 import javax.management.QueryExp;
 import javax.management.ValueExp;
-
+import org.apache.geode.management.DistributedSystemMXBean;
 import org.apache.geode.management.MemberMXBean;
-
 import gedi.solutions.geode.client.GemFireJmxClient;
 import gedi.solutions.geode.client.SingletonGemFireJmx;
 import nyla.solutions.core.patterns.jmx.JMX;
 import nyla.solutions.core.util.Debugger;
-
-
 
 /**
  * This object handles operations on the cluster 
@@ -150,6 +147,51 @@ public class GemFireMgmt
 			System.out.println(e.getMessage());
 		}
 	}// --------------------------------------------------------
+
+	public static void stopLocator(JMX jmx,String locatorName)
+	{
+		try
+		{
+			ObjectName objectName  = new ObjectName("GemFire:type=Member,member="+locatorName);
+			
+			//DistributedSystemMXBean distributedSystemMXBean = 
+			MemberMXBean bean = jmx.newBean(MemberMXBean.class, objectName);
+
+			bean.shutDownMember();
+		}
+		catch (MalformedObjectNameException e)
+		{
+			throw new RuntimeException("Cannot stop member:"+locatorName+" ERROR:"+e.getMessage(),e);
+		}
+
+	}//------------------------------------------------
+
+	//Does not stop locators
+	public static String [] shutDown(JMX jmx)
+	{
+		try
+		{
+			
+			DistributedSystemMXBean bean = toDistributeSystem(jmx);
+			
+
+			return bean.shutDownAllMembers();
+			
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(" ERROR:"+e.getMessage(),e);
+		}
+		
+	}// --------------------------------------------------------
+	private static DistributedSystemMXBean toDistributeSystem(JMX jmx) throws MalformedObjectNameException
+	{
+		ObjectName objectName  = new ObjectName("GemFire:service=System,type=Distributed");
+		
+		//DistributedSystemMXBean distributedSystemMXBean = 
+		DistributedSystemMXBean bean = jmx.newBean(DistributedSystemMXBean.class, objectName);
+		return bean;
+	}//------------------------------------------------
 	/**
 	 * Dispose of the JMX/GemFire connection
 	 */
@@ -185,6 +227,5 @@ public class GemFireMgmt
 		   GemFireMgmt.shutDownMember(objectName.getKeyProperty("member"));
 	   }
    }// --------------------------------------------------------
-
    private static long shutDownDelay = 1000;
 }

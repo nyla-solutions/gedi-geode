@@ -42,12 +42,12 @@ Get the Apache Geode client cache
  
  The following will extract a single statistic type with the name "CachePerfStats"
  
- 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs CachePerfStats   /Projects/LifeSciences/Humana/analysis/DigitIT/stats/CachePerfStats.csv`
+ 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs CachePerfStats   /Projects/stats/CachePerfStats.csv`
  
  
  To export all statistics with a file name pattern `<name>.gfs.<type>.csv` in the same directory as the stat file.
  
- 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs`
+ 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/analysis/DigitIT/stats/stats.gfs`
 
 
 # LDAP Security Manager
