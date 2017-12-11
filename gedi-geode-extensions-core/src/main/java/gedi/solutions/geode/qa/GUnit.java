@@ -1,12 +1,10 @@
 package gedi.solutions.geode.qa;
 
 import java.nio.file.Paths;
-
 import org.apache.geode.cache.RegionShortcut;
-import org.apache.geode.distributed.LocatorLauncher;
+import gedi.solutions.geode.util.GemFireInspector;
 import gedi.solutions.geode.util.GemFireMgmt;
 import nyla.solutions.core.io.IO;
-import nyla.solutions.core.operations.ClassPath;
 import nyla.solutions.core.operations.Shell;
 import nyla.solutions.core.operations.Shell.ProcessInfo;
 import nyla.solutions.core.patterns.jmx.JMX;
@@ -18,8 +16,6 @@ public class GUnit
 {
 	private final static String location = Config.getProperty("gfsh_location");
 	private final static String runtimeDir = Config.getProperty("runtime_location","runtime");
-	private final static String locatorDir = runtimeDir+"/locator";
-	private final static String serverDir = runtimeDir+"/server";
 	
 	public GUnit()
 	{
@@ -29,30 +25,22 @@ public class GUnit
 	{
 
 		
-		IO.mkdir(Paths.get(locatorDir).toFile());
-		IO.mkdir(Paths.get(serverDir).toFile());
+		IO.mkdir(Paths.get(runtimeDir+"/locator").toFile());
+		IO.mkdir(Paths.get(runtimeDir+"/server").toFile());
+		 
+		Shell shell = new Shell();
+		ProcessInfo pi = shell.execute(location+"/gfsh","-e","start locator  --dir=runtime/locator  --name=locator  --port=10334");
 		
-		Shell locatorShell = new Shell(Paths.get(locatorDir).toFile(),
-		Paths.get(locatorDir+"/locator.start.log").toFile());
+		System.out.println(pi.exitValue);
+		System.out.println(pi.output);
+		System.out.println(pi.error);
 		
-		
-		ProcessInfo p = locatorShell.execute(true,"java","-classpath", ClassPath.getClassPathText(), LocatorLauncher.class.getName(),"start", "locator");
-		
-		if(p.hasError() && p.error.indexOf("locator is currently online") < 0)
-			throw new RuntimeException(p.error);
-		
-		System.out.println("OUT:"+p.output);
-		System.out.println("ERROR:"+p.error);
-		Thread.sleep(1000);
-		
-		Shell cacheServerShell = new Shell(Paths.get(serverDir).toFile(),
-		Paths.get(locatorDir+"/server.start.log").toFile());
-		 p = cacheServerShell.execute(true,location+"/gfsh",
+		pi = shell.execute(location+"/gfsh",
 		"-e","start server --name=server --dir="+runtimeDir+"/server --locators=localhost[10334]"); 
 		
-		 System.out.println("OUT:"+p.output);
-			System.out.println("ERROR:"+p.error);
-		 Thread.sleep(1000);
+		System.out.println(pi.exitValue);
+		System.out.println("OUTPUT:"+pi.output);
+		System.out.println("ERROR:"+pi.error);
 	}
 	
 	public void createRegion(String regionName,RegionShortcut regionShortcut)
@@ -62,7 +50,7 @@ public class GUnit
 		
 		 ProcessInfo pi = shell.execute(location+"/gfsh",
 		 "-e","connect",
-		 "-e","create region --name=Test --type="+regionShortcut);
+		 "-e","create region --name="+regionName+" --type="+regionShortcut);
 		 
 		System.out.println(pi.exitValue);
 		System.out.println("OUTPUT:"+pi.output);
@@ -73,11 +61,93 @@ public class GUnit
 	{
 		try(JMX jmx = JMX.connect("localhost", 1099))
 		{
-			String[] members = GemFireMgmt.shutDown(jmx);
+			String[] members =  GemFireMgmt.shutDown(jmx);
 			
 			Debugger.println("members:"+Debugger.toString(members));
 			
 			GemFireMgmt.stopLocator(jmx, "locator");
+			
 		}
 	}//------------------------------------------------
+	
+	/**
+	 * Wait for a given member to startup
+	 * @param jmx the JMX connection
+	 * @param member the member to wait for
+	 */
+	public void waitForMemberStart(String member, JMX jmx)
+	{
+		boolean isRunning =  false;
+		boolean printedStartMember  = false;
+		int count = 0;
+		while(!isRunning)
+		{
+			try{ isRunning = GemFireInspector.checkMemberStatus(member,jmx); }
+			catch(Exception e) {Debugger.printWarn(e);}
+			
+			if(!printedStartMember )
+			{
+				Debugger.println("Waiting for member:"+member+".  Starting member to continue. "+
+			            " You can perform a gfsh status command to confirm whether the member is running");
+					printedStartMember = true;
+			}
+			
+			
+			try{ delay();}catch(Exception e){}
+			
+			 if(count > retryCount)
+			 {
+				 throw new RuntimeException("member:"+member+" did not start after "
+			 +retryCount+" checks with a delay of "+sleepDelay+" milliseconds");
+			 }
+			 
+			count++;
+		}
+	}// --------------------------------------------------------
+	/**
+	 * Wait for a given member to startup
+	 * @param jmx the JMX connection
+	 * @param member the member to wait for
+	 * @throws InterruptedException 
+	 */
+	public void waitForMemberStop(String member, JMX jmx) throws InterruptedException
+	{
+		boolean isRunning =  true;
+		boolean printedStartMember  = false;
+		
+		int count  = 0;
+		while(isRunning && count < retryCount)
+		{
+			isRunning = GemFireInspector.checkMemberStatus(member,jmx);
+			
+			if(!printedStartMember )
+			{
+					Debugger.println("Waiting for member:"+member+" to stop.");
+					printedStartMember = true;
+			}
+			
+			delay();
+			
+			count++;
+		}
+		
+		if(isRunning)
+		{
+			throw new RuntimeException("member:"+member+" failed to stop after "+retryCount+
+					" checks with a delay of "+sleepDelay+" milliseconds");
+		}
+	}// --------------------------------------------------------
+	
+	public static void delay() 
+			throws InterruptedException
+	{
+		System.out.println("Sleeping for "+sleepDelay+" milliseconds");
+		Thread.sleep(sleepDelay);
+	}// --------------------------------------------------------
+	
+	
+
+	private final static long   sleepDelay = Config.getPropertyLong(GUnit.class.getName()+".sleepDelay",1000*1); //seconds
+	private final static int    retryCount = Config.getPropertyInteger(GUnit.class,"retryCount",45);
+	
 }

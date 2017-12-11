@@ -28,15 +28,13 @@ import nyla.solutions.core.util.Debugger;
 public class GemFireInspector
 {
 	/**
-	 * 
+	 * @param jmx the JMX connection
 	 * @return the string containing the 
 	 */
-	public static String getPrimaryGatewaySenderMember()
+	public static String getPrimaryGatewaySenderMember(JMX jmx)
 	{
 		String objectNamePattern = "GemFire:service=GatewaySender,gatewaySender=REMOTE,type=Member,member=*";
-		
-		JMX jmx = SingletonGemFireJmx.getJmx();
-		Collection<ObjectName> objectNames =  jmx.searchObjectNames(objectNamePattern);
+			Collection<ObjectName> objectNames =  jmx.searchObjectNames(objectNamePattern);
 		if(objectNames == null)
 			return null;
 		
@@ -63,14 +61,13 @@ public class GemFireInspector
 	}// --------------------------------------------------------
 	
 	/**
-	 * 
+	 * @param jmx the JMX connection
 	 * @return list of gateway senders
 	 * @throws Exception when an unknown error occurs
 	 */
-	public static Collection<GatewaySenderMXBean> listGatewaySenders()
+	public static Collection<GatewaySenderMXBean> listGatewaySenders(JMX jmx)
 	throws Exception
 	{
-		JMX jmx = SingletonGemFireJmx.getJmx();
 		DistributedSystemMXBean system = jmx.newBean(DistributedSystemMXBean.class, 
 				new ObjectName("GemFire:service=System,type=Distributed"));
 		
@@ -91,13 +88,10 @@ public class GemFireInspector
 		
 		return list;
 	}// --------------------------------------------------------
-	public static MemberMXBean getMember(String name)
+	public static MemberMXBean getMember(String name, JMX jmx)
 	{
 		try
 		{
-			
-			JMX jmx = SingletonGemFireJmx.getJmx();
-
 			String pattern = "GemFire:type=Member,member="+name;
 			
 			Set<ObjectName> objectNames = jmx.searchObjectNames(pattern);
@@ -118,11 +112,9 @@ public class GemFireInspector
 		}
 		
 	}// --------------------------------------------------------
-    static DistributedSystemMXBean getDistributedSystemMXBean()
+    static DistributedSystemMXBean getDistributedSystemMXBean(JMX jmx)
     throws Exception
     {
-
-    	JMX jmx = SingletonGemFireJmx.getJmx();
 		DistributedSystemMXBean system = jmx.newBean(DistributedSystemMXBean.class, 
 				new ObjectName("GemFire:service=System,type=Distributed"));
 		
@@ -130,12 +122,11 @@ public class GemFireInspector
 		return system;
 		
     }// --------------------------------------------------------
-	public static Collection<GatewayReceiverMXBean> listGatewayReceivers()
-			throws Exception
-			{
+	public static Collection<GatewayReceiverMXBean> listGatewayReceivers(JMX jmx)
+	throws Exception
+	{		
 		
-				JMX jmx = SingletonGemFireJmx.getJmx();
-				DistributedSystemMXBean system = jmx.newBean(DistributedSystemMXBean.class, 
+		DistributedSystemMXBean system = jmx.newBean(DistributedSystemMXBean.class, 
 						new ObjectName("GemFire:service=System,type=Distributed"));
 				
 				ObjectName[] objectNames =  system.listGatewayReceiverObjectNames();
@@ -154,14 +145,14 @@ public class GemFireInspector
 				}
 				
 				return list;
-			}// --------------------------------------------------------
+	}// --------------------------------------------------------
 	/**
 	 * List the unique set of host name
+	 * @param jmx the JMX connection
 	 * @return set of host names
 	 */
-	public static Set<String> listHosts()
+	public static Set<String> listHosts(JMX jmx)
 	{
-		JMX jmx = SingletonGemFireJmx.getJmx();
 		Set<ObjectName> memberObjects = jmx.searchObjectNames("GemFire:type=Member,member=*");
 		
 		if(memberObjects == null || memberObjects.isEmpty())
@@ -187,13 +178,11 @@ public class GemFireInspector
 		return hostList;
 	}// --------------------------------------------------------
 	/**
-	 * 
+	 * @param jmx the jmx connection
 	 * @return member names
 	 */
-	public static Collection<String> listMembers()
-	
-	{
-		JMX jmx = SingletonGemFireJmx.getJmx();
+	public static Collection<String> listMembers(JMX jmx)
+	{	
 		Set<ObjectName> memberObjects = jmx.searchObjectNames("GemFire:type=Member,member=*");
 		
 		if(memberObjects == null || memberObjects.isEmpty())
@@ -220,13 +209,11 @@ public class GemFireInspector
 		return memberList;
 	}// --------------------------------------------------------
 
-	public static boolean checkMemberStatus(String serverName)
+	public static boolean checkMemberStatus(String serverName,JMX jmx)
 	{
 		
-			try
-			{
-				JMX jmx = SingletonGemFireJmx.getJmx();
-
+		try
+		{
 				ObjectName objectName = new ObjectName("GemFire:type=Member,member="+serverName);
 				
 				String status = (String)jmx.invoke(objectName, "status", null, null);
