@@ -1,5 +1,6 @@
 package gedi.solutions.geode.qa;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import org.apache.geode.cache.RegionShortcut;
 import gedi.solutions.geode.util.GemFireInspector;
@@ -68,6 +69,20 @@ public class GUnit
 			GemFireMgmt.stopLocator(jmx, "locator");
 			
 		}
+		
+		try
+		{
+			IO.delete(Paths.get(runtimeDir+"/server").toFile());		
+		}
+		catch(IOException e) {Debugger.printWarn(e);} 
+		
+		try
+		{
+			IO.delete(Paths.get(runtimeDir+"/locator").toFile());	
+		}
+		catch(IOException e) {Debugger.printWarn(e);} 
+		
+	
 	}//------------------------------------------------
 	
 	/**
