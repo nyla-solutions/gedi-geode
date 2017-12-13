@@ -12,7 +12,28 @@ import nyla.solutions.core.patterns.jmx.JMX;
 import nyla.solutions.core.util.Config;
 import nyla.solutions.core.util.Debugger;
 
-
+/**
+ * <pre>
+ * 
+ * This client support JUNIT testing by providing the ability to start
+ * management and stop a simple local GemFire cluster.
+ * 
+ * This particular class starts the member using Gfsh.
+ * 
+ * The Gfsh script location can be configured with configuration property named
+ * 
+ *  gfsh_location
+ *  
+ *  export gfsh_location=....
+ *  
+ *  or JVM property
+ *  
+ *  -Dgfsh_location=...
+ *  
+ *  or add to a file named "config.properties" in the CLASSPATH.
+ * </pre>
+ * @author Gregory Green
+ */
 public class GUnit
 {
 	private final static String location = Config.getProperty("gfsh_location");
@@ -21,11 +42,41 @@ public class GUnit
 	public GUnit()
 	{
 	}//------------------------------------------------
+	/**
+	 * <pre>
+	 * This method will start a single locator and cache server.
+	 * 
+	 * The location will be "locator".
+	 * The cache server name will be "server"
+	 * 
+	 * 
+	 * This particular method starts the member using Gfsh.
+	 * 
+	 * The Gfsh script location can be configured with configuration property named
+	 * 
+	 *  gfsh_location
+	 *  
+	 *  export gfsh_location=....
+	 *  
+	 *  or JVM property
+	 *  
+	 *  -Dgfsh_location=...
+	 *  
+	 *  or add to a file named "config.properties" in the CLASSPATH.
+	 *  
+	 *  
+	 *  Alternatively you could use org.apache.geode.distributed.LocatorLauncher 
+	 *  or org.apache.geode.distributed.ServerLauncher to start the process.
+	 *  
+	 *  Since there can only be a single Cache instance, these process should be
+	 *  started external of the current JVM.
+	 *  
+	 * </pre>
+	 * @throws Exception when an unknown exception occurs
+	 */
 	public void startCluster()
 	throws Exception
 	{
-
-		
 		IO.mkdir(Paths.get(runtimeDir+"/locator").toFile());
 		IO.mkdir(Paths.get(runtimeDir+"/server").toFile());
 		 
@@ -42,8 +93,12 @@ public class GUnit
 		System.out.println(pi.exitValue);
 		System.out.println("OUTPUT:"+pi.output);
 		System.out.println("ERROR:"+pi.error);
-	}
-	
+	}//------------------------------------------------
+	/**
+	 * 
+	 * @param regionName the region name
+	 * @param regionShortcut the region type to creates
+	 */
 	public void createRegion(String regionName,RegionShortcut regionShortcut)
 	{
 
@@ -123,7 +178,7 @@ public class GUnit
 	 * Wait for a given member to startup
 	 * @param jmx the JMX connection
 	 * @param member the member to wait for
-	 * @throws InterruptedException 
+	 * @throws InterruptedException when an communication error occurs
 	 */
 	public void waitForMemberStop(String member, JMX jmx) throws InterruptedException
 	{
