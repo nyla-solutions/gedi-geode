@@ -43,18 +43,25 @@ open class GeodeRegionService
 		
 		if(region == null || region.length == 0 || key == null)
 			return null;
-		
-		//Region<String, PdxInstance> gemRegion = geode.getRegion(region);
-		var gemRegion : Region<String, PdxInstance> = geode.getRegion(region)
-		
-		var pdxInstance =  JSONFormatter.fromJSON(value);
-		
-		var response = gemRegion.put(key, pdxInstance);
-		
-		if(response == null)
-			return null;
-		
-		return JSONFormatter.toJSON(response);
+
+		try {
+			//Region<String, PdxInstance> gemRegion = geode.getRegion(region);
+			var gemRegion: Region<String, PdxInstance> = geode.getRegion(region)
+
+			var pdxInstance = JSONFormatter.fromJSON(value);
+
+			var response = gemRegion.put(key, pdxInstance);
+
+			if (response == null)
+				return null;
+
+			return JSONFormatter.toJSON(response);
+		}
+		catch(e: Exception )
+		{
+			e.printStackTrace();
+			throw e;
+		}
 	}//------------------------------------------------
 	
 	/**

@@ -93,6 +93,55 @@ public class GemFireIO
 		
 	}// --------------------------------------------------------
 	/**
+	 * Execute a function with the given execution settings
+	 * @param execution the function service execution settings
+	 * @param functionId the function ID to be executed
+	 * @param <T> the type
+	 * @return the flatten results from one or more servers
+	 * @throws Exception when remote execution errors occur
+	 */
+	@SuppressWarnings("unchecked")
+	public  static <T> Collection<T> exeWithResults(Execution<?,?,?> execution, String functionId)
+			throws Exception
+	{
+		ResultCollector<?, ?> resultCollector;
+		try 
+		{
+			resultCollector = execution.execute(functionId);
+		}
+		catch (FunctionException e) 
+		{
+			if(e.getCause() instanceof NullPointerException)
+				throw new RuntimeException("Unable to execute function:"+functionId+
+						" assert hostnames(s) for locators and cache server can be resovled. "+
+						" If you do not have access to the host file, create host.properties and add to the CLASSPATH. "+
+						" Example: locahost=127.1.0.0 "+
+						" also assert that all cache servers have been initialized. Check if the server's cache.xml has all required <initializer>..</initializer> configurations",
+						e);
+			else
+				throw e;
+		}
+		
+		Object resultsObject = resultCollector.getResult();
+		
+		//Return a result in collection (for a single response)
+		Collection<Object> collectionResults = (Collection<Object>)resultsObject;
+			
+		//if empty return null
+		if(collectionResults.isEmpty())
+			return null;
+		
+		Collection<Object> list = new ArrayList<Object>(collectionResults.size());
+		
+		flatten(collectionResults, list);
+
+		if(list.isEmpty())
+			return null;
+					
+		return (Collection<T>)list;		
+		
+	}// --------------------------------------------------------	
+	/**
 	 * 
 	 * @param region the region
 	 * @param  <T> the type

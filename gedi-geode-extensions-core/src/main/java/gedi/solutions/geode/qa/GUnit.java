@@ -81,14 +81,14 @@ public class GUnit
 		IO.mkdir(Paths.get(runtimeDir+"/server").toFile());
 		 
 		Shell shell = new Shell();
-		ProcessInfo pi = shell.execute(location+"/gfsh","-e","start locator  --dir=runtime/locator  --name=locator  --port=10334");
+		ProcessInfo pi = shell.execute(location+"/gfsh","-e","start locator  --dir=runtime/locator --bind-address=localhost --J=-D=gemfire.jmx-manager-hostname-for-clients=localhost --J=-D=gemfire.jmx-manager-bind-address=localhost --J=-D=gemfire.http-service-bind-address=localhost --http-service-port=0  --name=locator  --port=10334");
 		
 		System.out.println(pi.exitValue);
 		System.out.println(pi.output);
 		System.out.println(pi.error);
 		
 		pi = shell.execute(location+"/gfsh",
-		"-e","start server --name=server --dir="+runtimeDir+"/server --locators=localhost[10334]"); 
+		"-e","start server --name=server --dir="+runtimeDir+"/server --bind-address=localhost  --server-bind-address=localhost --locators=localhost[10334]"); 
 		
 		System.out.println(pi.exitValue);
 		System.out.println("OUTPUT:"+pi.output);

@@ -28,7 +28,7 @@ class AppConfig
 	lateinit var clientCache : ClientCache; 
 
 	/**
-	 * Definite the GemFire connection cache
+	 * Defines the GemFire connection cache
 	 * @param environment the environment variables in application.yml, application.properties, system properties or evironment variables
 	 * @return
 	 */

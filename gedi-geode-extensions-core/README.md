@@ -13,7 +13,11 @@ If authentication is enabled
 	export SECURITY_USERNAME=user
 	export SECURITY_PASSWORD=password
     
-    
+
+If you need to set PDX read serialize to true (default false).
+
+    export PDX_READ_SERIALIZED=true
+
 **Get a Apache Geode Connection**
 
 	GeodeClient geodeClient = GeodeClient.connect()

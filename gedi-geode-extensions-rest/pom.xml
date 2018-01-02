@@ -24,14 +24,14 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<kotlin.version>1.1.2-5</kotlin.version>
-	  	<gemfire.version>9.0.2</gemfire.version>			
+	  	<gemfire.version>9.2.0</gemfire.version>			
 	</properties>
 
 	<dependencies>
 		<dependency>
 				<groupId>com.github.nyla-solutions</groupId>
 				<artifactId>gedi-geode-extensions-core</artifactId>
-				<version>1.0.0</version>
+				<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -67,7 +67,14 @@
 			<groupId>io.pivotal.gemfire</groupId>
 			<artifactId>geode-cq</artifactId>
 			<version>${gemfire.version}</version>
-		</dependency>			
+		</dependency>	
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.8.8</version>
+		</dependency>
+				
 	</dependencies>
 <repositories>
     <repository>
