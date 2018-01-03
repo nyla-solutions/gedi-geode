@@ -77,7 +77,10 @@ Perform a GemFire query operation
 http://host:port/query 
 
 * Note the select assumes the results of PdxInstances 
-POST BODY 
+
+HTTP POST 
+
+http://localhost:8080/query
 
     
     select * from /region 
@@ -87,4 +90,10 @@ Appending a number the limit the number of results returned.
 
     http://host:port/query/limitNumber
 	
-	
+
+HTTP POST 
+
+http://localhost:8080/query/10
+
+    
+    select * from /region 
