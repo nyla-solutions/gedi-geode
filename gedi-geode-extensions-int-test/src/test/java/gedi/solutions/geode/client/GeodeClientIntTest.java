@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
-
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
@@ -13,11 +11,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-<<<<<<< HEAD
-=======
-import gedi.solutions.geode.io.search.TextPageCriteria;
-import nyla.solutions.core.security.user.data.User;
->>>>>>> cb4f94dc875e4fd64e846b3bf4bab4b58504c803
+import gedi.solutions.geode.lucene.TextPageCriteria;
 import nyla.solutions.core.security.user.data.UserProfile;
 import nyla.solutions.core.util.Config;
 
@@ -51,7 +45,7 @@ public class GeodeClientIntTest
 	public void testGeodeClientClientCacheClientRegionFactoryOfQQ()
 	{
 		ClientCache clientCache = ClientCacheFactory.getAnyInstance();
-		GeodeClient geodeClient = new GeodeClient(clientCache,null);
+		GeodeClient geodeClient = new GeodeClient(clientCache);
 		
 		Assert.assertTrue(geodeClient.getClientCache() != null);
 		
@@ -74,7 +68,9 @@ public class GeodeClientIntTest
 		criteria.setDefaultField("lastName");
 		criteria.setIndexName("USER_INDEX");
 		criteria.setId("JUNIT");
-		criteria.setPageSize(2);
+		criteria.setSize(2);
+		
+		//.setPageSize(2);
 		
 		///put some data
 		String email ="nyla@test.com", loginID ="nyla",firstName = "nyla", lastName = "green";
@@ -138,17 +134,11 @@ public class GeodeClientIntTest
 		Assert.assertNotNull(geodeClient.getRegion("Test"));
 		Assert.assertTrue(geodeClient.getClientCache() != null);
 	}
-	
-<<<<<<< HEAD
+
 	//@Test
 	@Ignore
 	public void testPutAmmountOfData()
-=======
-	@Test
-	//@Ignore
-	public void testPutAmmountOfData()
 	throws Exception
->>>>>>> cb4f94dc875e4fd64e846b3bf4bab4b58504c803
 	{
 		
 		GeodeClient geodeClient = GeodeClient.connect();
@@ -157,13 +147,12 @@ public class GeodeClientIntTest
 		while(true)
 		{
 			i ++;
-<<<<<<< HEAD
+
 			geodeClient.getRegion("TEST_PARTITION_PERSISTENT_OVERFLOW").put(i, new UserProfile());
-=======
+
 			geodeClient.getRegion("tweets").put(i, new UserProfile());
 			Thread.sleep(5);
->>>>>>> cb4f94dc875e4fd64e846b3bf4bab4b58504c803
-			
+
 		}
 		
 	}

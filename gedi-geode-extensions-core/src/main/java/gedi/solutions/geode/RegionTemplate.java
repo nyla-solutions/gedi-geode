@@ -9,19 +9,23 @@ import org.apache.geode.cache.CacheWriterException;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.TimeoutException;
 
+/**
+ * 
+ * @author Gregory Green
+ *
+ * @param <K> the region key type
+ * @param <V> the value type
+ */
 public class RegionTemplate<K,V>
-{
-	
+{	
 	public RegionTemplate(Region<K, V> region)
 	{
 		this.region = region;
-	}
-	
-	
+	}//------------------------------------------------
 
 	/**
 	 * @param key
-	 * @return
+	 * @return the region value
 	 * @see java.util.Map#get(java.lang.Object)
 	 */
 	public V get(Object key)
@@ -32,11 +36,11 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param key
-	 * @param aCallbackArgument
-	 * @return
-	 * @throws TimeoutException
-	 * @throws CacheLoaderException
+	 * @param key the region key
+	 * @param aCallbackArgument the call object
+	 * @return the region value
+	 * @throws TimeoutException when a timeout error occurs
+	 * @throws CacheLoaderException  when a timeout error occurs
 	 * @see org.apache.geode.cache.Region#get(java.lang.Object, java.lang.Object)
 	 */
 	public V get(Object key, Object aCallbackArgument) throws TimeoutException, CacheLoaderException
@@ -47,9 +51,9 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param key
-	 * @param value
-	 * @return
+	 * @param key the region
+	 * @param value the new value to put
+	 * @return replaced value
 	 * @throws TimeoutException
 	 * @throws CacheWriterException
 	 * @see org.apache.geode.cache.Region#put(java.lang.Object, java.lang.Object)
@@ -62,10 +66,10 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param key
-	 * @param value
-	 * @param aCallbackArgument
-	 * @return
+	 * @param key the key
+	 * @param value the region value
+	 * @param aCallbackArgument the call back argument
+	 * @return the replace value
 	 * @throws TimeoutException
 	 * @throws CacheWriterException
 	 * @see org.apache.geode.cache.Region#put(java.lang.Object, java.lang.Object, java.lang.Object)
@@ -78,7 +82,7 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @return
+	 * @return  key set
 	 * @see org.apache.geode.cache.Region#keySet()
 	 */
 	public Set<K> keySet()
@@ -100,7 +104,7 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param map
+	 * @param map the pull all
 	 * @param aCallbackArgument
 	 * @see org.apache.geode.cache.Region#putAll(java.util.Map, java.lang.Object)
 	 */
@@ -112,7 +116,7 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param keys
+	 * @param keys the keys to remove
 	 * @see org.apache.geode.cache.Region#removeAll(java.util.Collection)
 	 */
 	public void removeAll(Collection<? extends K> keys)
@@ -123,7 +127,7 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param keys
+	 * @param keys the keys to from
 	 * @param aCallbackArgument
 	 * @see org.apache.geode.cache.Region#removeAll(java.util.Collection, java.lang.Object)
 	 */
@@ -135,8 +139,8 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param keys
-	 * @return
+	 * @param keys the key entries to get
+	 * @return the map of match entries
 	 * @see org.apache.geode.cache.Region#getAll(java.util.Collection)
 	 */
 	public Map<K, V> getAll(Collection<?> keys)
@@ -147,10 +151,10 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param <T>
-	 * @param keys
-	 * @param aCallbackArgument
-	 * @return
+	 * @param <T> the type key
+	 * @param keys the keys
+	 * @param aCallbackArgument the callback argument
+	 * @return Map the map entries matching the keys
 	 * @see org.apache.geode.cache.Region#getAll(java.util.Collection, java.lang.Object)
 	 */
 	public <T extends K> Map<T, V> getAll(Collection<T> keys, Object aCallbackArgument)
@@ -161,8 +165,8 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param key
-	 * @return
+	 * @param key the key of the entry to remove
+	 * @return the value
 	 * @see org.apache.geode.cache.Region#remove(java.lang.Object)
 	 */
 	public V remove(Object key)
@@ -173,7 +177,7 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @return
+	 * @return the key set on server
 	 * @see org.apache.geode.cache.Region#keySetOnServer()
 	 */
 	public Set<K> keySetOnServer()
@@ -184,9 +188,9 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param key
-	 * @param value
-	 * @return
+	 * @param key the key of the region
+	 * @param value the region value
+	 * @return the previous entry
 	 * @see org.apache.geode.cache.Region#putIfAbsent(java.lang.Object, java.lang.Object)
 	 */
 	public V putIfAbsent(K key, V value)
@@ -197,9 +201,9 @@ public class RegionTemplate<K,V>
 
 
 	/**
-	 * @param key
-	 * @param value
-	 * @return
+	 * @param key the key to remove
+	 * @param value the region value
+	 * @return boolean if the entry is removed
 	 * @see org.apache.geode.cache.Region#remove(java.lang.Object, java.lang.Object)
 	 */
 	public boolean remove(Object key, Object value)
@@ -214,8 +218,6 @@ public class RegionTemplate<K,V>
 	{
 		return region;
 	}
-
-
-
+	
 	private final Region<K,V> region;
 }
