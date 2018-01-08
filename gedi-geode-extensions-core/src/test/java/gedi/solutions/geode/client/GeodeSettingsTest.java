@@ -1,5 +1,7 @@
 package gedi.solutions.geode.client;
 
+import static org.junit.Assert.*;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -35,6 +37,21 @@ public class GeodeSettingsTest
 		Assert.assertEquals("10.244.0.4[55221],10.244.1.2[55221],10.244.0.130[55221]",locators);
 	}//------------------------------------------------
 
+	@Test
+	public void testBlankEnvContent() throws Exception
+	{
+		String envContent = null;
+		GeodeSettings config = new GeodeSettings(envContent);
+		
+		assertTrue(config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+		
+		
+		envContent = " ";
+		config = new GeodeSettings(envContent);
+		
+		assertTrue(config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+		
+	}//------------------------------------------------
 	@Test
 	public void testGetUsername()
 	throws Exception

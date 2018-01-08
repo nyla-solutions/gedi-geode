@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import nyla.solutions.core.util.Debugger
 
 
 /**
@@ -48,6 +49,8 @@ open class GeodeRegionService
 			//Region<String, PdxInstance> gemRegion = geode.getRegion(region);
 			var gemRegion: Region<String, PdxInstance> = geode.getRegion(region)
 
+            System.out.println("Putting key $key in region $region")
+            
 			var pdxInstance = JSONFormatter.fromJSON(value);
 
 			var response = gemRegion.put(key, pdxInstance);
@@ -157,6 +160,7 @@ open class GeodeRegionService
 		response.status = 500;
 		
 		dataError.message = e.message;
+		dataError.stackTrace = Debugger.stackTrace(e);
 		
 		return dataError;
 	}//------------------------------------------------

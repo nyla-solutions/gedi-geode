@@ -300,10 +300,6 @@ public class GeodeSettings
 	private List<Map<String, ?>> getGemFireService(Map services)
 	{
 		List<Map<String, ?>> l = (List) services.get("p-cloudcache");
-		if (l == null)
-		{
-			throw new IllegalStateException("cloud cache service is not bound to this application");
-		}
 		return l;
 	}
 
