@@ -16,6 +16,11 @@ Example
 	export LOCATOR_HOST=localhost
 	export LOCATOR_PORT=10334
 	export name=GEDI_GEDI_REST_CLIENT
+	
+	
+The following are optional settings
+	
+	export POOL_PR_SINGLE_HOP_ENABLED=true
 
 
 

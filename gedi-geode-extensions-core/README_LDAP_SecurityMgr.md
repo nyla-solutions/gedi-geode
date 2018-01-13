@@ -119,6 +119,13 @@ The following are example gfsh commands to start a single locator
 
 		start locator --name=local --http-service-bind-address=localhost --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-<VERSION>.jar --enable-cluster-configuration  --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr 
 		
+		
+		Example
+
+	start locator --name=local --http-service-bind-address=localhost --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-1.1.3-SNAPSHOT.jar --enable-cluster-configuration  --http-service-port=7070 --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr 
+
+
+		
 	
 4) **Start Servers**
 
@@ -128,6 +135,13 @@ The following are example gfsh commands to start two data node cache servers
 		
 		start server --name=server2 --server-port=9002 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-<VERSION>.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar
 	
+	
+	
+example
+
+	
+
+	start server --name=server1 --server-port=9001 --locators=localhost[10334] --security-properties-file=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/src/test/resources/ldap/gfldapsecurity.properties --J=-Dgemfire.security-manager=gedi.solutions.geode.security.ldap.LdapSecurityMgr --classpath=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/target/gedi-geode-extensions-core-1.1.3-SNAPSHOT.jar:/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-core/lib/nyla.solutions.core-1.1.0.jar
 
 After startup, gfsh and pulse will require a username/password to connect.
   

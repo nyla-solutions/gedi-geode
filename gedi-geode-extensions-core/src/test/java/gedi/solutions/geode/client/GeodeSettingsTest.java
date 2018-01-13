@@ -43,13 +43,24 @@ public class GeodeSettingsTest
 		String envContent = null;
 		GeodeSettings config = new GeodeSettings(envContent);
 		
-		assertTrue(config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+		String envLocatorHost = System.getenv(GeodeConfigConstants.LOCATOR_HOST_PROP);
 		
-		
-		envContent = " ";
-		config = new GeodeSettings(envContent);
-		
-		assertTrue(config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+		if(envLocatorHost == null || envLocatorHost.length() == 0)
+		{
+			assertTrue("getLocatorHost:"+config.getLocatorHost()+" would be empty",
+			config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+			
+			
+			envContent = " ";
+			config = new GeodeSettings(envContent);
+			
+			assertTrue("getLocatorHost:"+config.getLocatorHost()+" would be empty",config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+
+		}
+		else
+		{
+			assertEquals(envLocatorHost, config.getLocatorHost());
+		}
 		
 	}//------------------------------------------------
 	@Test

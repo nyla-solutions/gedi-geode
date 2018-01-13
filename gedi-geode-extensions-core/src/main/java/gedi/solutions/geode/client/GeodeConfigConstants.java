@@ -4,20 +4,27 @@ import nyla.solutions.core.util.Config;
 
 public interface GeodeConfigConstants
 {
-	public final String LOCATOR_HOST_PROP = "LOCATOR_HOST";
-	public final String LOCATOR_PORT_PROP = "LOCATOR_PORT";
+	public final static String LOCATOR_HOST_PROP = "LOCATOR_HOST";
+	public final static String LOCATOR_PORT_PROP = "LOCATOR_PORT";
 	
 
-	public final String USER_NAME = "security-username";
-	public final String PASSWORD = "security-password";
-	public final String TOKEN = "security-token";
+	public final static String USER_NAME = "security-username";
+	public final static String PASSWORD = "security-password";
+	public final static String TOKEN = "security-token";
 	
-	public final String PDX_CLASS_PATTERN_PROP = "PDX_CLASS_PATTERN";
+	/**
+	 * PARTITION SINGLE HOP ENABLED (default false)
+	 */
+	public final static boolean POOL_PR_SINGLE_HOP_ENABLED = Config.getPropertyBoolean("POOL_PR_SINGLE_HOP_ENABLED",false).booleanValue();
+	
+	public final static String PDX_CLASS_PATTERN_PROP = "PDX_CLASS_PATTERN";
 	
 	
-	public final String USE_CACHING_PROXY_PROP = "USE_CACHING_PROXY";
+	public final static String USE_CACHING_PROXY_PROP = "USE_CACHING_PROXY";
 
-
-	public static boolean PDX_READ_SERIALIZED = Config.getPropertyBoolean("PDX_READ_SERIALIZED",false);
+	/**
+	 * PDX_READ_SERIALIZED default false
+	 */
+	public final static  boolean PDX_READ_SERIALIZED = Config.getPropertyBoolean("PDX_READ_SERIALIZED",false);
 	 
 }

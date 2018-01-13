@@ -96,6 +96,7 @@ public class GeodeClient
 			.setPoolSubscriptionEnabled(true)
 			.setPdxSerializer(new ReflectionBasedAutoSerializer(classPatterns))
 			.setPdxReadSerialized(GeodeConfigConstants.PDX_READ_SERIALIZED)
+			.setPoolPRSingleHopEnabled(GeodeConfigConstants.POOL_PR_SINGLE_HOP_ENABLED)
 			.set("log-level", Config.getProperty("log-level","config"))
 			.set("name", name)
 			.create();

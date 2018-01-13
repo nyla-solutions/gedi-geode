@@ -3,11 +3,13 @@ package gedi.solutions.geode.serialization;
 import static org.junit.Assert.*;
 
 import org.apache.geode.pdx.PdxInstance;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import gedi.solutions.geode.client.GeodeClient;
 import nyla.solutions.core.io.IO;
 
+@Ignore
 public class PDXTest
 {
 
