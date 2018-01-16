@@ -5,8 +5,19 @@
 **Setup Environment**
 
     export LOCATOR_HOST=localhost
-
     export LOCATOR_PORT=10334
+ 
+ **Optional Settings**
+
+With defaults
+
+	export PDX_SERIALIZER_CLASS_NM=...   (default org.apache.geode.pdx.ReflectionBasedAutoSerializer)
+
+	export POOL_PR_SINGLE_HOP_ENABLED=false
+	export PDX_CLASS_PATTERN=.*
+	export USE_CACHING_PROXY=false
+	export PDX_READ_SERIALIZED=false
+	
 
 If authentication is enabled
 	

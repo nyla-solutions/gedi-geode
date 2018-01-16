@@ -4,8 +4,14 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.apache.geode.pdx.PdxReader;
+import org.apache.geode.pdx.PdxSerializer;
+import org.apache.geode.pdx.PdxWriter;
+import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 import org.junit.Ignore;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
 import java.util.Properties;
 
 /**
@@ -39,6 +45,55 @@ public class GeodeClientTest  {
     	
     	
     }
+    
+    //@Test
+    public void testWithCachingProxy()
+    {
+    	
+    		GeodeClient geodeClient = new GeodeClient("localhost",10000,true,".*");
+    		
+    		Region<String,Object> region = geodeClient.getRegion("test");
+    		region.put("1", "1");
+    		
+    		assertEquals("1", region.get("1"));
+    		
+    	
+    }
+    
+    @Test
+	public void testPdxSerializer() throws Exception
+	{
+		PdxSerializer pdxSerializer = GeodeClient.createPdxSerializer(ReflectionBasedAutoSerializer.class.getName(), GeodeConfigConstants.PDX_CLASS_PATTERN);
+		System.out.println("pdxSerializier"+pdxSerializer);
+    	    assertNotNull(pdxSerializer);
+    	    assertTrue(pdxSerializer instanceof ReflectionBasedAutoSerializer);
+
+    	    String[] pattern = {".*"};
+    	    PdxSerializer pdxSerializerVerifier = GeodeClient.createPdxSerializer(TestPdxSerialzier.class.getName(),pattern);
+    	    
+    	    assertTrue(pdxSerializerVerifier instanceof TestPdxSerialzier);
+	}
+    
+    public static class TestPdxSerialzier implements PdxSerializer
+	{
+    	
+    		public TestPdxSerialzier(String... args)
+    		{}
+		
+		@Override
+		public boolean toData(Object o, PdxWriter out)
+		{
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public Object fromData(Class<?> clazz, PdxReader in)
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
             
 //    @Test
 //    public void geodeClient_ShouldQueueReturnResultsForCq()
