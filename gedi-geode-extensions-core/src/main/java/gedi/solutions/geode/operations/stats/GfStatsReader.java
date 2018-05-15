@@ -41,11 +41,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
 import gedi.solutions.geode.operations.stats.visitors.GenericCsvStatsVisitor;
 import gedi.solutions.geode.operations.stats.visitors.StatsVisitor;
+import nyla.solutions.core.io.IO;
 
 /**
  * Based on GEODE-78
@@ -938,6 +940,27 @@ public class GfStatsReader implements StatsInfo
 
 	}//------------------------------------------------
 	/**
+	 * Finds and converts all statistics files in a given directory to CSV
+	 * @param directory the top directory
+	 * @throws IOException when an IO issues occurs
+	 */
+	public static void toCvsFiles(File directory)
+	throws IOException
+	{
+		
+		Set<File> statsFiles = IO.listFileRecursive(directory, "*.gfs");
+		
+		if(statsFiles == null || statsFiles.isEmpty())
+			return;
+		
+		for (File archiveFile : statsFiles)
+		{
+			GfStatsReader reader = new GfStatsReader(archiveFile.getAbsolutePath());
+			reader.dumpCsvFiles();
+		}
+		
+	}//------------------------------------------------
+	/**
 	 * Main method to extract GF Stats to file
 	 * @param args archiveFile csvFile [statName ]*
 	 */
@@ -953,6 +976,13 @@ public class GfStatsReader implements StatsInfo
 		try
 		{
 			archiveFile = Paths.get(args[0]).toFile();
+			
+			
+			if(archiveFile.isDirectory())
+			{
+				toCvsFiles(archiveFile);
+				return;
+			}
 					
 			if(args.length < 2)
 			{

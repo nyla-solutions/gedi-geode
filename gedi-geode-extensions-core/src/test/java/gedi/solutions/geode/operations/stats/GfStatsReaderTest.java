@@ -3,6 +3,7 @@ package gedi.solutions.geode.operations.stats;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -13,6 +14,25 @@ import nyla.solutions.core.io.IO;
 
 public class GfStatsReaderTest
 {
+	@Test
+	public void testCsvs() throws Exception
+	{
+		//TODO: delete
+		File directory = new File("/Projects/LifeSciences/Humana/docs/Vantage/docs/assessments/performance/anaylysis/canvas_plus_vantage/Attachments_v2/LOUWEBLTS131");
+		GfStatsReader.toCvsFiles(directory);
+		
+		Set<File> gfsFiles = IO.listFileRecursive(directory, "*.gfs");
+		
+		assertNotNull(gfsFiles);
+		assertTrue(gfsFiles.size() > 0);
+		
+		Set<File> csvFiles = IO.listFileRecursive(directory, "*.csv");
+		
+		System.out.println("files:"+csvFiles);
+		assertNotNull(csvFiles);
+		assertTrue(csvFiles.size() > 0);
+		
+	}//------------------------------------------------
 	@Test
 	public void testMain()
 	throws Exception

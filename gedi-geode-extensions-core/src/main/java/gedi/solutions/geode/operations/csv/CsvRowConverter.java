@@ -9,6 +9,12 @@ import nyla.solutions.core.io.csv.BeanPropertiesToCsvConverter;
 import nyla.solutions.core.io.csv.CsvWriter;
 import nyla.solutions.core.patterns.conversion.Converter;
 
+/**
+ * Converts PDX instance of java beans properties to CSV lines
+ * 
+ * @author Gregory Green
+ *
+ */
 public class CsvRowConverter implements Converter<Object, String>
 {
 
