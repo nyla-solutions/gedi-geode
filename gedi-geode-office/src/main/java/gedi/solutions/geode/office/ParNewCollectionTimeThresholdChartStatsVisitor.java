@@ -131,8 +131,6 @@ public class ParNewCollectionTimeThresholdChartStatsVisitor  implements  ChartSt
 			entry.getKey().getValue().toString());
 		}
 		
-			
-		
 	}//------------------------------------------------
 	
 

@@ -12,6 +12,7 @@ public class StatsUtil
 		return machine;
 	}
 	/**
+	 * Current supports get cache server name
 	 * Determine the logic name of app
 	 * @param resources the resource used to determine namne
 	 * @return the application name (ex: datanode or locator name)

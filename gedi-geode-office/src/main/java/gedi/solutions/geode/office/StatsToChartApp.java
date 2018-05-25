@@ -1,6 +1,5 @@
 package gedi.solutions.geode.office;
 
-import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 

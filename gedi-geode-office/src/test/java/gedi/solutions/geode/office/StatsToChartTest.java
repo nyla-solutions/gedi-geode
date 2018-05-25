@@ -11,6 +11,7 @@ import nyla.solutions.office.chart.Chart;
 
 public class StatsToChartTest
 {
+	
 
 	@Test
 	public void testConvert()

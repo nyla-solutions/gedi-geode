@@ -23,9 +23,11 @@ import nyla.solutions.office.chart.JFreeChartFacade;
 public class ParNewCollectionsChartStatsVisitor implements  ChartStatsVisitor
 {
 	
+
+
 	public ParNewCollectionsChartStatsVisitor()
 	{
-		String title = "Collections per second "+
+		String title = "Collections per second greater than "+threshold+" "+
 		Text.formatDate("MM/dd/yyyy",StatsConstants.DAY_FILTER.getDate());
 		
 		this.chart =new JFreeChartFacade();
@@ -40,11 +42,15 @@ public class ParNewCollectionsChartStatsVisitor implements  ChartStatsVisitor
 
 
 	@Override
+	public void visitResourceInsts(ResourceInst[] resourceInsts)
+	{
+		this.appName = StatsUtil.getAppName(resourceInsts);
+	}
+	@Override
 	public void visitResourceInst(ResourceInst resourceInst)
 	{
 		String name = resourceInst.getName();
 		
-		String appName = resourceInst.getArchive().getArchiveInfo().getSystem();
 		
 		
 		ResourceType resourceType= resourceInst.getType();
@@ -74,7 +80,7 @@ public class ParNewCollectionsChartStatsVisitor implements  ChartStatsVisitor
 			
 
 			StatDescriptor statDescriptor = resourceInst.getType().getStat(statName);
-			System.out.println("appNeam:"+appName+" name:"+name+" resourceType"+resourceType.getName()+".statName:"+statName+" describe:"+statDescriptor.getDescription()+
+			System.out.println("appName:"+appName+" name:"+name+" resourceType"+resourceType.getName()+".statName:"+statName+" describe:"+statDescriptor.getDescription()+
 			" units:"+statDescriptor.getUnits() );
 			
 			long [] times = statValue.getRawAbsoluteTimeStamps();
@@ -118,12 +124,19 @@ public class ParNewCollectionsChartStatsVisitor implements  ChartStatsVisitor
 		}
 		
 		String entryName = null;
+		int intValue;
 		for(Map.Entry<String, NumberedProperty> entry : this.countPerHour.entrySet())
 		{
 			entryName = entry.getValue().getName();
 			entryName = entryName.replace("amd64 ", "");
 			System.out.println("entryName:"+entryName);
-			this.chart.plotValue(entry.getValue().getValueInteger(), entryName, entry.getKey());
+			
+			intValue = entry.getValue().getValueInteger();
+			
+			if(intValue > threshold)
+			{
+				this.chart.plotValue(intValue, entryName, entry.getKey());
+			}
 		}
 		
 		
@@ -144,7 +157,8 @@ public class ParNewCollectionsChartStatsVisitor implements  ChartStatsVisitor
 	private String resourceResourceNameFilter = "ParNew";
 	private String filterTypeName = "VMGCStats".toUpperCase();
 	private String filterStatName = "collections";
-
+	private String appName;
 	private  final JFreeChartFacade chart ;
+	private  int threshold = 1;
 	
 }
