@@ -9,8 +9,28 @@ import nyla.solutions.core.io.IO;
 import nyla.solutions.core.patterns.conversion.Converter;
 import nyla.solutions.office.chart.Chart;
 
+
+/**
+ * <pre>
+ * Converts the statistics in files/directory into a Chart.
+ * 
+ * See CpuAboveThresholdChartStatsVisitor
+ * 
+ * The initial chart implementation uses JFreeChart
+ * </pre>
+ * 
+ * @author Gregory Green
+ * 
+ */
 public class StatsToChart implements Converter<File, Chart>
 {
+	
+
+	public StatsToChart(ChartStatsVisitor visitor)
+	{
+		this.visitor = visitor;
+	}
+
 
 	/**
 	 * Accepts a file or directory contain the statistics files
@@ -24,7 +44,7 @@ public class StatsToChart implements Converter<File, Chart>
 		
 		try
 		{
-			CpuAboveThresholdChartStatsVisitor v = new CpuAboveThresholdChartStatsVisitor();
+			
 			
 		    if(file.isDirectory())
 		    {
@@ -37,23 +57,18 @@ public class StatsToChart implements Converter<File, Chart>
 				{
 		    		GfStatsReader reader = new GfStatsReader(statFile.getAbsolutePath());
 			    	
-			    	reader.accept(v);
+			    	reader.accept(visitor);
 				}
 		    }
 		    else
 		    {
 		    	GfStatsReader reader = new GfStatsReader(file.getAbsolutePath());
 		    	
-		    	reader.accept(v);
+		    	reader.accept(visitor);
 		    	
 		    }
 			
-			
-
-			
-
-			
-			return v.getChart();
+			return visitor.getChart();
 		}
 		catch (IOException e)
 		{
@@ -61,4 +76,6 @@ public class StatsToChart implements Converter<File, Chart>
 		}
 	}
 
+	
+	private final ChartStatsVisitor visitor;
 }

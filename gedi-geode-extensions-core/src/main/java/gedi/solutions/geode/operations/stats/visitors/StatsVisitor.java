@@ -14,6 +14,7 @@ public interface StatsVisitor
 	default void visitResourceType(ResourceType resourceType){}
 	
 	default  void visitTimeStampSeries(TimeStampSeries timeStampSeries){}
+	default void visitResourceInsts(ResourceInst[] resourceInsts){}
 	default void visitResourceInst(ResourceInst resourceInst){}
 	default void visitSimpleValue(SimpleValue simpleValue) {}
 }

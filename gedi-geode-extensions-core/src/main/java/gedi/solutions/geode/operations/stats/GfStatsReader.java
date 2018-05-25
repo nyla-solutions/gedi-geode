@@ -913,6 +913,8 @@ public class GfStatsReader implements StatsInfo
 			visitor.visitArchInfo(info);
 		}
 
+		visitor.visitResourceInsts(resourceInstTable);
+		
 		if(resourceTypeTable != null)
 		{
 			for (ResourceType aResourceTypeTable : resourceTypeTable)

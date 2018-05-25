@@ -17,7 +17,7 @@ public class StatsToChartTest
 	throws Exception
 	{
 		System.out.println(IO.delete(new File("target/graph.png")));
-		StatsToChart c = new StatsToChart();
+		StatsToChart c = new StatsToChart(new CpuAboveThresholdChartStatsVisitor());
 		//File file = new File("src/test/resources/stats");
 		File file = new File("/Projects/LifeSciences/Humana/docs/Vantage/docs/assessments/performance/perf-test-results/april-23-2018/tmp/support");
 		

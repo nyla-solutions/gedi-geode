@@ -1,8 +1,6 @@
 package gedi.solutions.geode.office;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -20,32 +18,49 @@ public class StatsToChartApp
 {
     public static void main( String[] args )
     {
-    	if(args.length != 2)
+    	if(args.length != 1)
     	{
-    		throw new IllegalArgumentException("Usage java "+StatsToChart.class.getName()+" <fileOrDirectoryWithStats> <pngFilePath>");
-    		
+    		throw new IllegalArgumentException("Usage java "+StatsToChart.class.getName()+" <fileOrDirectoryWithStats>");
     	}
-		StatsToChart c = new StatsToChart();
-		File file = new File(args[0]);
-		
-		System.out.println(file);
-		
-		Chart chart = c.convert(file);
-		
-		assertNotNull(chart);
-		
-		
-		byte [] bytes = chart.getBytes();
-		
-		assertTrue(bytes != null  && bytes.length > 0);
-		
-		try
+    	
+    	
+    	try
 		{
-			IO.writeFile(args[1], bytes);
+				
+	    	
+			StatsToChart cpuChartConvert = new StatsToChart(new CpuAboveThresholdChartStatsVisitor());
+			File file = new File(args[0]);
+			
+			System.out.println(file);
+			
+			File cpuFilePath = new File(args[0]+"/cpu.png");
+			File parNewCollectionTimesFilePath = new File(args[0]+"/parNewCollectionTimes.png");
+			File parNewCollectionsFilePath = new File(args[0]+"/parNewCollections.png");
+			
+			Chart cpuChart = cpuChartConvert.convert(file);
+			System.out.println("Writing "+cpuFilePath.getAbsolutePath());
+			IO.writeFile(cpuFilePath, cpuChart.getBytes());
+			
+			
+			Chart parNewChart = new StatsToChart
+			(new ParNewCollectionTimeThresholdChartStatsVisitor())
+			.convert(file);
+			
+			System.out.println("Writing "+parNewCollectionTimesFilePath.getAbsolutePath());
+			IO.writeFile(parNewCollectionTimesFilePath, parNewChart.getBytes());
+			
+			Chart parNewCollections = new StatsToChart(new ParNewCollectionsChartStatsVisitor())
+			.convert(file);
+			
+			System.out.println("Writing "+parNewCollectionsFilePath.getAbsolutePath());
+			IO.writeFile(parNewCollectionsFilePath, parNewCollections.getBytes());
+			
+			
+			
 		}
 		catch (IOException e)
 		{
 			throw new RuntimeException(e);
 		}
-    }
+    }//------------------------------------------------
 }
