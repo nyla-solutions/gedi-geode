@@ -19,12 +19,15 @@ public class StatsUtil
 	 */
 	public static String getAppName(ResourceInst[] resources)
 	{
-		if(resources == null)
+		if(resources == null || resources.length == 0)
 			return null;
 		
 		ResourceType rt = null;
 		for (ResourceInst resourceInst : resources)
 		{
+			if(resourceInst == null)
+				continue;
+			
 			rt = resourceInst.getType();
 			if(rt == null)
 				continue;

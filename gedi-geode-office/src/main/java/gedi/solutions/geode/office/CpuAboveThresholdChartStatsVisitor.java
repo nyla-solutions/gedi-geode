@@ -123,7 +123,6 @@ public class CpuAboveThresholdChartStatsVisitor implements  ChartStatsVisitor
 		return chart;
 	}//------------------------------------------------
 	private Map<Property,Double> maxMap = new TreeMap<Property,Double>();
-	
 	private String filterTypeName = "LinuxSystemStats".toUpperCase();
 	private String filterStatName = "cpuActive";
 	private double cpuPercentThreshold = 50.1;

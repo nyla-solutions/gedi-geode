@@ -30,7 +30,7 @@ public class GeodeClientTest  {
     	prop.setProperty("security-password", "admin");
     	
     	ClientCacheFactory factory = new ClientCacheFactory(prop)
-    	.addPoolLocator("localhost", 10334);
+    	.addPoolLocator("ec2-18-218-46-170.us-east-2.compute.amazonaws.com", 10334);
     	//.addPoolLocator("localhost", 10334)
     	//.set("locators", "localhost[10334")
     	
@@ -39,7 +39,7 @@ public class GeodeClientTest  {
     	ClientCache cache = factory.create();
     	
     	Region<Object,Object> region = 
-    	cache.createClientRegionFactory(ClientRegionShortcut.PROXY).create("TEST");
+    	cache.createClientRegionFactory(ClientRegionShortcut.PROXY).create("test");
     	
     	region.put("test", "tesT");
     	
