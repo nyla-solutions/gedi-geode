@@ -29,6 +29,8 @@ import org.apache.geode.pdx.PdxSerializer;
 import gedi.solutions.geode.client.cq.CqQueueListener;
 import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
+import gedi.solutions.geode.io.QuerierMgr;
+import gedi.solutions.geode.io.QuerierService;
 import gedi.solutions.geode.lucene.GeodeLuceneSearch;
 import gedi.solutions.geode.lucene.TextPageCriteria;
 import gedi.solutions.geode.lucene.function.LuceneSearchFunction;
@@ -223,7 +225,15 @@ public class GeodeClient
 		return search.clearSearchResultsByPage(criteria,this.getRegion(criteria.getPageRegionName()));
 		
 	}//------------------------------------------------
-	
+	/**
+	 * 
+	 * @return the querier service instance
+	 */
+	public QuerierService getQuerierService()
+	{
+		connect();
+		return new QuerierMgr();
+	}//------------------------------------------------
 	@SuppressWarnings("unchecked")
 	private <K,V> Region<K,V> createRegion(String regionName)
 	{

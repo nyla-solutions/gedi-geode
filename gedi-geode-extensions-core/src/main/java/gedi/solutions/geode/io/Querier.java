@@ -21,14 +21,22 @@ public class Querier
 	 * 
 	 * @param query the OQL query
 	 * @param <ReturnType> the return type
+	 * @param params the bind variables
 	 * @return the collection of the return types
 	 */
-	public static <ReturnType> Collection<ReturnType> query(String query)
+	public static <ReturnType> Collection<ReturnType> query(String query,Object...params)
 	{
-		return query(query, null);
+		return query(query, (RegionFunctionContext)null,params);
 	}// ------------------------------------------------
-
-	public static <ReturnType> Collection<ReturnType> query(String query, RegionFunctionContext rfc)
+	/**
+	 * 
+	 * @param <ReturnType> the collection of return types
+	 * @param query the OQL
+	 * @param rfc the region function context
+	 * @param params the bind variables
+	 * @return Collection of the return type
+	 */
+	public static <ReturnType> Collection<ReturnType> query(String query, RegionFunctionContext rfc, Object... params)
 	{
 		try
 		{
@@ -38,7 +46,7 @@ public class Querier
 			// Create the Query Object.
 			Query queryObj = queryService.newQuery(query);
 
-			return query(queryObj, rfc);
+			return query(queryObj, rfc,params);
 		}
 		catch (Exception e)
 		{
@@ -46,9 +54,20 @@ public class Querier
 		}
 
 	}// -------------------------------------------------------------------
-
+	/**
+	 * Select results for OQL
+	 * @param <ReturnType> the collection return type
+	 * @param queryObj the query object
+	 * @param rfc the region function context
+	 * @param params the bind variables
+	 * @return collection of results
+	 * @throws FunctionDomainException function error occurs
+	 * @throws TypeMismatchException type error occurs
+	 * @throws NameResolutionException name resolution exception occurs
+	 * @throws QueryInvocationTargetException when query invocation target exception occurs
+	 */
 	@SuppressWarnings("unchecked")
-	public static <ReturnType> Collection<ReturnType> query(Query queryObj, RegionFunctionContext rfc)
+	public static <ReturnType> Collection<ReturnType> query(Query queryObj, RegionFunctionContext rfc, Object... params)
 	throws FunctionDomainException, TypeMismatchException, NameResolutionException, QueryInvocationTargetException
 	{
 		SelectResults<ReturnType> selectResults;
@@ -57,7 +76,14 @@ public class Querier
 
 		if (rfc == null || JvmRegionFunctionContext.class.isAssignableFrom(rfc.getClass()))
 		{
-			selectResults = (SelectResults<ReturnType>) queryObj.execute();
+			if(params == null || params.length == 0)
+			{
+				selectResults = (SelectResults<ReturnType>) queryObj.execute();				
+			}
+			else
+			{
+				selectResults = (SelectResults<ReturnType>) queryObj.execute(params);
+			}
 			if (selectResults == null || selectResults.isEmpty())
 				return null;
 
@@ -68,7 +94,15 @@ public class Querier
 		}
 		else
 		{
-			selectResults = (SelectResults<ReturnType>) queryObj.execute(rfc);
+			if(params == null || params.length == 0)
+			{
+				selectResults = (SelectResults<ReturnType>) queryObj.execute(rfc);	
+			}
+			else
+			{
+				selectResults = (SelectResults<ReturnType>) queryObj.execute(rfc,params);
+			}
+			
 
 			if (selectResults == null || selectResults.isEmpty())
 				return null;

@@ -1,5 +1,16 @@
 # Geode Extension 
 
+
+Note that this API is available in the Maven Repository.
+
+	
+	<dependency>
+	    <groupId>com.github.nyla-solutions</groupId>
+	    <artifactId>gedi-geode-extensions-core</artifactId>
+	    <version>${VERSION}</version>
+	</dependency>
+
+
 ## GeodeClient API
 
 **Setup Environment**
