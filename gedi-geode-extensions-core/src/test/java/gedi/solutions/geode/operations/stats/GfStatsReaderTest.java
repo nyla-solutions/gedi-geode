@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -12,6 +13,7 @@ import gedi.solutions.geode.operations.stats.ArchiveInfo;
 import gedi.solutions.geode.operations.stats.visitors.RegionCsvStatsVisitor;
 import nyla.solutions.core.io.IO;
 
+@Ignore
 public class GfStatsReaderTest
 {
 	@Test

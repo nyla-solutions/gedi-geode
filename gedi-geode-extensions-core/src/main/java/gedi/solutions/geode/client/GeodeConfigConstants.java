@@ -20,7 +20,7 @@ public interface GeodeConfigConstants
 	/**
 	 * PARTITION SINGLE HOP ENABLED (default false)
 	 */
-	public final static boolean POOL_PR_SINGLE_HOP_ENABLED = Config.getPropertyBoolean("POOL_PR_SINGLE_HOP_ENABLED",false).booleanValue();
+	public final static boolean POOL_PR_SINGLE_HOP_ENABLED = Config.getPropertyBoolean("POOL_PR_SINGLE_HOP_ENABLED",true).booleanValue();
 	
 	
 	public final static String PDX_CLASS_PATTERN = Config.getProperty("PDX_CLASS_PATTERN",".*");

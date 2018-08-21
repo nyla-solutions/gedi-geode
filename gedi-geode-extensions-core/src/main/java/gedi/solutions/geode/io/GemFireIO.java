@@ -198,4 +198,25 @@ public class GemFireIO
 		}
 
 	}// --------------------------------------------------------	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T> Collection<T> collectResults(ResultCollector<?, ?> resultCollector)
+	throws Exception
+	{
+		if(resultCollector == null)
+			return null;
+		
+		Collection<Object> results = (Collection)resultCollector.getResult();
+		
+		if(results  == null || results.isEmpty())
+			return null;
+			
+		ArrayList<Object> output = new ArrayList<>(10);
+		flatten(results, output);
+		
+		if(output.isEmpty())
+			return null;
+		
+		output.trimToSize();
+		return (Collection)output;
+	}
 }

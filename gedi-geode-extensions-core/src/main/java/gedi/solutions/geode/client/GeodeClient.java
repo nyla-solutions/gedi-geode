@@ -275,6 +275,30 @@ public class GeodeClient
 		
 		return region;
 	}//------------------------------------------------
+	/**
+	 * Create a proxy region
+	 * @param <K> the region key
+	 * @param <V> the region value
+	 * @param clientCache the client cache
+	 * @param regionName the region name
+	 * @return the create region
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,V> Region<K,V> getRegion(ClientCache clientCache, String regionName)
+	{
+		if(regionName == null || regionName.length() == 0)
+			return null;
+		
+		Region<K,V> region = (Region<K,V>)clientCache.getRegion(regionName);
+		
+		if(region != null )
+			return (Region<K,V>)region;
+		
+		region = (Region<K,V>)clientCache
+		.createClientRegionFactory(ClientRegionShortcut.PROXY).create(regionName);
+		
+		return region;
+	}//------------------------------------------------
 	public <T> Queue<T> registerCq(String cqName,String oql) 
 	{
 		try

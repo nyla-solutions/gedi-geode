@@ -25,6 +25,7 @@ public class GeodeConfigAuthInitializeTest
 	{
 		synchronized (GeodeConfigAuthInitializeTest.class)
 		{
+			
 			System.setProperty("SECURITY_USERNAME","myuser");
 			System.setProperty("SECURITY_PASSWORD","mypassword");
 		
