@@ -1,5 +1,8 @@
 package gedi.solutions.geode.client;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
@@ -34,7 +37,9 @@ import gedi.solutions.geode.io.QuerierService;
 import gedi.solutions.geode.lucene.GeodeLuceneSearch;
 import gedi.solutions.geode.lucene.TextPageCriteria;
 import gedi.solutions.geode.lucene.function.LuceneSearchFunction;
+import nyla.solutions.core.exception.ConfigException;
 import nyla.solutions.core.exception.SystemException;
+import nyla.solutions.core.io.IO;
 import nyla.solutions.core.operations.ClassPath;
 import nyla.solutions.core.patterns.iteration.Paging;
 import nyla.solutions.core.util.Config;
@@ -43,7 +48,18 @@ import nyla.solutions.core.util.Debugger;
 
 
 /**
- *  GemFire (power by Apache Geode) API wrapper
+ *  GemFire (power by Apache Geode) API wrapper.
+ *  
+ *  export SSL_KEYSTORE_PASSWORD=pivotal
+	export SSL_PROTOCOLS=TLSv1.2
+	export SSL_TRUSTSTORE_PASSWORD=pivotal
+	export SSL_KEYSTORE_TYPE=jks
+	export SSL_CIPHERS=TLS_RSA_WITH_AES_128_GCM_SHA256
+	export SSL_ENABLED_COMPONENTS=gateway,server,locator,jmx
+	export SSL_REQUIRE_AUTHENTICATION=true
+	export SSL_TRUSTSTORE_CLASSPATH_FILE=truststore.jks
+	export SSL_KEYSTORE_CLASSPATH_FILE=keystore.jks
+
  * @author Gregory Green
  *
  */
@@ -71,10 +87,10 @@ public class GeodeClient
 	{
 		this.cachingProxy = cachingProxy;
 		
-		 Properties props = new Properties();
-		props.setProperty("security-client-auth-init", GeodeConfigAuthInitialize.class.getName()+".create");
+		//	byte[] bytes = IO.readBinaryClassPath("/truststore.jks");
 		
-		String name = Config.getProperty("name",GeodeClient.class.getSimpleName());
+		
+		String name = Config.getProperty(GeodeConfigConstants.NAME_PROP,GeodeClient.class.getSimpleName());
 		
 		//check for exists client cache
 		ClientCache cache = null;
@@ -96,6 +112,16 @@ public class GeodeClient
 		
 		PdxSerializer pdxSerializer = createPdxSerializer(GeodeConfigConstants.PDX_SERIALIZER_CLASS_NM,classPatterns);
 		
+		Properties props = new Properties();
+		try
+		{
+			constructSecurity(props);
+		}
+		catch(IOException e)
+		{
+			throw new ConfigException("Unable to configure security connection details ERROR:"+e.getMessage(),e);
+		}
+			
 			this.clientCache = new ClientCacheFactory(props).addPoolLocator(host, port)
 			.setPoolSubscriptionEnabled(true)
 			.setPdxSerializer(pdxSerializer)
@@ -104,13 +130,82 @@ public class GeodeClient
 			.set("log-level", Config.getProperty("log-level","config"))
 			.set("name", name)
 			.create();
-
-		
-
+			
 			//Caching Proxy
 			cachingRegionfactory = clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
 			proxyRegionfactory = clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY);
 		
+	}//------------------------------------------------
+	/**
+	 * Initialize security properties
+	 * @param props the security properties
+	 * @throws IOException 
+	 */
+	protected static void constructSecurity(Properties props) throws IOException
+	{
+		props.setProperty("security-client-auth-init", GeodeConfigAuthInitialize.class.getName()+".create");
+		
+		//write to file
+		File sslFile = saveEnvFile(GeodeConfigConstants.SSL_KEYSTORE_CLASSPATH_FILE_PROP);
+		
+
+		System.out.println("sslFile:"+sslFile);
+		
+		
+		File sslTrustStoreFile = saveEnvFile(GeodeConfigConstants.SSL_TRUSTSTORE_CLASSPATH_FILE_PROP);
+		String sslTrustStoreFilePath = "";
+		if(sslTrustStoreFile != null)
+			sslTrustStoreFilePath = sslTrustStoreFile.getAbsolutePath();
+		
+		props.setProperty("ssl-keystore",(sslFile != null) ?  sslFile.getAbsolutePath(): "");
+
+		props.setProperty("ssl-keystore-password",Config.getPropertyEnv("ssl-keystore-password",""));
+		
+		props.setProperty("ssl-truststore",sslTrustStoreFilePath);
+		props.setProperty("ssl-protocols",Config.getPropertyEnv("ssl-protocols",""));
+		props.setProperty("ssl-truststore-password",Config.getPropertyEnv("ssl-truststore-password",""));
+		props.setProperty("ssl-keystore-type",Config.getPropertyEnv("ssl-keystore-type","")   );
+		props.setProperty("ssl-ciphers",Config.getPropertyEnv("ssl-ciphers",""));
+		props.setProperty("ssl-require-authentication",Config.getPropertyEnv("ssl-require-authentication","")  );
+		props.setProperty("ssl-enabled-components", Config.getPropertyEnv("ssl-enabled-components",""));
+		
+	}//------------------------------------------------
+	/**
+	 * 
+	 * @param configPropFilePath the property name with the file path
+	 * @return the saved File
+	 * @throws IOException when there is an issue with saving the file
+	 */
+	private static File saveEnvFile(String configPropFilePath)
+	throws IOException
+	{
+		String sslKeystorePath = Config.getProperty(configPropFilePath,"");
+		
+		String fileName = Paths.get(sslKeystorePath).toFile().getName();
+		
+		if(sslKeystorePath.length() == 0)
+			return null;
+		
+		byte[] bytes = IO.readBinaryClassPath(sslKeystorePath);
+		
+		
+		String sslDirectory = Config.getProperty(GeodeConfigConstants.SSL_KEYSTORE_STORE_DIR_PROP,".");
+		File sslDirectoryFile = Paths.get(sslDirectory).toFile();
+		
+		if(!sslDirectoryFile.exists())
+		{
+			throw new ConfigException("Configuration property "+GeodeConfigConstants.SSL_KEYSTORE_STORE_DIR_PROP+" "+sslDirectoryFile+" but it does not exist");
+		}
+		else if(!sslDirectoryFile.isDirectory())
+		{
+			throw new ConfigException("Configuration property "+GeodeConfigConstants.SSL_KEYSTORE_STORE_DIR_PROP+" "+sslDirectoryFile+" but is not a valid directory");
+		}
+
+		File sslFile = Paths.get(sslDirectoryFile+IO.fileSperator()+fileName).toFile();
+		
+		IO.writeFile(sslFile, bytes);
+		
+		return sslFile;
 	}//------------------------------------------------
 	
 	public <ReturnType> Collection<ReturnType>  select(String oql)
@@ -296,6 +391,32 @@ public class GeodeClient
 		
 		region = (Region<K,V>)clientCache
 		.createClientRegionFactory(ClientRegionShortcut.PROXY).create(regionName);
+		
+		return region;
+	}//------------------------------------------------
+	
+	/**
+	 * Create a proxy region
+	 * @param <K> the region key
+	 * @param <V> the region value
+	 * @param clientCache the client cache
+	 * @param regionName the region name
+	 * @param poolName the pool to use
+	 * @return the create region
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,V> Region<K,V> getRegion(ClientCache clientCache, String regionName, String poolName)
+	{
+		if(regionName == null || regionName.length() == 0)
+			return null;
+		
+		Region<K,V> region = (Region<K,V>)clientCache.getRegion(regionName);
+		
+		if(region != null )
+			return (Region<K,V>)region;
+		
+		region = (Region<K,V>)clientCache
+		.createClientRegionFactory(ClientRegionShortcut.PROXY).setPoolName(poolName).create(regionName);
 		
 		return region;
 	}//------------------------------------------------

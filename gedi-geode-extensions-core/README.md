@@ -39,6 +39,20 @@ If authentication is enabled
 If you need to set PDX read serialize to true (default false).
 
     export PDX_READ_SERIALIZED=true
+    
+    
+If you need SSL keystore/truststores loading via CLASSPATH for 
+12 factor cloud native applications (Example below)
+
+	export SSL_KEYSTORE_PASSWORD=...
+	export SSL_PROTOCOLS=TLSv1.2
+	export SSL_TRUSTSTORE_PASSWORD=...
+	export SSL_KEYSTORE_TYPE=jks
+	export SSL_CIPHERS=TLS_RSA_WITH_AES_128_GCM_SHA256
+	export SSL_ENABLED_COMPONENTS=gateway,server,locator,jmx
+	export SSL_REQUIRE_AUTHENTICATION=true
+	export SSL_TRUSTSTORE_CLASSPATH_FILE=truststore.jks
+	export SSL_KEYSTORE_CLASSPATH_FILE=keystore.jks
 
 **Get a Apache Geode Connection**
 
