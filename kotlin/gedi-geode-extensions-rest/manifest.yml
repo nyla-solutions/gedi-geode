@@ -1,4 +1,0 @@
----
-applications:
-- name: gedi-geode-extensions-rest
-  memory: 512M
