@@ -66,7 +66,7 @@ public class GeodeQueryServiceRestService
 			  
 			  Logger logger = LogManager.getLogger(getClass());
 			  logger.info("QueryService: START query "+query);
-	            Collection<PdxInstance> results = querierService.query(query);
+	            Collection<Object> results = querierService.query(query);
 	            logger.info("QueryService: END query "+query);
 
 	            if(results == null)
@@ -77,31 +77,33 @@ public class GeodeQueryServiceRestService
 	           int count = 0;
 
 	           //TODO: concerns on performance
-	            if(limit > 0){
-	                for (PdxInstance pdxInstance : results) {
+	           Boolean isPdx = null;
+	           
+	       
+	            for (Object obj : results) {
+	                	
+	                	if(isPdx == null)
+	                		isPdx = Boolean.valueOf(obj instanceof PdxInstance);
 
-	                    responseJson.append(JSONFormatter.toJSON(pdxInstance));
-
+	                	if(Boolean.TRUE.equals(isPdx))
+	                	{
+	                		responseJson.append(JSONFormatter.toJSON((PdxInstance)obj));	
+	                	}
+	                	else
+	                	{
+	                		//escape quote to \\
+	                		responseJson.append("\"").append(String.valueOf(obj)
+	                		.replace("\\", "\\\\")
+	                		.replace("\"", "\\\"")).append("\"");	
+	                	}
+	                    
 	                    count++;
 
 	                    if(count >= limit )
 	                        break;
 
-	                }
 	            }
-	            else{
-	                for (PdxInstance pdxInstance : results) {
-
-	                    if(count > 0 )
-	                        responseJson.append(",");
-
-	                    responseJson.append(JSONFormatter.toJSON(pdxInstance));
-
-	                    count++;
-
-	                }
-	            }
-
+	            
 	            StringBuilder allResults = new StringBuilder().append("[").append(responseJson).append("]");
 
 	            return allResults.toString();

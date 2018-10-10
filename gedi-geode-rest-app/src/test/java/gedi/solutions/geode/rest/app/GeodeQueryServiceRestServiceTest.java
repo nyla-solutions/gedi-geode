@@ -63,6 +63,59 @@ public class GeodeQueryServiceRestServiceTest
 		
 		assertTrue(results != null && results.length > 0);
 		
+	
+		
+	}
+	@Test
+	public void testQuery_non_pdx()
+	throws Exception
+	{
+		QuerierService qs = mock(QuerierService.class);
+		
+		Collection<Object> expected = new ArrayList<>();
+		String pi = "hello world";
+		expected.add(pi);
+		
+		verifyQuery(qs, expected);
+		
+	
+		
+	}
+	@Test
+	public void testQuery_string_with_specialchars()
+	throws Exception
+	{
+		QuerierService qs = mock(QuerierService.class);
+		
+		Collection<Object> expected = new ArrayList<>();
+		String pi = "hello \" world~`!@#$%^&*()_-+= {[}]|\\:;'<,>.?/";
+		expected.add(pi);
+		
+		verifyQuery(qs, expected);
+	}
+	private void verifyQuery(QuerierService qs, Collection<Object> expected) throws Exception
+	{
+		when(qs.query(anyString(),any())).thenReturn(expected);
+		
+		GeodeQueryServiceRestService restService = new GeodeQueryServiceRestService();
+		restService.querierService = qs;
+		
+		
+		String query = "select * from /data";
+		int limit = 0;
+		
+		String json = restService.queryLimit(query,limit);
+		
+		assertNotNull(json);
+		
+		System.out.println("json:"+json);
+		assertTrue(json.length() > 0);
+		
+		JSON jsonObject = JSON.newInstance();
+		
+		Object[] results = jsonObject.fromJson(json, Object[].class);
+		
+		assertTrue(results != null && results.length > 0);
 	}
 
 	//------------------------------------------------
