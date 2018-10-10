@@ -1,18 +1,20 @@
 package gedi.solutions.geode.client;
 
 import org.apache.geode.cache.Region;
-import org.apache.geode.cache.client.ClientCache;
-import org.apache.geode.cache.client.ClientCacheFactory;
-import org.apache.geode.cache.client.ClientRegionShortcut;
+
 import org.apache.geode.pdx.PdxReader;
 import org.apache.geode.pdx.PdxSerializer;
 import org.apache.geode.pdx.PdxWriter;
 import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import nyla.solutions.core.util.Config;
+
 import static org.junit.Assert.*;
 
 import java.util.Properties;
+
 
 /**
  * Created by ggreen on 7/7/17.
@@ -20,31 +22,36 @@ import java.util.Properties;
 
 public class GeodeClientTest  {
 
+	
+	@Test
+	public void testConstructSecurity()
+	throws Exception
+	{
+		System.setProperty("SSL_KEYSTORE_CLASSPATH_FILE", "keystore.jks");
+		Config.reLoad();
+		Properties props = new Properties();
+		
+		GeodeClient.constructSecurity(props);
+		
+		assertTrue(!props.isEmpty());
+		
+		assertTrue("Has ssl",props.keySet().stream().anyMatch(k -> k.toString().startsWith("ssl")));
+		
+	}//------------------------------------------------
     @Test
     @Ignore
     public void testing_security()
             throws Exception
     {
-    	Properties prop = new Properties();
-    	prop.setProperty("security-username", "paul");
-    	prop.setProperty("security-password", "admin");
+    	GeodeClient geode = GeodeClient.connect();
     	
-    	ClientCacheFactory factory = new ClientCacheFactory(prop)
-    	.addPoolLocator("ec2-18-218-46-170.us-east-2.compute.amazonaws.com", 10334);
-    	//.addPoolLocator("localhost", 10334)
-    	//.set("locators", "localhost[10334")
+    	Region<Object,Object> region = geode.getRegion("test");
+    	
+    	region.put("test", "test");
+    	assertEquals("test",region.get("test"));
     	
     	
-    	
-    	ClientCache cache = factory.create();
-    	
-    	Region<Object,Object> region = 
-    	cache.createClientRegionFactory(ClientRegionShortcut.PROXY).create("test");
-    	
-    	region.put("test", "tesT");
-    	
-    	
-    }
+    }//------------------------------------------------
     
     //@Test
     public void testWithCachingProxy()
