@@ -4,11 +4,12 @@
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode</artifactId>
          <packaging>pom</packaging>
-	<version>1.1.7-SNAPSHOT</version>
+	<version>1.1.7</version>
 	<name>gedi-geode</name>
   <modules> 
         <module>gedi-geode-extensions-core</module>
         <module>gedi-geode-rest-app</module>		
+<!--         <module>gedi-geode-office</module>		 -->
     </modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

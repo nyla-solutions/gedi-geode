@@ -5,7 +5,7 @@
 
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode-rest-app</artifactId>
-	<version>1.1.7-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>gedi-geode-rest-app</name>
@@ -65,7 +65,6 @@
 			<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
