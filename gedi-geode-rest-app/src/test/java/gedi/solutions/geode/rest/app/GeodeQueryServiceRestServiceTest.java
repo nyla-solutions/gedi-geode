@@ -9,13 +9,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import gedi.solutions.geode.io.QuerierService;
 import gedi.solutions.geode.rest.app.GeodeQueryServiceRestService;
-import gedi.solutions.geode.rest.app.exception.DataError;
 import nyla.solutions.global.json.JSON;
 
 /**
@@ -64,6 +59,15 @@ public class GeodeQueryServiceRestServiceTest
 		assertTrue(results != null && results.length > 0);
 		
 	
+		//multiple results
+		
+		expected.add(pi);
+	
+		json = restService.queryLimit(query,limit);
+		
+		results = jsonObject.fromJson(json, Object[].class);
+		
+		assertTrue(results != null && results.length > 1);
 		
 	}
 	@Test
@@ -119,22 +123,6 @@ public class GeodeQueryServiceRestServiceTest
 	}
 
 	//------------------------------------------------
-	/**
-	 * Test handle exception
-	 */
-	@Test
-	public void testHandleException()
-	{
-		GeodeQueryServiceRestService restService = new GeodeQueryServiceRestService();
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		HttpServletResponse response = mock(HttpServletResponse.class);
-	
-		DataError de = restService.handleException(request, response, null);
-		
-		assertNotNull(de);
-		
-		
-	}//------------------------------------------------
 	@Test
 	public void test_appendLimit()
 	{

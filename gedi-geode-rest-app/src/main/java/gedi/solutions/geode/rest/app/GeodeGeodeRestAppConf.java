@@ -9,6 +9,11 @@ import gedi.solutions.geode.io.QuerierService;
 @Configuration
 public class GeodeGeodeRestAppConf
 {
+	@Bean
+	GeodeClient geodeClient()
+	{
+		return GeodeClient.connect();
+	}
 	
 	@Bean
 	QuerierService querierService()

@@ -15,41 +15,43 @@ import gedi.solutions.geode.lucene.TextPageCriteria;
 import nyla.solutions.core.security.user.data.UserProfile;
 import nyla.solutions.core.util.Config;
 
+@Ignore
 public class GeodeClientIntTest
 {
 
-	@Test
-	public void testGeodeClientBooleanStringArray()
-	{
-		GeodeClient geodeClient = new GeodeClient(false, ".*");
-		Assert.assertTrue(geodeClient.getClientCache() != null);
-	}
+	//@Test
+//	public void testGeodeClientBooleanStringArray()
+//	{
+//		GeodeClient geodeClient = new GeodeClient(false, ".*");
+//		Assert.assertTrue(geodeClient.getClientCache() != null);
+//	}
+//
+//	//@Test
+//	public void testGeodeClientStringIntBooleanStringArray()
+//	{
+//		GeodeClient geodeClient = new GeodeClient("localhost",10334,false, ".*");
+//		Assert.assertTrue(geodeClient.getClientCache() != null);
+//	}
 
-	@Test
-	public void testGeodeClientStringIntBooleanStringArray()
-	{
-		GeodeClient geodeClient = new GeodeClient("localhost",10334,false, ".*");
-		Assert.assertTrue(geodeClient.getClientCache() != null);
-	}
+//	@Test
+//	public void testGeodeClientClientCache()
+//	{
+//		
+//		ClientCache clientCache = ClientCacheFactory.getAnyInstance();
+//		GeodeClient geodeClient = new GeodeClient(clientCache);
+//		
+//		Assert.assertTrue(geodeClient.getClientCache() != null);
+//	}
 
-	@Test
-	public void testGeodeClientClientCache()
-	{
-		ClientCache clientCache = ClientCacheFactory.getAnyInstance();
-		GeodeClient geodeClient = new GeodeClient(clientCache);
-		
-		Assert.assertTrue(geodeClient.getClientCache() != null);
-	}
-
-	@Test
-	public void testGeodeClientClientCacheClientRegionFactoryOfQQ()
-	{
-		ClientCache clientCache = ClientCacheFactory.getAnyInstance();
-		GeodeClient geodeClient = new GeodeClient(clientCache);
-		
-		Assert.assertTrue(geodeClient.getClientCache() != null);
-		
-	}
+//	@Test
+//	public void testGeodeClientClientCacheClientRegionFactoryOfQQ()
+//	{
+//		ClientCache clientCache = ClientCacheFactory.getAnyInstance();
+//		GeodeClient geodeClient = new GeodeClient(clientCache);
+//		
+//		Assert.assertTrue(geodeClient.getClientCache() != null);
+//		
+//	}
 	
 	@Test
 	public void test_SearchTextWithPages() throws Exception

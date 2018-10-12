@@ -1,0 +1,116 @@
+<html>
+	<body>
+		<h1>Example GemFire REST Web based API</h1>
+		<p>
+			This is an example Spring Boot based app that provides the following GemFire features.
+		</p> 
+		<ul>
+			<li>POST region with region key and value to put data into a region</li>
+			<li>GET region name and key to read</li>
+		</ul>
+		
+		<p>
+		When starting the application you must provide the ENVironment	
+		</p>
+		
+		<ul>
+            <li><strong>name=</strong>The REST application GemFire client name
+            </li>
+			<li><strong>LOCATOR_HOST=</strong>public IP address or Public Host Name**
+			</li>
+			<li><strong>LOCATOR_PORT=</strong> =**Locator Port**</li>
+		</ul>
+		
+
+		
+<h2>Example REST Region Service</h2>
+<p>
+The URL http://**root**/region prefix exposes a REST interface to preform READ/WRITE 
+operations on a GemFire region.
+</p>
+
+<h3>POST region</h3>
+	<br/>
+	Put a  key/value entry into a given region.
+	<br/>
+	**NOTE** The value is expected to be a JSON string
+	<br/>
+	<br/>
+	**Format**
+	<br/>
+		http://<strong>root</strong>/region/<strong>regionName</strong>/<strong>key</strong>
+		<br/>
+		POST BODY
+	<br/>
+			<strong>value</strong>
+	<br/>
+	<p>
+	<strong>Example</strong>
+	</p>
+	<p>
+	HTTP POST<br/>
+	<br/>
+	<p>
+            http://localhost:8080/region/test/1
+            <br/>
+
+            POST DATA
+            <br/>
+
+
+            HELLO WORLD
+	</p>
+	<br/>
+	RESPONSE
+	<br/>
+	{ "name" : "world"}
+	<br/>
+	<br/>
+	<br/>
+<h3>GET region</h3>
+		<br/>
+		Get a region value based on a given key
+		<br/>
+		<strong>Format</strong>
+		<br/>
+			http://<strong>host</strong>/region/<strong>regionName</strong>/<strong>key</strong>
+			<br/>
+		<br/>
+		<strong>Example</strong>
+		<br/>
+		HTTP GET
+		<br/>
+		http://<strong>host</strong>:<strong>port</strong>/region/Test/hello
+		<br/>
+		RESPONSE
+		<br/>
+		{ "name" : "world"}
+		<br/>
+<!-- ======================================================================================= -->
+
+        <!--    Query Example -->
+        <h3>Query</h3>
+        <br/>
+        Perform a GemFire query operation<br/>
+
+        http://<strong>host</strong>:<strong>port</strong>/query
+
+        <br/>
+
+        * Note the select assumes the results of PdxInstances
+
+        <br/>
+        POST BODY
+        <br/>
+
+        select * from /region
+
+        <br/>
+        <br/>
+
+        Appending a number the limit the number of results returned.
+        <br/>
+        http://<strong>host</strong>:<strong>port</strong>/query/<strong>limitNumber</strong>
+
+	</body>
+</html>

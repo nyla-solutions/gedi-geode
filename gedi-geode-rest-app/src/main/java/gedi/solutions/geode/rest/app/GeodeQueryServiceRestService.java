@@ -4,9 +4,6 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.geode.cache.RegionDestroyedException;
-import org.apache.geode.cache.client.ServerOperationException;
 import org.apache.geode.pdx.JSONFormatter;
 import org.apache.geode.pdx.PdxInstance;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gedi.solutions.geode.io.QuerierService;
 import gedi.solutions.geode.rest.app.exception.DataError;
+import gedi.solutions.geode.rest.app.exception.FaultAgent;
 
 /**
  * Generic READ/WRITE GemFire REST service
@@ -33,6 +31,9 @@ public class GeodeQueryServiceRestService
 {
 	@Autowired
 	QuerierService querierService;
+ 
+	@Autowired
+	FaultAgent faultAgent;
 	
 	/**
 	 * Execute a GemFire query with no limit
@@ -74,8 +75,6 @@ public class GeodeQueryServiceRestService
 
 	            StringBuilder responseJson = new StringBuilder();
 
-	           int count = 0;
-
 	           //TODO: concerns on performance
 	           Boolean isPdx = null;
 	           
@@ -85,6 +84,11 @@ public class GeodeQueryServiceRestService
 	                	if(isPdx == null)
 	                		isPdx = Boolean.valueOf(obj instanceof PdxInstance);
 
+	                	if( responseJson.length() > 0)
+	                	{
+	                		responseJson.append(",");
+	                	}
+	                	
 	                	if(Boolean.TRUE.equals(isPdx))
 	                	{
 	                		responseJson.append(JSONFormatter.toJSON((PdxInstance)obj));	
@@ -96,12 +100,6 @@ public class GeodeQueryServiceRestService
 	                		.replace("\\", "\\\\")
 	                		.replace("\"", "\\\"")).append("\"");	
 	                	}
-	                    
-	                    count++;
-
-	                    if(count >= limit )
-	                        break;
-
 	            }
 	            
 	            StringBuilder allResults = new StringBuilder().append("[").append(responseJson).append("]");
@@ -122,37 +120,9 @@ public class GeodeQueryServiceRestService
      * @return Data Error details
      */
     @ExceptionHandler(Exception.class)
-    public DataError  handleException(HttpServletRequest request, HttpServletResponse response,Exception e ) 
+    DataError  handleException(HttpServletRequest request, HttpServletResponse response,Exception e ) 
     {
-
-    	DataError dataError = new DataError();
-    	
-    	dataError.setError("Processing error");
-    	if(e != null)
-    	{
-    		Throwable cause = e.getCause();
-
-    		dataError.setMessage(e.getMessage());
-    		
-            if(e instanceof ServerOperationException)
-            {
-                dataError.setError("Server opertion error");
-
-                if(cause instanceof RegionDestroyedException)
-                {
-                	RegionDestroyedException regionDestroyedException = (RegionDestroyedException)cause;
-                    dataError.setMessage("Region region:"+regionDestroyedException.getRegionFullPath()+" not found");
-                }
-            }
-            
-    	}
-    	
-        dataError.setPath(request.getRequestURI());
-        response.setStatus(500);
-
-        
-
-        return dataError;
+        return faultAgent.handleException(request,response,e);
     }//------------------------------------------------
 	/**
 	 * 

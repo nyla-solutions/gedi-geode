@@ -1,0 +1,53 @@
+<pre>
+<h1>Grid Enterprise Data Integration</h1>
+<h2>Geode Extensions Data Services</h2>
+
+Rest Data service example code repository
+
+
+<h2>Building</h2> 
+
+
+For maven to access the GemFire library artifacts, you must add an entry to your .m2/settings.xml file:
+	
+	   &lt;settings&gt;
+	       &lt;servers&gt;
+	           &lt;server&gt;
+	               &lt;id&gt;gemfire-release-repo&lt;/id&gt;
+	               &lt;username&gt;MY-USERNAME@example.com&lt;/username&gt;
+	               &lt;password&gt;MY-DECRYPTED-PASSWORD&lt;/password&gt;
+	           &lt;/server&gt;
+	       &lt;/servers&gt;
+	   &lt;/settings&gt;
+	   
+See <a href="https://gemfire.docs.pivotal.io/gemfire/getting_started/installation/obtain_gemfire_maven.html">https://gemfire.docs.pivotal.io/gemfire/getting_started/installation/obtain_gemfire_maven.html</a>
+
+<h2>GemFire Environments</h2>
+
+Examples
+
+    security-username=user
+    security-password=password
+	LOCATOR_HOST= 192.168.40.140
+	LOCATOR_PORT = port
+
+<h1> Example Data Services</h1>
+
+This is an example Spring Boot based app that provides the following GemFire features.
+
+<a href="rest.html">(gedi-geode-data-services-rest) Example REST API for GemFire region data</a>
+ 
+
+<li>POST region with region key and value to put data into a region</li>
+<li>GET region name and key to read.</li>
+
+
+When starting the application you must provide the ENVironment
+
+	- name=<strong>GemFire client name</strong>
+	- LOCATOR_HOST=<strong>public IP address or Public Host Name</strong>
+	- LOCATOR_PORT =<strong>Locator Port</strong>
+
+
+
+</pre>
