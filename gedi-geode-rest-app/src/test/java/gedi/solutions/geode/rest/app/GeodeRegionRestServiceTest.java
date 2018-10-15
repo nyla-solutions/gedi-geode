@@ -14,6 +14,7 @@ public class GeodeRegionRestServiceTest
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testPutGet()
+	throws Exception
 	{
 		String region = null;
 		String key = null;
@@ -26,18 +27,18 @@ public class GeodeRegionRestServiceTest
 		GeodeRegionRestService service = new GeodeRegionRestService();
 		service.geode = geodeClient;
 		
-		String results = service.putEntry(region, key, value);
+		String results = service.putEntry(region, null, key, value);
 		results = service.getValueByKey(region, key);
 		
 		assertNull(results);
 		
 		region = "test";
-		results = service.putEntry(region, key, value);
+		results = service.putEntry(region, null, key, value);
 		results = service.getValueByKey(region, key);
 		assertNull(results);
 		
 		key = "key";
-		results = service.putEntry(region, key, value);
+		results = service.putEntry(region, null, key, value);
 		results = service.getValueByKey(region, key);
 		assertNull(results);
 		
@@ -47,6 +48,7 @@ public class GeodeRegionRestServiceTest
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testRemove()
+	throws Exception
 	{
 		String region = null;
 		String key = null;
@@ -61,7 +63,7 @@ public class GeodeRegionRestServiceTest
 		GeodeRegionRestService service = new GeodeRegionRestService();
 		service.geode = geodeClient;
 		
-		String results = service.putEntry(region, key, value);
+		String results = service.putEntry(region,null, key, value);
 		results = service.getValueByKey(region, key);
 		
 		assertNull(results);

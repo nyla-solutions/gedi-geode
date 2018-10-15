@@ -23,6 +23,15 @@ The following are optional settings
 	export POOL_PR_SINGLE_HOP_ENABLED=true
 
 
+# Startup
+
+	java -cp target/gedi-geode-rest-app-0.0.1.jar -Dloader.path=/Projects/solutions/gedi/dev/gedi-geode/gedi-geode-extensions-int-test -Dloader.main=gedi.solutions.geode.rest.app.GediGeodeRestApp  org.springframework.boot.loader.PropertiesLauncher
+
+
+Note the used domain objects used in the access region must be added to the CLASSPATH using the 
+`-Dloader.path` property.
+
+
 # REST Region Service
 
 The URL http://**root**/region prefix exposes a REST interface to preform READ/WRITE 
@@ -38,7 +47,7 @@ Put a  key/value entry into a given region.
 
 **Format** 
 
-	http://<root>/region/<regionName>/<key>
+	http://<root>/region/<regionName>//<type>/<key>
 	
 	POST BODY
 		<value>
@@ -47,7 +56,7 @@ Put a  key/value entry into a given region.
 
 HTTP POST
 
-http://**host**/region/Test/hello
+http://**host**/region/Test/com.acme.user.data.UserProfile/hello
 
 RESPONSE
 

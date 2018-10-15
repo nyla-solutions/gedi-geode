@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.geode.pdx.JSONFormatter;
-import org.apache.geode.pdx.PdxInstance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
 
 import gedi.solutions.geode.io.QuerierService;
 import gedi.solutions.geode.rest.app.exception.DataError;
@@ -29,6 +29,10 @@ import gedi.solutions.geode.rest.app.exception.FaultAgent;
 @RequestMapping("/query")
 public class GeodeQueryServiceRestService
 {
+	
+	@Autowired
+	Gson gson; 
+	
 	@Autowired
 	QuerierService querierService;
  
@@ -43,6 +47,12 @@ public class GeodeQueryServiceRestService
 	 */
 	@PostMapping(path = "/",produces = "application/json")
 	public String query(@RequestBody String query)
+	throws Exception
+	{
+		return queryLimit(query, -1);
+	}//------------------------------------------------
+	@PostMapping(path = "",produces = "application/json")
+	public String queryNoLimit(@RequestBody String query)
 	throws Exception
 	{
 		return queryLimit(query, -1);
@@ -71,40 +81,9 @@ public class GeodeQueryServiceRestService
 	            logger.info("QueryService: END query "+query);
 
 	            if(results == null)
-	                return null;
-
-	            StringBuilder responseJson = new StringBuilder();
-
-	           //TODO: concerns on performance
-	           Boolean isPdx = null;
-	           
-	       
-	            for (Object obj : results) {
-	                	
-	                	if(isPdx == null)
-	                		isPdx = Boolean.valueOf(obj instanceof PdxInstance);
-
-	                	if( responseJson.length() > 0)
-	                	{
-	                		responseJson.append(",");
-	                	}
-	                	
-	                	if(Boolean.TRUE.equals(isPdx))
-	                	{
-	                		responseJson.append(JSONFormatter.toJSON((PdxInstance)obj));	
-	                	}
-	                	else
-	                	{
-	                		//escape quote to \\
-	                		responseJson.append("\"").append(String.valueOf(obj)
-	                		.replace("\\", "\\\\")
-	                		.replace("\"", "\\\"")).append("\"");	
-	                	}
-	            }
+	            	return null;
 	            
-	            StringBuilder allResults = new StringBuilder().append("[").append(responseJson).append("]");
-
-	            return allResults.toString();
+	            return gson.toJson(results, Collection.class);
 	        }
 	        catch(Exception e)
 	        {
@@ -115,7 +94,7 @@ public class GeodeQueryServiceRestService
 	/**
      * Handling exceptions in general for REST responses
      * @param request the HTTP request
-     * @param response the HTTP reponse
+     * @param response the HTTP response
      * @param e the exception
      * @return Data Error details
      */
@@ -138,5 +117,4 @@ public class GeodeQueryServiceRestService
 		return new StringBuilder(query).append(" limit ").append(limit).toString();
 	}
 
-	
 }

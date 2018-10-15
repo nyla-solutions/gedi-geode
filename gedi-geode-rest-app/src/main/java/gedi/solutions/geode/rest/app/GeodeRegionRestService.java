@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import gedi.solutions.geode.client.GeodeClient;
 import gedi.solutions.geode.rest.app.exception.DataError;
 import gedi.solutions.geode.rest.app.exception.DataServiceSystemException;
@@ -37,42 +39,46 @@ public class GeodeRegionRestService
 	FaultAgent faultAgent;
 
 	
+	@Autowired
+	Gson gson;
+	
 	/**
 	 * Put a new records
 	 * @param region the region name 
+	 * @param type teh class name type
 	 * @param key the region key
 	 * @param value the region value
 	 * @return previous Region values in JSON
+	 * @throws Exception when an unknown error occurs
 	 */
-	@PostMapping(path = "{region}/{key}",produces = "application/json")
-	public String putEntry(@PathVariable String region ,@PathVariable String key, @RequestBody String value) 
+	@PostMapping(path = "{region}/{type}/{key}",produces = "application/json")
+	public String putEntry(@PathVariable String region ,@PathVariable String type, @PathVariable String key, @RequestBody String value) 
+	throws Exception
 	{
 		
 		if(region == null || region.length() == 0 || key == null || value ==null)
 			return null;
+		
+		
+		if(type == null || type.length() == 0)
+					throw new IllegalArgumentException("type is required. URL pattern {region}/{type}/{key}");
 
 		try {
-			Region<String, PdxInstance> gemRegion  = geode.getRegion(region);
+			Region<String, Object> gemRegion  = geode.getRegion(region);
 
             System.out.println("Putting key $key in region $region");
             
-            if(!value.contains("@type"))
-            {
-            	throw new IllegalArgumentException("@type required in JSON value. Example JSON string: {\n" + 
-            	"    \"@type\": \"package.ObjectName\",\n" + 
-            	"     \"field1\": 1121,\n" + 
-            	"     \"field2\": 1012,\n" + 
-            	"     \"field3\":  \"example\"}");
-            }
+           
+            Class<?> clz =  Class.forName(type);
             
-			PdxInstance pdxInstance = JSONFormatter.fromJSON(value);
+			Object obj = gson.fromJson(value, clz);
 
-			PdxInstance response = gemRegion.put(key, pdxInstance);
+			Object response = gemRegion.put(key, obj);
 
 			if (response == null)
 				return null;
 
-			return JSONFormatter.toJSON(response);
+			return gson.toJson(response);
 		}
 		catch(Exception e)
 		{

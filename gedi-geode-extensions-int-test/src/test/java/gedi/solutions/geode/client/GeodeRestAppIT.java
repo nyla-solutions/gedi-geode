@@ -24,13 +24,13 @@ public class GeodeRestAppIT
 		domain.setMyDate(Calendar.getInstance().getTime());
 		domain.setMyString(Text.generateId());
 		
-		Region<String,Object> region = GeodeClient.connect().getRegion("pdxTest");
+		Region<String,QaDataDomain> region = GeodeClient.connect().getRegion("pdxTest");
 		
 		region.put(domain.getMyString(), domain);
 		
-		PdxInstance user = (PdxInstance)region.get(domain.getMyString());
+		QaDataDomain user = region.get(domain.getMyString());
 		
-		String json = JSONFormatter.toJSON(user);
+	
 		
 		
 	}
