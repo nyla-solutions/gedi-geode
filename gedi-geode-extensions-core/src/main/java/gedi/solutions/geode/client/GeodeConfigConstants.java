@@ -1,15 +1,13 @@
 package gedi.solutions.geode.client;
 
-
-import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
-
 import nyla.solutions.core.util.Config;
 
 public interface GeodeConfigConstants
 {
 	public final static String SSL_KEYSTORE_CLASSPATH_FILE_PROP = "SSL_KEYSTORE_CLASSPATH_FILE";
 	
-	public final static String PDX_SERIALIZER_CLASS_NM = Config.getProperty("PDX_SERIALIZER_CLASS_NM",ReflectionBasedAutoSerializer.class.getName()); 
+	public final static String PDX_SERIALIZER_CLASS_NM_PROP = "PDX_SERIALIZER_CLASS_NM";
+	//public final static String PDX_SERIALIZER_CLASS_NM = Config.getProperty("PDX_SERIALIZER_CLASS_NM",ReflectionBasedAutoSerializer.class.getName()); 
 	
 	public final static String LOCATOR_HOST_PROP = "LOCATOR_HOST";
 	public final static String LOCATOR_PORT_PROP = "LOCATOR_PORT";
@@ -22,10 +20,11 @@ public interface GeodeConfigConstants
 	/**
 	 * PARTITION SINGLE HOP ENABLED (default false)
 	 */
-	public final static boolean POOL_PR_SINGLE_HOP_ENABLED = Config.getPropertyBoolean("POOL_PR_SINGLE_HOP_ENABLED",true).booleanValue();
+	public final static String POOL_PR_SINGLE_HOP_ENABLED_PROP = "POOL_PR_SINGLE_HOP_ENABLED";
 	
+	public final static String PDX_CLASS_PATTERN_PROP ="PDX_CLASS_PATTERN";
 	
-	public final static String PDX_CLASS_PATTERN = Config.getProperty("PDX_CLASS_PATTERN",".*");
+	//public final static String PDX_CLASS_PATTERN = Config.getProperty("PDX_CLASS_PATTERN",".*");
 	
 	public final static String USE_CACHING_PROXY_PROP = "USE_CACHING_PROXY";
 

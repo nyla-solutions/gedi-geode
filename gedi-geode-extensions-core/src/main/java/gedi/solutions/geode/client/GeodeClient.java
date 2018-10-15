@@ -28,6 +28,7 @@ import org.apache.geode.cache.query.QueryInvalidException;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.pdx.PdxSerializer;
+import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
 import gedi.solutions.geode.client.cq.CqQueueListener;
 import gedi.solutions.geode.io.GemFireIO;
@@ -37,6 +38,7 @@ import gedi.solutions.geode.io.QuerierService;
 import gedi.solutions.geode.lucene.GeodeLuceneSearch;
 import gedi.solutions.geode.lucene.TextPageCriteria;
 import gedi.solutions.geode.lucene.function.LuceneSearchFunction;
+import gedi.solutions.geode.serialization.EnhancedReflectionSerializer;
 import nyla.solutions.core.exception.ConfigException;
 import nyla.solutions.core.exception.SystemException;
 import nyla.solutions.core.io.IO;
@@ -86,10 +88,7 @@ public class GeodeClient
 	protected GeodeClient(String host, int port, boolean cachingProxy, String... classPatterns)
 	{
 		this.cachingProxy = cachingProxy;
-		
-		//	byte[] bytes = IO.readBinaryClassPath("/truststore.jks");
-		
-		
+			
 		String name = Config.getProperty(GeodeConfigConstants.NAME_PROP,GeodeClient.class.getSimpleName());
 		
 		//check for exists client cache
@@ -110,7 +109,11 @@ public class GeodeClient
 		}catch(Exception e)
 		{Debugger.println(e.getMessage());}
 		
-		PdxSerializer pdxSerializer = createPdxSerializer(GeodeConfigConstants.PDX_SERIALIZER_CLASS_NM,classPatterns);
+		String className = Config.getProperty(
+			GeodeConfigConstants.PDX_SERIALIZER_CLASS_NM_PROP,
+			EnhancedReflectionSerializer.class.getName());
+		
+		PdxSerializer pdxSerializer = createPdxSerializer(className,classPatterns);
 		
 		Properties props = new Properties();
 		try
@@ -126,7 +129,8 @@ public class GeodeClient
 			.setPoolSubscriptionEnabled(true)
 			.setPdxSerializer(pdxSerializer)
 			.setPdxReadSerialized(GeodeConfigConstants.PDX_READ_SERIALIZED)
-			.setPoolPRSingleHopEnabled(GeodeConfigConstants.POOL_PR_SINGLE_HOP_ENABLED)
+			.setPoolPRSingleHopEnabled(Config.getPropertyBoolean(
+				GeodeConfigConstants.POOL_PR_SINGLE_HOP_ENABLED_PROP,true))
 			.set("log-level", Config.getProperty("log-level","config"))
 			.set("name", name)
 			.create();
@@ -468,7 +472,8 @@ public class GeodeClient
 		
 		boolean cachingProxy = Config.getPropertyBoolean(GeodeConfigConstants.USE_CACHING_PROXY_PROP,false).booleanValue();
 		
-		geodeClient = new GeodeClient(cachingProxy,GeodeConfigConstants.PDX_CLASS_PATTERN);
+		geodeClient = new GeodeClient(cachingProxy,
+		Config.getProperty(GeodeConfigConstants.PDX_CLASS_PATTERN_PROP,".*"));
 		
 		return geodeClient;
 	}//------------------------------------------------

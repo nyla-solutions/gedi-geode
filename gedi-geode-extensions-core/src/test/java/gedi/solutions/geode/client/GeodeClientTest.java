@@ -70,7 +70,7 @@ public class GeodeClientTest  {
     @Test
 	public void testPdxSerializer() throws Exception
 	{
-		PdxSerializer pdxSerializer = GeodeClient.createPdxSerializer(ReflectionBasedAutoSerializer.class.getName(), GeodeConfigConstants.PDX_CLASS_PATTERN);
+		PdxSerializer pdxSerializer = GeodeClient.createPdxSerializer(ReflectionBasedAutoSerializer.class.getName(), ReflectionBasedAutoSerializer.class.getName());
 		System.out.println("pdxSerializier"+pdxSerializer);
     	    assertNotNull(pdxSerializer);
     	    assertTrue(pdxSerializer instanceof ReflectionBasedAutoSerializer);

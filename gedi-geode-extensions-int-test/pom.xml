@@ -12,7 +12,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	  	<maven.javadoc.skip>true</maven.javadoc.skip>		
 	  	<gemfire.version>9.1.0</gemfire.version>
-		<gedi-geode-extensions-core>1.1.3</gedi-geode-extensions-core>
+		<gedi-geode-extensions-core>1.1.8-SNAPSHOT</gedi-geode-extensions-core>
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
 	<licenses>
@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>nyla.solutions.core</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.8</version>
 		</dependency>	
 		<dependency>
 				<groupId>com.github.nyla-solutions</groupId>
