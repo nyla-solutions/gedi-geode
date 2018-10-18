@@ -128,9 +128,8 @@ public class GeodeRegionRestService
 				return null;
 			
 			
-			if(value instanceof PdxInstance)
-				return JSONFormatter.toJSON((PdxInstance)value);
-			return value.toString();
+			
+				return gson.toJson(value);
 		}
 		catch(ServerOperationException serverError)
 		{

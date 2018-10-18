@@ -11,7 +11,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	  	<maven.javadoc.skip>true</maven.javadoc.skip>		
-	  	<gemfire.version>9.1.0</gemfire.version>
+	  	<gemfire.version>9.3.0</gemfire.version>
 		<gedi-geode-extensions-core>1.1.8-SNAPSHOT</gedi-geode-extensions-core>
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
