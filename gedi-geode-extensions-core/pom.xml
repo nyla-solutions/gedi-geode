@@ -11,7 +11,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.javadoc.skip>false</maven.javadoc.skip>
-		<gemfire.version>9.3.0</gemfire.version>
+		<gemfire.version>9.2.0</gemfire.version>
 		<jacoco.method.coverage>0.0</jacoco.method.coverage>	
 		<findbugs.skip>true</findbugs.skip>
 	  	<!-- gemfire.version>9.1.0</gemfire.version-->	
@@ -104,11 +104,12 @@
 		    <version>1.2.0.RELEASE</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-core</artifactId>
-	    <version>4.3.14.RELEASE</version>
-	</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-core</artifactId>
+		    <version>4.3.20.RELEASE</version>
+		</dependency>
+
 			
 			
         <dependency>
