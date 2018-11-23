@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.geode.cache.Region;
-import org.apache.geode.cache.client.ClientCache;
-import org.apache.geode.cache.client.ClientCacheFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

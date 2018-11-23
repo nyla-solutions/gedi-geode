@@ -1,7 +1,7 @@
 package gedi.solutions.geode.client;
 
+import org.apache.geode.cache.EntryEvent;
 import org.apache.geode.cache.Region;
-
 import org.apache.geode.pdx.PdxReader;
 import org.apache.geode.pdx.PdxSerializer;
 import org.apache.geode.pdx.PdxWriter;
@@ -14,6 +14,7 @@ import nyla.solutions.core.util.Config;
 import static org.junit.Assert.*;
 
 import java.util.Properties;
+import java.util.function.Consumer;
 
 
 /**
@@ -79,6 +80,19 @@ public class GeodeClientTest  {
     	    PdxSerializer pdxSerializerVerifier = GeodeClient.createPdxSerializer(TestPdxSerialzier.class.getName(),pattern);
     	    
     	    assertTrue(pdxSerializerVerifier instanceof TestPdxSerialzier);
+	}
+    
+    @Test
+	public void testRegisterListener() throws Exception
+	{
+    	Consumer<EntryEvent<String, Object>> consumer = e -> System.out.println("event:"+e);
+		
+    	GeodeClient geode = GeodeClient.connect();
+    	String regionName ="test";
+		geode.registerAfterPut(regionName ,consumer);
+    	
+    	
+    	
 	}
     
     public static class TestPdxSerialzier implements PdxSerializer

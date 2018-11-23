@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode-extensions-int-test</artifactId>
-	<version>1.1.7-SNAPSHOT</version>
+	<version>1.1.9</version>
 	<name>gedi-geode-extensions-int-test</name>
 	<description>GemFire Enterprise Data Integration - Power by Apache Geode</description>
 	<properties>
@@ -12,7 +12,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	  	<maven.javadoc.skip>true</maven.javadoc.skip>		
 	  	<gemfire.version>9.3.0</gemfire.version>
-		<gedi-geode-extensions-core>1.1.8-SNAPSHOT</gedi-geode-extensions-core>
+		<gedi-geode-extensions-core>1.1.7</gedi-geode-extensions-core>
 	</properties>
 	<url>https://github.com/nyla-solutions/gedi-geode</url>
 	<licenses>
@@ -60,6 +60,16 @@
 	</dependency>
 		<dependency>
 			<groupId>io.pivotal.gemfire</groupId>
+			<artifactId>geode-json</artifactId>
+			<version>${gemfire.version}</version>
+	</dependency>
+		<dependency>
+			<groupId>io.pivotal.gemfire</groupId>
+			<artifactId>geode-common</artifactId>
+			<version>${gemfire.version}</version>
+	</dependency>
+		<dependency>
+			<groupId>io.pivotal.gemfire</groupId>
 			<artifactId>geode-wan</artifactId>
 			<version>${gemfire.version}</version>
 		</dependency>
@@ -68,12 +78,17 @@
 			<artifactId>geode-cq</artifactId>
 			<version>${gemfire.version}</version>
 		</dependency>		
+		<dependency>
+			<groupId>io.pivotal.gemfire</groupId>
+			<artifactId>geode-lucene</artifactId>
+			<version>${gemfire.version}</version>
+		</dependency>			
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 
 		<dependency>
 			<groupId>com.github.nyla-solutions</groupId>
 			<artifactId>nyla.solutions.core</artifactId>
-			<version>1.1.8</version>
+			<version>1.1.9</version>
 		</dependency>	
 		<dependency>
 				<groupId>com.github.nyla-solutions</groupId>

@@ -8,6 +8,7 @@
 	<name>gedi-geode</name>
   <modules> 
         <module>gedi-geode-extensions-core</module>
+        <module>gedi-geode-extensions-spring/gedi-geode-spring-security</module>
         <module>gedi-geode-rest-app</module>		
 <!--         <module>gedi-geode-office</module>		 -->
     </modules>

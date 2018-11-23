@@ -37,7 +37,7 @@ class GediGeodeExtensionsRestApplicationTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	fun contextLoads() {
 		AppConfig()
 	}

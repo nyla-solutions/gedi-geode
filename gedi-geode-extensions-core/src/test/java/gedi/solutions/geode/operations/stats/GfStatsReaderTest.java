@@ -20,7 +20,7 @@ public class GfStatsReaderTest
 	public void testCsvs() throws Exception
 	{
 		//TODO: delete
-		File directory = new File("/Projects/LifeSciences/Humana/docs/Vantage/docs/assessments/performance/anaylysis/canvas_plus_vantage/Attachments_v2/LOUWEBLTS131");
+		File directory = new File("src/test/resources/stats/rdrlnxm28-server1.gfs");
 		GfStatsReader.toCvsFiles(directory);
 		
 		Set<File> gfsFiles = IO.listFileRecursive(directory, "*.gfs");

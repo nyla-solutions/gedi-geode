@@ -1,7 +1,7 @@
 # Geode Extension 
 
 
-Note that this API is available in the Maven Repository.
+Note that this API is available in the [Maven Repository](https://mvnrepository.com/artifact/com.github.nyla-solutions/gedi-geode-extensions-core).
 
 	
 	<dependency>
@@ -9,6 +9,7 @@ Note that this API is available in the Maven Repository.
 	    <artifactId>gedi-geode-extensions-core</artifactId>
 	    <version>${VERSION}</version>
 	</dependency>
+
 
 
 ## GeodeClient API
@@ -39,10 +40,19 @@ If authentication is enabled
 If you need to set PDX read serialize to true (default false).
 
     export PDX_READ_SERIALIZED=true
-    
+  
+ ** Cloud Foundry/ Pivotal Cloud Cache (PCC) Friendly **
+ 
+ PCC is Pivotal's 12-factor backing service implementation of GemFire.
+ The locator host, port and security credential are automatically 
+ wired when the PCC service is binded to a service instance.
+ 
+ 
+** SSL key/trust store management **
     
 If you need SSL keystore/truststores loading via CLASSPATH for 
-12 factor cloud native applications (Example below)
+12 factor cloud native applications such as cloud foundry Spring Boot application
+see the properties below. 
 
 	export SSL_KEYSTORE_PASSWORD=...
 	export SSL_PROTOCOLS=TLSv1.2
@@ -54,6 +64,8 @@ If you need SSL keystore/truststores loading via CLASSPATH for
 	export SSL_TRUSTSTORE_CLASSPATH_FILE=truststore.jks
 	export SSL_KEYSTORE_CLASSPATH_FILE=keystore.jks
 
+-------------------------------------------------
+
 **Get a Apache Geode Connection**
 
 	GeodeClient geodeClient = GeodeClient.connect()
@@ -64,35 +76,42 @@ Get the Apache Geode client cache
 		
 
 **Get a Region**
-		
+	
+	//Does not require a client.xml or pre-registration of the region on the client
+	//But, the region must exist on the server
 	Region<String,PdxInstance> region = geodeClient.getRegion("Test"))
 
 **Execute a Query**
 
-    Collection<PdxInstance> collection = geodeClient.select("select * from /myregion");
+    Collection<Object> collection = geodeClient.select("select * from /myregion");
  
-**Get a queue continous query matches**
+**Get a queue continuous query matches**
 
-    Queue<PdxInstance> queue = registerCq("myQueryName","select * from /myregion")
+    	Queue<Object> queue = registerCq("myQueryName","select * from /myregion")
     
-    //get first recod
-    PdxInstance pdxRow = queue.poll();
+    	//get first record
+    	Object object = queue.poll(); //non blocking
+    
+    	//blocking
+    	BlockingQueue<Object> queue = client.registerCq("testCq", "select * from /test");
+	Object take = queue.take();
+    
+ ** Register simple java.util.Consumer listeners for region puts/delete events **
+ 
+		Consumer<EntryEvent<String, Object>> customer = e -> System.out.println("Put event"+e);
+		client.registerAfterPut("testEventRegion", putConsumer);
+		client.getRegion("testEventRegion");
  
  ## Convert Statistics to CSV file
  
  The following will extract a single statistic type with the name "CachePerfStats"
  
- 	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/LifeSciences/Humana/analysis/DigitIT/stats/stats.gfs CachePerfStats   /Projects/stats/CachePerfStats.csv`
+ 	`java gedi.solutions.geode.operations.stats.GfStatsReader /stats/stats.gfs CachePerfStats   /Projects/stats/CachePerfStats.csv`
  
  
  To export all statistics with a file name pattern `<name>.gfs.<type>.csv` in the same directory as the stat file.
  
  	`java gedi.solutions.geode.operations.stats.GfStatsReader /Projects/analysis/DigitIT/stats/stats.gfs`
-
-
-# LDAP Security Manager
-
-See [LDAP Security manager](README_LDAP_SecurityMgr.md)
 
  
 ## GemFire Commercial Repository

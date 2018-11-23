@@ -4,12 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.function.Consumer;
 
 import org.apache.geode.cache.CacheClosedException;
+import org.apache.geode.cache.CacheListener;
+import org.apache.geode.cache.EntryEvent;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
@@ -28,13 +32,12 @@ import org.apache.geode.cache.query.QueryInvalidException;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.pdx.PdxSerializer;
-import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
-
 import gedi.solutions.geode.client.cq.CqQueueListener;
 import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
 import gedi.solutions.geode.io.QuerierMgr;
 import gedi.solutions.geode.io.QuerierService;
+import gedi.solutions.geode.listeners.CacheListenerBridge;
 import gedi.solutions.geode.lucene.GeodeLuceneSearch;
 import gedi.solutions.geode.lucene.TextPageCriteria;
 import gedi.solutions.geode.lucene.function.LuceneSearchFunction;
@@ -76,6 +79,7 @@ public class GeodeClient
 	private final ClientRegionFactory<?, ?> proxyRegionfactory;
 	private final ClientRegionFactory<?, ?> cachingRegionfactory;
 	private static GeodeClient geodeClient = null;
+	private Map<String,CacheListenerBridge<?, ?>> listenerMap = new Hashtable<>();
 
 	
 	protected GeodeClient(boolean cachingProxy, String... classPatterns)
@@ -333,16 +337,40 @@ public class GeodeClient
 		connect();
 		return new QuerierMgr();
 	}//------------------------------------------------
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private <K,V> Region<K,V> createRegion(String regionName)
 	{
 		if(regionName.startsWith("/"))
 			regionName = regionName.substring(1); //remove prefix
 		
+	
+		
+		CacheListenerBridge<K, V> listener = (CacheListenerBridge)this.listenerMap.get(regionName);
+		
+		if(listener != null)
+		{
+			ClientRegionFactory<K, V> listenerRegionFactory = null;
+			
+			if(this.cachingProxy)
+				listenerRegionFactory = this.clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);	
+			else
+				listenerRegionFactory = this.clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY);
+			
+			listenerRegionFactory.addCacheListener((CacheListener)listener);
+			
+			Region<K,V> region = listenerRegionFactory.create(regionName);
+			
+			region.registerInterestRegex(".*");
+			return region;
+			
+		}
+		
 		if(this.cachingProxy)
 			return (Region<K,V>)this.cachingRegionfactory.create(regionName);
 		else
 			return (Region<K,V>)this.proxyRegionfactory.create(regionName);
+		
+		
 	}//------------------------------------------------
 	/**
 	 * This is an example to get or create a region
@@ -424,7 +452,7 @@ public class GeodeClient
 		
 		return region;
 	}//------------------------------------------------
-	public <T> Queue<T> registerCq(String cqName,String oql) 
+	public <T> BlockingQueue<T> registerCq(String cqName,String oql) 
 	{
 		try
 		{
@@ -498,6 +526,64 @@ public class GeodeClient
 	public void setCachingProxy(boolean cachingProxy)
 	{
 		this.cachingProxy = cachingProxy;
+	}//------------------------------------------------
+	/**
+	 * Add the observer as a listener for put/create events
+	 * @param <K> the region key
+	 * @param <V> the region value
+	 * @param regionName the region name
+	 * @param consumer the observer
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <K,V> void  registerAfterPut(String regionName, Consumer<EntryEvent<K, V>> consumer)
+	{
+		CacheListenerBridge<K, V> listener = (CacheListenerBridge)this.listenerMap.get(regionName);
+		if(listener == null)
+		{
+			Region<K,V> region = (Region<K,V>)clientCache.getRegion(regionName);
+			
+			if(region != null )
+				throw new IllegalStateException("Cannot register a listener when the region already created. Try registering the listener first. Then use GeodeClient.getRegion for regionName:"+regionName);
+			
+			listener = CacheListenerBridge.forAfterPut(consumer);
+		}
+		else
+		{
+			listener.addAfterPutListener(consumer);
+		}
+		
+		this.listenerMap.put(regionName, listener);
+		
+	}//------------------------------------------------
+	/**
+	 * Add the observer as a listener for remove/invalidate events
+	 * @param <K> the region key
+	 * @param <V> the region value
+	 * @param regionName the region name
+	 * @param consumer the observer
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public   <K,V> void registerAfterDelete(String regionName, Consumer<EntryEvent<K,V>> consumer)
+	{
+		
+		
+		CacheListenerBridge<K, V> listener = (CacheListenerBridge)this.listenerMap.get(regionName);
+		if(listener == null)
+		{
+			Region<K,V> region = (Region<K,V>)clientCache.getRegion(regionName);
+			
+			if(region != null )
+				throw new IllegalStateException("Cannot register a listener when the region already created. Try registering the listener first. Then use GeodeClient.getRegion for regionName:"+regionName);
+			
+			listener = CacheListenerBridge.forAfterDelete(consumer);
+		}
+		else
+		{
+			listener.addAfterDeleteListener(consumer);
+		}
+		
 	}
+	
+
 	
 }

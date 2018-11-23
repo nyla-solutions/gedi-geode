@@ -1,16 +1,15 @@
 package gedi.solutions.geode.client.cq;
 
-import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.geode.cache.Operation;
 import org.apache.geode.cache.query.CqEvent;
 import org.apache.geode.cache.query.CqListener;
 import org.apache.geode.cache.query.CqQuery;
-
 import nyla.solutions.core.patterns.Disposable;
 import nyla.solutions.core.util.Debugger;
 
-public class CqQueueListener<E> extends LinkedList<E> 
+public class CqQueueListener<E> extends LinkedBlockingQueue<E> 
 implements CqListener, Disposable
 {	
 	

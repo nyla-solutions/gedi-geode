@@ -1,6 +1,5 @@
 package gedi.solutions.geode.serialization;
 
-import java.lang.reflect.Field;
 
 import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
