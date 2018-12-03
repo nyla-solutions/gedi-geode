@@ -10,13 +10,17 @@ import java.util.stream.Collectors;
 
 import org.apache.geode.cache.GemFireCache;
 import org.apache.geode.cache.Region;
+import org.apache.geode.cache.execute.FunctionService;
 import org.apache.geode.cache.lucene.LuceneQuery;
 import org.apache.geode.cache.lucene.LuceneQueryException;
 import org.apache.geode.cache.lucene.LuceneResultStruct;
 import org.apache.geode.cache.lucene.LuceneService;
 import org.apache.geode.cache.lucene.LuceneServiceProvider;
 
+import gedi.solutions.geode.client.GeodeClient;
+import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.io.Querier;
+import gedi.solutions.geode.lucene.function.SimpleLuceneSearchFunction;
 import nyla.solutions.core.data.MapEntry;
 import nyla.solutions.core.exception.SystemException;
 import nyla.solutions.core.util.BeanComparator;
@@ -29,6 +33,7 @@ import nyla.solutions.core.util.Organizer;
  */
 public class GeodeLuceneSearch
 {
+	private final LuceneService luceneService;
 	/**
 	 * 
 	 * @param gemFireCache the cache
@@ -192,7 +197,19 @@ public class GeodeLuceneSearch
 		
 		return pageKeys;
 	}//------------------------------------------------
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> search(String indexName,String regionName,String queryString,String defaultField) 
+	throws Exception
+	{
+		Region<?,?> region = GeodeClient.connect().getRegion(regionName);
+		
+		String[] args = {indexName,regionName,queryString,defaultField};
 	
-	private final LuceneService luceneService;
+		return GemFireIO.exeWithResults(FunctionService.onRegion(region).setArguments(args).setArguments(args), new SimpleLuceneSearchFunction());
+	}
+	
+
+
+	
 
 }

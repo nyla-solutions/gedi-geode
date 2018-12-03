@@ -41,14 +41,14 @@ If you need to set PDX read serialize to true (default false).
 
     export PDX_READ_SERIALIZED=true
   
- ** Cloud Foundry/ Pivotal Cloud Cache (PCC) Friendly **
+ **Cloud Foundry/ Pivotal Cloud Cache (PCC) Friendly**
  
  PCC is Pivotal's 12-factor backing service implementation of GemFire.
  The locator host, port and security credential are automatically 
  wired when the PCC service is binded to a service instance.
  
  
-** SSL key/trust store management **
+**SSL key/trust store management**
     
 If you need SSL keystore/truststores loading via CLASSPATH for 
 12 factor cloud native applications such as cloud foundry Spring Boot application
@@ -96,7 +96,7 @@ Get the Apache Geode client cache
     	BlockingQueue<Object> queue = client.registerCq("testCq", "select * from /test");
 	Object take = queue.take();
     
- ** Register simple java.util.Consumer listeners for region puts/delete events **
+ **Register simple java.util.Consumer listeners for region puts/delete events**
  
 		Consumer<EntryEvent<String, Object>> customer = e -> System.out.println("Put event"+e);
 		client.registerAfterPut("testEventRegion", putConsumer);
