@@ -8,12 +8,17 @@
   <packaging>jar</packaging>
 
   <name>gedi-geode-spring-security</name>
+  <description>Apache Geode/GemFire Spring Security utilities along with a UserDetailsService implementation.</description>
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.security.version>4.2.2.RELEASE</spring.security.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+	<jacoco.method.coverage>0.0</jacoco.method.coverage>	
+	<findbugs.skip>true</findbugs.skip>
+    
   </properties>
 	<url>https://github.com/nyla-solutions/gedi-geode/tree/master/gedi-geode-extensions-spring/gedi-geode-spring-security</url>
 	<licenses>
@@ -63,7 +68,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.9</version>
+				<version>0.8.2</version>
 				<executions>
 					<execution>
 						<id>prepare</id>
@@ -114,7 +119,7 @@
 						</goals>
 						<configuration>
 							<files>
-								<file>../project.properties</file>
+								<file>../../project.properties</file>
 							</files>
 						</configuration>
 					</execution>
@@ -255,7 +260,7 @@
 				<reportSets>
 					<reportSet>
 						<reports>
-							<!-- select non-aggregate reports -->
+							<!--  select non-aggregate reports-->
 							<report>report</report>
 						</reports>
 					</reportSet>

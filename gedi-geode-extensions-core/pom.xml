@@ -42,12 +42,12 @@
 			</snapshots>
 		</repository>
 	</repositories>
-	<developers>
-		<developer>
-			<name>Gregory Green</name>
-			<email>ggreen@g-solutions.net</email>
-		</developer>
-	</developers>
+		<developers>
+			<developer>
+				<name>Gregory Green</name>
+				<email>ggreen@g-solutions.net</email>
+			</developer>
+		</developers>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
