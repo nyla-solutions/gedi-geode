@@ -6,8 +6,14 @@ import java.util.Set;
 
 import org.apache.geode.cache.CacheLoaderException;
 import org.apache.geode.cache.CacheWriterException;
+import org.apache.geode.cache.DataPolicy;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.TimeoutException;
+import org.apache.geode.cache.execute.Execution;
+import org.apache.geode.cache.execute.FunctionService;
+
+import gedi.solutions.geode.io.GemFireIO;
+import gedi.solutions.geode.io.function.GetAllRegionValuesFunction;
 
 /**
  * 
@@ -148,7 +154,45 @@ public class RegionTemplate<K,V>
 		return region.getAll(keys);
 	}
 
-
+	/**
+	 * @param keys the key entries to get
+	 * @return the map of match entries
+	 * @throws Exception when an unknown internal error occurs
+	 * @see org.apache.geode.cache.Region#getAll(java.util.Collection)
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public Collection<V> getAllValues(Collection<K> keys)
+	throws Exception
+	{
+		if(keys ==  null || keys.isEmpty())
+			return null;
+		
+		try
+		{
+			if(DataPolicy.EMPTY.equals(this.region.getAttributes().getDataPolicy()))
+			{
+				//execute thru function
+				Execution<K,?,?> exe = FunctionService.onRegion(this.region).setArguments(keys);
+				
+				Collection<V> results = GemFireIO.exeWithResults(exe, new GetAllRegionValuesFunction<K>());
+				
+				return results;
+			}
+			else
+			{
+				Map<K,V> map = region.getAll(keys);
+				
+				if(map == null || map.isEmpty())
+					return null;
+				
+				return map.values();
+			}
+		}
+		catch (RuntimeException e)
+		{
+			throw e;
+		}	
+	}//------------------------------------------------
 
 	/**
 	 * @param <T> the type key
@@ -160,7 +204,7 @@ public class RegionTemplate<K,V>
 	public <T extends K> Map<T, V> getAll(Collection<T> keys, Object aCallbackArgument)
 	{
 		return region.getAll(keys, aCallbackArgument);
-	}
+	}//------------------------------------------------
 
 
 
