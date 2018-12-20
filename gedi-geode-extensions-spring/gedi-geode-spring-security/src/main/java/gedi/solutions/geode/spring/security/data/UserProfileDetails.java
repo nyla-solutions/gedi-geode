@@ -1,105 +1,227 @@
 package gedi.solutions.geode.spring.security.data;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class UserProfileDetails extends User
+import nyla.solutions.core.security.user.data.UserProfile;
+
+/**
+ * Implementation of the spring security user 
+ * @author Gregory Green
+ *
+ */
+public class UserProfileDetails extends UserProfile implements UserDetails
 {
+
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -595503042970610169L;
-
-	public UserProfileDetails(String username, String password, boolean enabled, boolean accountNonExpired,
-	boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities)
+	private static final long serialVersionUID = 4313385948608665134L;
+	
+	public UserProfileDetails()
 	{
-		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-	}//------------------------------------------------
-	public UserProfileDetails(String username, String password, Collection<? extends GrantedAuthority> authorities)
-	{
-		super(username, password, authorities);
+		// TODO Auto-generated constructor stub
 	}//------------------------------------------------
 	
-    /**
-	 * @return the email
-	 */
-	public String getEmail()
+	public UserProfileDetails(String userName, String password, Collection<GrantedAuthority> grantAuthorities)
 	{
-		return email;
-	}
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName()
-	{
-		return firstName;
-	}
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName()
-	{
-		return lastName;
-	}
-	/**
-	 * @return the title
-	 */
-	public String getTitle()
-	{
-		return title;
-	}
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email)
-	{
-		this.email = email;
-	}
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName)
-	{
-		this.firstName = firstName;
-	}
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName)
-	{
-		this.lastName = lastName;
-	}
-	/**
-	 * @param title the title to set
-	 */
-	public void setTitle(String title)
-	{
-		this.title = title;
+		this.setLoginID(userName);
+		this.setPassword(password);
+		this.setAuthorities(grantAuthorities);
 	}
 
-	
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+
+	public UserProfileDetails(String userName, String password, String[] roles)
+	{
+		this.setLoginID(userName);
+		this.setPassword(password);
+		this.setRoleAuthorities(roles);
+		
+	}
+
+
+	/**
+	 * @return the authorities
 	 */
+	public Collection<GrantedAuthority> getAuthorities()
+	{
+		return authorities;
+	}
+	/**
+	 * @param authorities the authorities to set
+	 */
+	public void setRoleAuthorities(String[] authorities)
+	{
+		if(authorities == null || authorities.length == 0)
+		{
+			this.authorities = null;
+		}
+		else
+		{
+			this.setRoleAuthorities(Arrays.asList(authorities));
+		}
+		
+	}
+	/**
+	 * @param authorities the authorities to set
+	 */
+	public void setRoleAuthorities(Collection<String> authorities)
+	{
+		if(authorities == null || authorities.isEmpty())
+			this.authorities = null;
+		else
+		{
+			List<GrantedAuthority> l = authorities.stream().map(a -> new SimpleGrantedAuthority(a)).collect(Collectors.toList());
+			
+			this.authorities = l;
+		}
+		
+	}
+	/**
+	 * @param authorities the authorities to set
+	 */
+	public void setAuthorities(Collection<GrantedAuthority> authorities)
+	{
+		this.authorities = authorities;
+	}
+
+
+	/**
+	 * @return the accountNonExpired
+	 */
+	public boolean isAccountNonExpired()
+	{
+		return accountNonExpired;
+	}
+
+
+	/**
+	 * @return the accountNonLocked
+	 */
+	public boolean isAccountNonLocked()
+	{
+		return accountNonLocked;
+	}
+
+
+
+
+	/**
+	 * @return the credentialsNonExpired
+	 */
+	public boolean isCredentialsNonExpired()
+	{
+		return credentialsNonExpired;
+	}
+
+
+
+
+	/**
+	 * @return the enabled
+	 */
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+
+
+
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword()
+	{
+		if(password == null)
+			return null;
+		
+		return String.valueOf(password);
+	}
+
+
+
+
+	/**
+	 * @param accountNonExpired the accountNonExpired to set
+	 */
+	public void setAccountNonExpired(boolean accountNonExpired)
+	{
+		this.accountNonExpired = accountNonExpired;
+	}
+
+
+
+
+	/**
+	 * @param accountNonLocked the accountNonLocked to set
+	 */
+	public void setAccountNonLocked(boolean accountNonLocked)
+	{
+		this.accountNonLocked = accountNonLocked;
+	}
+
+
+
+
+	/**
+	 * @param credentialsNonExpired the credentialsNonExpired to set
+	 */
+	public void setCredentialsNonExpired(boolean credentialsNonExpired)
+	{
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+
+
+
+
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+	}
+
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password)
+	{
+		if(password == null)
+			this.password = null;
+		else
+			this.setPassword(password.toCharArray());
+	}//------------------------------------------------
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(char[] password)
+	{
+		this.password = password;
+	}
+
 	@Override
-	public String toString()
+	public String getUsername()
 	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("UserProfileDetails [email=").append(email).append(", firstName=").append(firstName)
-		.append(", lastName=").append(lastName).append(", title=").append(title).append(", toString()=")
-		.append(super.toString()).append("]");
-		return builder.toString();
+		return getLoginID();
 	}
+	
 
-
-
-	private String email = "";
-    private String firstName = "";
-    private String lastName = "";  
-    private String title = "";
+	private  boolean accountNonExpired = true;
+	private boolean accountNonLocked = true;
+	private boolean credentialsNonExpired = true;
+	private boolean enabled = true;
+	private char[] password;
+	private Collection<GrantedAuthority> authorities;
 
 }
