@@ -49,5 +49,10 @@ public interface GeodeConfigConstants
 	 * NAME_PROP = "NAME"
 	 */
 	public static final String NAME_PROP = "NAME";
+
+	/**
+	 * LOCATORS_PROP = "LOCATORS" use for the locator pool connections
+	 */
+	public static final String LOCATORS_PROP = "LOCATORS";
 	 
 }

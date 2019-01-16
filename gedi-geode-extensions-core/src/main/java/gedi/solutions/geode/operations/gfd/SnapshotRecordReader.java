@@ -153,7 +153,8 @@ public class SnapshotRecordReader implements Closeable
     }
 
     private TypeRegistry getRegistry() {
-      GemFireCacheImpl gfc = GemFireCacheImpl.getInstance();
+      @SuppressWarnings("deprecation")
+	GemFireCacheImpl gfc = GemFireCacheImpl.getInstance();
       if (gfc != null) {
         return gfc.getPdxRegistry();
       }

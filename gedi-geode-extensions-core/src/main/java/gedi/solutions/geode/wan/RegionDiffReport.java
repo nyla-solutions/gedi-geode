@@ -2,6 +2,11 @@ package gedi.solutions.geode.wan;
 
 import java.util.Set;
 
+/**
+ * 
+ * @author Gregory Green
+ *
+ */
 public class RegionDiffReport {
 
 	private String regionName;

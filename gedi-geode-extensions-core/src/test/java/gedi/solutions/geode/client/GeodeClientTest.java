@@ -58,7 +58,7 @@ public class GeodeClientTest  {
     public void testWithCachingProxy()
     {
     	
-    		GeodeClient geodeClient = new GeodeClient("localhost",10000,true,".*");
+    		GeodeClient geodeClient = new GeodeClient(true,".*");
     		
     		Region<String,Object> region = geodeClient.getRegion("test");
     		region.put("1", "1");
@@ -82,6 +82,7 @@ public class GeodeClientTest  {
     	    assertTrue(pdxSerializerVerifier instanceof TestPdxSerialzier);
 	}
     
+    @Ignore
     @Test
 	public void testRegisterListener() throws Exception
 	{

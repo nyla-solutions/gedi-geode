@@ -1,15 +1,64 @@
 package gedi.solutions.geode.client;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import java.net.URI;
+import java.util.List;
+
+import org.apache.geode.cache.client.ClientCacheFactory;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import gedi.solutions.geode.client.GeodeSettings;
 import nyla.solutions.core.io.IO;
+import nyla.solutions.core.util.Config;
 
 public class GeodeSettingsTest
 {
+	@Test
+	public void testGetLocatorUrlList() throws Exception
+	{
+		System.setProperty(GeodeConfigConstants.LOCATORS_PROP, "host1[1],host2[2],host2[3];");
+		
+		Config.reLoad();
+		
+		List<URI> list = GeodeSettings.getInstance().getLocatorUrlList();
+		assertTrue(list != null && !list.isEmpty());
+		
+	}
+	@Test
+	public void testLocatorsBuild() throws Exception
+	{
+		try
+		{
+			System.setProperty(GeodeConfigConstants.LOCATORS_PROP, "host1[1],host2[2],host2[3]");
+			
+			Config.reLoad();
+			
+			List<URI> list = GeodeSettings.getInstance().getLocatorUrlList();
+			assertTrue(list != null && !list.isEmpty());
+			
+			assertEquals(3,list.size());
+			
+			
+			ClientCacheFactory factory  = mock(ClientCacheFactory.class);
+			GeodeSettings.getInstance().constructPoolLocator(factory);
+			
+			assertNotNull(factory);
+			verify(factory,Mockito.atLeastOnce()).addPoolLocator(anyString(), anyInt());
+			verify(factory,times(3)).addPoolLocator(anyString(), anyInt());
+			
+		
+			
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	public void testGetInstance()
@@ -47,19 +96,21 @@ public class GeodeSettingsTest
 		
 		if(envLocatorHost == null || envLocatorHost.length() == 0)
 		{
-			assertTrue("getLocatorHost:"+config.getLocatorHost()+" would be empty",
-			config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+			List<URI> l = config.getLocatorUrlList();
+			assertTrue("getLocatorHost:"+config.getLocatorUrlList()+" would be empty",
+			l == null || l.size() == 0); 
 			
 			
 			envContent = " ";
 			config = new GeodeSettings(envContent);
 			
-			assertTrue("getLocatorHost:"+config.getLocatorHost()+" would be empty",config.getLocatorHost() == null || config.getLocatorHost().length() == 0); 
+			l = config.getLocatorUrlList();
+			assertTrue("getLocatorHost:"+l+" would be empty",l == null || l.size() == 0); 
 
 		}
 		else
 		{
-			assertEquals(envLocatorHost, config.getLocatorHost());
+			assertEquals(envLocatorHost, GeodeSettings.getInstance().getLocatorHost());
 		}
 		
 	}//------------------------------------------------

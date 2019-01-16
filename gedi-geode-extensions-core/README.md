@@ -14,10 +14,19 @@ Note that this API is available in the [Maven Repository](https://mvnrepository.
 
 ## GeodeClient API
 
-**Setup Environment**
+**Setup Environment Single locator**
 
     export LOCATOR_HOST=localhost
     export LOCATOR_PORT=10334
+    
+**Setup Environment Multiple locators**
+ 
+
+ Format: host[port]`(,host[port])*`
+ 
+ Sample:
+ 
+	export LOCATORS=host1[port],host2[port],host2[port]
  
  **Optional Settings**
 
@@ -43,9 +52,12 @@ If you need to set PDX read serialize to true (default false).
   
  **Cloud Foundry/ Pivotal Cloud Cache (PCC) Friendly**
  
- PCC is Pivotal's 12-factor backing service implementation of GemFire.
- The locator host, port and security credential are automatically 
- wired when the PCC service is binded to a service instance.
+ Pivotal Cloud Cache [PCC](https://docs.pivotal.io/p-cloud-cache/index.html) is [Pivotal](http://pivotal.io)'s [12-factor](https://12factor.net/) [backing service](https://12factor.net/backing-services) implementation of GemFire. GeodeClient.connect method supports automatically wiring the locators hosts, ports and security credential when the PCC service is binded a Cloud Foundry application that using this API.
+ 
+ 
+ See [https://docs.pivotal.io/p-cloud-cache/using-pcc.html#bind-service](https://docs.pivotal.io/p-cloud-cache/using-pcc.html#bind-service)
+ 
+	cf bind-service [appNAme] [pcc-service]
  
  
 **SSL key/trust store management**
@@ -102,7 +114,7 @@ Get the Apache Geode client cache
 		client.registerAfterPut("testEventRegion", putConsumer);
 		client.getRegion("testEventRegion");
  
- ## Convert Statistics to CSV file
+## Convert Statistics to CSV file
  
  The following will extract a single statistic type with the name "CachePerfStats"
  

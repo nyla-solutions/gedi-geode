@@ -64,6 +64,7 @@ import nyla.solutions.core.util.Debugger;
 	export SSL_REQUIRE_AUTHENTICATION=true
 	export SSL_TRUSTSTORE_CLASSPATH_FILE=truststore.jks
 	export SSL_KEYSTORE_CLASSPATH_FILE=keystore.jks
+	export LOCATORS=hostname[ports]
 
  * @author Gregory Green
  *
@@ -81,15 +82,8 @@ public class GeodeClient
 	private static GeodeClient geodeClient = null;
 	private Map<String,CacheListenerBridge<?, ?>> listenerMap = new Hashtable<>();
 
-	
+
 	protected GeodeClient(boolean cachingProxy, String... classPatterns)
-	{
-		 this(GeodeSettings.getInstance().getLocatorHost(),
-		 	GeodeSettings.getInstance().getLocatorPort(),
-		 	cachingProxy, 
-		 	classPatterns);
-	}//------------------------------------------------
-	protected GeodeClient(String host, int port, boolean cachingProxy, String... classPatterns)
 	{
 		this.cachingProxy = cachingProxy;
 			
@@ -129,15 +123,21 @@ public class GeodeClient
 			throw new ConfigException("Unable to configure security connection details ERROR:"+e.getMessage(),e);
 		}
 			
-			this.clientCache = new ClientCacheFactory(props).addPoolLocator(host, port)
-			.setPoolSubscriptionEnabled(true)
+			ClientCacheFactory factory = new ClientCacheFactory(props);
+			
+		
+			factory.setPoolSubscriptionEnabled(true)
 			.setPdxSerializer(pdxSerializer)
 			.setPdxReadSerialized(GeodeConfigConstants.PDX_READ_SERIALIZED)
 			.setPoolPRSingleHopEnabled(Config.getPropertyBoolean(
 				GeodeConfigConstants.POOL_PR_SINGLE_HOP_ENABLED_PROP,true))
 			.set("log-level", Config.getProperty("log-level","config"))
-			.set("name", name)
-			.create();
+			.set("name", name);
+			
+			//.addPoolLocator(host, port)
+			GeodeSettings.getInstance().constructPoolLocator(factory);
+
+			this.clientCache = factory.create();
 			
 			//Caching Proxy
 			cachingRegionfactory = clientCache.createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);

@@ -2,6 +2,11 @@ package gedi.solutions.geode.wan;
 
 import java.util.HashMap;
 
+/**
+ * 
+ * @author Gregory Green
+ *
+ */
 public class ClusterDiffReport {
 	
 

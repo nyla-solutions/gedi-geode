@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.geode.cache.client.ClientCacheFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -66,9 +69,11 @@ public class GeodeSettings
 
 	private static GeodeSettings instance = null;
 	private final String envContent;
-	private final Pattern p = Pattern.compile("(.*)\\[(\\d*)\\]");
-	private final String locatorHost;
-	private final int locatorPort;
+	private final Pattern regExpPattern = Pattern.compile("(.*)\\[(\\d*)\\].*");
+
+	private int port;
+
+	private String host;
 
 	/**
 	 * Get from VCAP_SERVICES system environment variable or JVM system property
@@ -92,9 +97,9 @@ public class GeodeSettings
 		if(locatorList != null && !locatorList.isEmpty())
 				locatorURI = locatorList.get(0);
 		
-		int port = 10334;
+		port = 10334;
 		
-		String host = Config.getProperty(GeodeConfigConstants.LOCATOR_HOST_PROP,"");
+		host = Config.getProperty(GeodeConfigConstants.LOCATOR_HOST_PROP,"");
 		
 		if (host.trim().length() == 0)
 		{
@@ -113,26 +118,7 @@ public class GeodeSettings
 				throw new ConfigException(GeodeConfigConstants.LOCATOR_PORT_PROP+" configuration property required");
 		}
 		
-		this.locatorHost = host;
-		this.locatorPort = port;
 	}// ------------------------------------------------
-
-	/**
-	 * @return the locatorHost
-	 */
-	public String getLocatorHost()
-	{
-		return locatorHost;
-	}
-
-	/**
-	 * 
-	 * @return the locator port
-	 */
-	public int getLocatorPort()
-	{
-		return locatorPort;
-	}//------------------------------------------------
 
 	/**
 	 * 
@@ -179,28 +165,46 @@ public class GeodeSettings
 	{
 		List<URI> locatorList = new ArrayList<URI>();
 		Map<String, ?> credentials = getCredentials();
-
-		if (credentials == null)
-			return null;
-
-		List<String> locators = (List<String>) credentials.get("locators");
+		List<String> locators = null;
+		
+		if (credentials != null)
+			locators = (List<String>) credentials.get("locators");
+			
 		try
 		{
+			if(locators == null || locators.isEmpty())
+			{
+				//get for LOCATORS env
+				String locatorsConfig = Config.getProperty(GeodeConfigConstants.LOCATORS_PROP,"");
+				if(locatorsConfig.length() == 0)
+					return null;
+	
+				String[] parsedLocators = locatorsConfig.split(",");
+				
+				if(parsedLocators == null || parsedLocators.length == 0)
+					return null;
+				
+				locators = Arrays.asList(parsedLocators);
+			}
+			
 			for (String locator : locators)
 			{
-				Matcher m = p.matcher(locator);
+				Matcher m = regExpPattern.matcher(locator);
 				if (!m.matches())
 				{
-					throw new IllegalStateException("Unexpected locator format. expected host[port], got" + locator);
+					throw new IllegalStateException("Unexpected locator format. expected host[port], but got:" + locator);
 				}
 				locatorList.add(new URI("locator://" + m.group(1) + ":" + m.group(2)));
 			}
 			return locatorList;
+		
 		}
 		catch (URISyntaxException e)
 		{
 			throw new ConfigException("One of the provided locators has an incorrect syntax:"+locatorList);
 		}
+		
+
 	}// ------------------------------------------------
 
 	
@@ -295,6 +299,23 @@ public class GeodeSettings
 		}
 	}// ------------------------------------------------
 
+	public void constructPoolLocator(ClientCacheFactory factory)
+	{
+		
+		List<URI> list = this.getLocatorUrlList();
+		if(list != null && !list.isEmpty())
+		{
+			for (URI uri : list)
+			{
+				factory.addPoolLocator(uri.getHost(), uri.getPort());
+			}
+		}
+		else
+		{
+			factory.addPoolLocator(this.host, this.port);
+		}
+	}//------------------------------------------------
+	
 	@SuppressWarnings(
 	{ "unchecked", "rawtypes" })
 	private List<Map<String, ?>> getGemFireService(Map services)
@@ -302,5 +323,11 @@ public class GeodeSettings
 		List<Map<String, ?>> l = (List) services.get("p-cloudcache");
 		return l;
 	}
+
+	String getLocatorHost()
+	{
+		return this.host;
+	}
+
 
 }
