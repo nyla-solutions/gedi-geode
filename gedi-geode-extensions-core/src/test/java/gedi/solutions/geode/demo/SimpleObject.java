@@ -500,6 +500,31 @@ public class SimpleObject implements Serializable
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("SimpleObject [simpleEnum=").append(simpleEnum).append(", fieldSqlDate=").append(fieldSqlDate)
+		.append(", fieldDate=").append(fieldDate).append(", fieldTime=").append(fieldTime).append(", fieldTimestamp=")
+		.append(fieldTimestamp).append(", fieldCalendar=").append(fieldCalendar).append(", fieldLongObject=")
+		.append(fieldLongObject).append(", fieldLong=").append(fieldLong).append(", fieldDouble=").append(fieldDouble)
+		.append(", fieldDoubleObject=").append(fieldDoubleObject).append(", fieldFloatObject=").append(fieldFloatObject)
+		.append(", fieldFloat=").append(fieldFloat).append(", fieldInteger=").append(fieldInteger)
+		.append(", fieldString=").append(fieldString).append(", fieldInt=").append(fieldInt).append(", bigDecimal=")
+		.append(bigDecimal).append(", fieldBooleanObject=").append(fieldBooleanObject).append(", fieldBoolean=")
+		.append(fieldBoolean).append(", fieldByteObject=").append(fieldByteObject).append(", fiedByte=")
+		.append(fiedByte).append(", fieldCharObject=").append(fieldCharObject).append(", fieldChar=").append(fieldChar)
+		.append(", fieldClass=").append(fieldClass).append(", error=").append(error).append(", exception=")
+		.append(exception).append(", fieldShortObject=").append(fieldShortObject).append(", fieldShort=")
+		.append(fieldShort).append(", setWithNoGet=").append(setWithNoGet).append(", getWithNoSet=")
+		.append(getWithNoSet).append(", overloadedRestriction=").append(overloadedRestriction).append("]");
+		return builder.toString();
+	}
+
+
 	private SimpleEnum simpleEnum; 
 	
 	private java.sql.Date fieldSqlDate;

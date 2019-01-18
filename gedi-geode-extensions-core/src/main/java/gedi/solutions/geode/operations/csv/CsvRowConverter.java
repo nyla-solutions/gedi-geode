@@ -1,13 +1,18 @@
 package gedi.solutions.geode.operations.csv;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.TreeSet;
 
 import org.apache.geode.pdx.PdxInstance;
 
+
 import nyla.solutions.core.io.csv.BeanPropertiesToCsvConverter;
 import nyla.solutions.core.io.csv.CsvWriter;
+import nyla.solutions.core.operations.ClassPath;
 import nyla.solutions.core.patterns.conversion.Converter;
+import nyla.solutions.core.util.Config;
+import nyla.solutions.core.util.Text;
 
 /**
  * Converts PDX instance of java beans properties to CSV lines
@@ -18,19 +23,32 @@ import nyla.solutions.core.patterns.conversion.Converter;
 public class CsvRowConverter implements Converter<Object, String>
 {
 
+	/**
+	 * DATE_FORMAT = Config.getProperty("DATE_FORMAT","MM/dd/yyyy HH:mm:ss:SSSS")
+	 */
+	public String DATE_FORMAT = Config.getProperty("DATE_FORMAT","MM/dd/yyyy HH:mm:ss:SSSS");
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public String convert(Object sourceObject)
 	{
+		if(sourceObject == null)
+			return null;
+		
 		Class<?> cls = sourceObject.getClass();
+		
+		if(Date.class.isAssignableFrom(cls) )
+			return new StringBuilder(Text.formatDate(DATE_FORMAT, (Date)sourceObject))
+			.append("\n").toString();
+		
+		if(ClassPath.isPrimitive(cls))
+			return new StringBuilder(sourceObject.toString())
+							.append("\n").toString();
+		
 		
 		if(!PdxInstance.class.isAssignableFrom(cls))
 		{
-			if(beanPropertiesToCsvConverter == null)
-				beanPropertiesToCsvConverter = new BeanPropertiesToCsvConverter(cls);
-			
-			
-			return beanPropertiesToCsvConverter.convert(sourceObject);
+			return new BeanPropertiesToCsvConverter(cls).convert(sourceObject);
 		}
 		
 		PdxInstance pdxInstance = (PdxInstance)sourceObject;
@@ -56,5 +74,5 @@ public class CsvRowConverter implements Converter<Object, String>
 		return row.toString();
 	}
 
-	private BeanPropertiesToCsvConverter<Object> beanPropertiesToCsvConverter = null;
+	//private BeanPropertiesToCsvConverter<Object> beanPropertiesToCsvConverter = null;
 }

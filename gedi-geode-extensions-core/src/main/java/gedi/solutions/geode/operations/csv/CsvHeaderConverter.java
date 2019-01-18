@@ -1,12 +1,14 @@
 package gedi.solutions.geode.operations.csv;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.TreeSet;
 
 import org.apache.geode.pdx.PdxInstance;
 
 import nyla.solutions.core.io.csv.BeanPropertiesToCsvHeaderConverter;
 import nyla.solutions.core.io.csv.CsvWriter;
+import nyla.solutions.core.operations.ClassPath;
 import nyla.solutions.core.patterns.conversion.Converter;
 
 public class CsvHeaderConverter implements Converter<Object, String>
@@ -16,7 +18,13 @@ public class CsvHeaderConverter implements Converter<Object, String>
 	@Override
 	public String convert(Object sourceObject)
 	{
+		if(sourceObject == null)
+			return "\"\"\n";
+		
 		Class<?> cls = sourceObject.getClass();
+				
+		if(Date.class.isAssignableFrom(cls) || ClassPath.isPrimitive(cls))
+			return new StringBuilder(cls.getSimpleName()).append("\n").toString();
 		
 		if(!PdxInstance.class.isAssignableFrom(cls))
 		{
