@@ -12,6 +12,7 @@ import gedi.solutions.geode.operations.stats.StatValue;
 import nyla.solutions.core.data.Property;
 import nyla.solutions.core.data.clock.Day;
 import nyla.solutions.core.util.Text;
+import nyla.solutions.office.chart.Chart;
 import nyla.solutions.office.chart.JFreeChartFacade;
 
 /**
@@ -32,7 +33,7 @@ public class CpuAboveThresholdChartStatsVisitor implements  ChartStatsVisitor
 		this.chart =new JFreeChartFacade();
 		this.chart.setTitle(title);
 
-		this.chart.setGraphType("bar");
+		this.chart.setGraphType(Chart.BAR_GRAPH_TYPE);
 		this.chart.setHeight(1000);
 		this.chart.setWidth(7000);
 		//this.chart.setCategoryLabel(this.filterStatName);
@@ -43,6 +44,8 @@ public class CpuAboveThresholdChartStatsVisitor implements  ChartStatsVisitor
 	public void visitResourceInst(ResourceInst resourceInst)
 	{
 		String name = resourceInst.getName();
+		
+		String machine = resourceInst.getArchive().getArchiveInfo().getMachine();
 		
 		ResourceType resourceType= resourceInst.getType();
 		
@@ -105,7 +108,7 @@ public class CpuAboveThresholdChartStatsVisitor implements  ChartStatsVisitor
 				this.maxMap.put(timeValue, max);
 				
 				if(values[i] >= cpuPercentThreshold)
-					this.chart.plotValue(max, timeValue.getName(), (String)timeValue.getValue());
+					this.chart.plotValue(max,machine, (String)timeValue.getValue());
 			}
 			
 		}

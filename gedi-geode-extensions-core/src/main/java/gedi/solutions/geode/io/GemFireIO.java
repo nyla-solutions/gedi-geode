@@ -19,7 +19,7 @@ import nyla.solutions.core.exception.DataException;
  * @author Gregory Green
  *
  */
-public class GemFireIO
+public final class GemFireIO
 {
 	private GemFireIO()
 	{

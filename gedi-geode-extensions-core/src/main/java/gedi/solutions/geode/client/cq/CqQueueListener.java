@@ -37,7 +37,7 @@ implements CqListener, Disposable
 	 
 	  public void onError(CqEvent cqEvent)
 	  {
-		  System.err.println("ERROR"+cqEvent);
+		  Debugger.println(this,"ERROR"+cqEvent);
 	  }//------------------------------------------------
 	  @Override
 	  public void close()

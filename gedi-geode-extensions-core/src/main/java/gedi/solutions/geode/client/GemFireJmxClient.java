@@ -34,6 +34,8 @@ import org.apache.geode.management.MemberMXBean;
 
 import gedi.solutions.geode.io.GemFireIO;
 import gedi.solutions.geode.operations.functions.ClearRegionFunction;
+import nyla.solutions.core.patterns.cache.Cache;
+import nyla.solutions.core.patterns.cache.CacheFarm;
 import nyla.solutions.core.patterns.jmx.JMX;
 
 /**
@@ -44,9 +46,9 @@ import nyla.solutions.core.patterns.jmx.JMX;
  */
 public class GemFireJmxClient
 {
+	private static final String RESOURCE_BUNDLE_CACHENAME = "lookupNetworkHost_resourceBundle";
 	private static ClientCache clientCache = null;
-	private static ResourceBundle _bundle = null;
-	private static final String hostPropFileName = "host.properties";
+	private static final String HOST_PROP_FILE_NAME = "host.properties";
 
 	
 	public synchronized static void clearRegion(String regionName, JMX jmx)
@@ -869,17 +871,21 @@ public class GemFireJmxClient
 	 * @param host the host to resolve the IP
 	 * @return the resolved host (or original if mapping does not exists)
 	 */
-	static synchronized String lookupNetworkHost(String host)
+	static  String lookupNetworkHost(String host)
 	{
 		try
 		{
-			if(_bundle == null)
+			Cache<String,Object> cache = CacheFarm.getCache();
+			
+			ResourceBundle resoureBundle = (ResourceBundle)CacheFarm.getCache().get(RESOURCE_BUNDLE_CACHENAME);
+			
+			if(resoureBundle == null)
 			{
-				URL url = GemFireJmxClient.class.getResource(hostPropFileName);
+				URL url = GemFireJmxClient.class.getResource(HOST_PROP_FILE_NAME);
 				
 				String filePath = null;
 				if(url == null)
-					filePath = hostPropFileName;
+					filePath = HOST_PROP_FILE_NAME;
 				else
 					filePath = url.toString();
 				
@@ -887,13 +893,16 @@ public class GemFireJmxClient
 				System.out.println(new StringBuilder("Loading IP addresses from ")
 						.append(filePath).toString());
 				
-				_bundle = ResourceBundle.getBundle("host");
+				resoureBundle = ResourceBundle.getBundle("host");
+				
+				cache.put(RESOURCE_BUNDLE_CACHENAME, resoureBundle);
+				
 			}
 		
 			System.out.println(new StringBuilder("Looking for host name \"").append(host).append("\" IP address in ")
-					.append(hostPropFileName).toString());
+					.append(HOST_PROP_FILE_NAME).toString());
 			
-			String newHost = _bundle.getString(host);
+			String newHost = resoureBundle.getString(host);
 			System.out.println(new StringBuilder(host).append("=").append(newHost).toString());
 			
 			return newHost;

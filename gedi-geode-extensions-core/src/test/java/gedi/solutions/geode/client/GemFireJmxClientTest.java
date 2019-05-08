@@ -1,13 +1,17 @@
 package gedi.solutions.geode.client;
 
 
+import static org.junit.Assert.assertNotNull;
+
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.junit.Assert;
+import org.junit.Test;
 
 import nyla.solutions.core.patterns.jmx.JMX;
+import nyla.solutions.core.util.Debugger;
 
 //@Ignore
 /**
@@ -40,6 +44,13 @@ public class GemFireJmxClientTest
 	}
 
 
+	@Test
+	public void testLookup()
+	{
+		String host = GemFireJmxClient.lookupNetworkHost("localhost");
+		Debugger.println("host:"+host);
+		assertNotNull(host);
+	}
 
 	//@Test
 	public void test1Put()

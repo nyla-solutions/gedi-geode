@@ -128,6 +128,9 @@ public class ParNewCollectionsChartStatsVisitor implements  ChartStatsVisitor
 		for(Map.Entry<String, NumberedProperty> entry : this.countPerHour.entrySet())
 		{
 			entryName = entry.getValue().getName();
+			if(entryName == null)
+				entryName = "Unknown";
+			
 			entryName = entryName.replace("amd64 ", "");
 			System.out.println("entryName:"+entryName);
 			

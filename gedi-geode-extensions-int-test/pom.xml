@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.nyla-solutions</groupId>
 	<artifactId>gedi-geode-extensions-int-test</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.2-SNAPSHOT</version>
 	<name>gedi-geode-extensions-int-test</name>
 	<description>GemFire Enterprise Data Integration - Power by Apache Geode</description>
 	<properties>
@@ -28,7 +28,7 @@
 		<dependency>
 				<groupId>com.github.nyla-solutions</groupId>
 				<artifactId>gedi-geode-extensions-core</artifactId>
-				<version>1.2.1</version>
+				<version>1.2.0</version>
 		</dependency>	
 		<dependency>
 			<groupId>junit</groupId>

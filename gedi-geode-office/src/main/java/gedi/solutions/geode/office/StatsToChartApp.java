@@ -35,6 +35,7 @@ public class StatsToChartApp
 			File cpuFilePath = new File(args[1]+"/cpu.png");
 			File parNewCollectionTimesFilePath = new File(args[1]+"/parNewCollectionTimes.png");
 			File parNewCollectionsFilePath = new File(args[1]+"/parNewCollections.png");
+			File jvmMemoryFilePath = new File(args[1]+"/jvmMemory.png");
 			
 			Chart cpuChart = cpuChartConvert.convert(inputFileOrDirectory);
 			System.out.println("Writing "+cpuFilePath.getAbsolutePath());
@@ -55,6 +56,11 @@ public class StatsToChartApp
 			IO.writeFile(parNewCollectionsFilePath, parNewCollections.getBytes());
 			
 			
+			Chart jvmMemoryChart = new StatsToChart(new JvmMaxHeapUsageAboveThresholdChartStatsVisitor())
+			.convert(inputFileOrDirectory);
+			
+			System.out.println("Writing "+jvmMemoryFilePath.getAbsolutePath());
+			IO.writeFile(jvmMemoryFilePath, jvmMemoryChart.getBytes());
 			
 		}
 		catch (IOException e)

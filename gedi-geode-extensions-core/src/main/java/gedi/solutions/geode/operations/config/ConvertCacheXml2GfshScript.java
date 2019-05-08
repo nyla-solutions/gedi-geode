@@ -22,8 +22,12 @@ public class ConvertCacheXml2GfshScript
 
 	public static final void main(String[] args)
 	{
+		if(args == null || args.length == 0)
+			throw new IllegalArgumentException("Argument with cache.xml file required");
+		
 		try
 		{
+			 
 			File file = Paths.get(args[0]).toFile();
 			
 			Document doc = XML.toDocument(file);
@@ -34,11 +38,11 @@ public class ConvertCacheXml2GfshScript
 			
 			//Add Disk stores
 			
-			gfsh.append("create disk-store --name=PDX_DISKSTORE --dir=. --max-oplog-sizes=64").append(GFSH_CMD_END);
+			gfsh.append("create disk-store --name=PDX_DISKSTORE --dir=. --max-oplog-size=64").append(GFSH_CMD_END);
 			
-			gfsh.append("create disk-store --name=REF_DISKSTORE --dir=. --max-oplog-sizes=128").append(GFSH_CMD_END);
+			gfsh.append("create disk-store --name=REF_DISKSTORE --dir=. --max-oplog-size=128").append(GFSH_CMD_END);
 			
-			gfsh.append("create disk-store --name=DATA_DISKSTORE --dir=. --max-oplog-sizes=512").append(GFSH_CMD_END);
+			gfsh.append("create disk-store --name=DATA_DISKSTORE --dir=. --max-oplog-size=512").append(GFSH_CMD_END);
 
 			
 			//Add PDX

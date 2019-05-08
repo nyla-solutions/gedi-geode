@@ -1,6 +1,5 @@
 package gedi.solutions.geode.operations.csv.function;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.geode.cache.Region;
